@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Medical Book Store</title>
     
-    <!-- Telegram WebApp Script - MUST BE FIRST -->
+    <!-- Telegram WebApp Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     
     <style>
-        /* ============================================
-           COMPLETE STYLES - INLINE FOR RELIABILITY
-           ============================================ */
-        
         * {
             margin: 0;
             padding: 0;
@@ -53,7 +49,6 @@
             height: 100vh;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(0px);
         }
 
         /* Header */
@@ -136,6 +131,7 @@
             overflow-y: auto;
             padding: 20px 16px;
             -webkit-overflow-scrolling: touch;
+            padding-bottom: 80px;
         }
 
         /* Views */
@@ -302,6 +298,7 @@
         .book-actions {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .sample-link {
@@ -318,116 +315,12 @@
             border: none;
         }
 
-        /* Category Pills */
-        .category-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .category-btn {
-            padding: 8px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.85);
-            color: #1a1a2e;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .category-btn.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-color: transparent;
-        }
-
-        /* Search Bar */
-        .search-bar {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8a8a9e;
-            z-index: 1;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.85);
-            color: #1a1a2e;
-            font-size: 16px;
-        }
-
-        /* Books List */
-        .books-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .book-list-item {
-            display: flex;
-            gap: 14px;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-        }
-
-        .book-list-cover {
-            width: 70px;
-            height: 90px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .book-list-cover i {
-            font-size: 32px;
-            color: white;
-        }
-
-        .book-list-info {
-            flex: 1;
-        }
-
-        .book-list-title {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            color: #1a1a2e;
-        }
-
-        .book-list-desc {
-            font-size: 12px;
-            color: #4a4a6a;
-            margin-bottom: 8px;
-        }
-
-        .book-list-price {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c7da0;
-            margin-bottom: 10px;
-        }
-
-        .book-list-actions {
-            display: flex;
-            gap: 8px;
+        /* All Books List (Grid style for home) */
+        .all-books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
         }
 
         /* Buttons */
@@ -443,6 +336,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            width: 100%;
         }
 
         .action-btn.primary-btn {
@@ -454,19 +348,6 @@
             background: rgba(255, 255, 255, 0.85);
             color: #1a1a2e;
             border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .small-btn {
-            padding: 6px 12px;
-            background: #2c7da0;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
 
         /* Cart Items */
@@ -560,21 +441,159 @@
             padding: 40px 20px;
         }
 
-        /* Quick Actions */
-        .quick-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
+        /* Sample Viewer */
+        .sample-header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            margin-bottom: 20px;
         }
 
-        /* Bottom Navigation */
+        .sample-header h3 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+            color: #1a1a2e;
+        }
+
+        .pdf-viewer {
+            height: 60vh;
+            margin: 16px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .pdf-viewer iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Support Section */
+        .support-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .contact-card {
+            display: flex;
+            gap: 16px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            align-items: center;
+        }
+
+        .contact-icon {
+            font-size: 36px;
+            width: 55px;
+            text-align: center;
+            color: #2c7da0;
+        }
+
+        .small-btn {
+            padding: 6px 12px;
+            background: #2c7da0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .response-time {
+            text-align: center;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #4a4a6a;
+        }
+
+        /* About Section */
+        .about-logo {
+            font-size: 72px;
+            margin-bottom: 16px;
+        }
+
+        .about-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .feature-list li {
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .payment-icons span {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 9999px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            color: white;
+            font-size: 14px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Bottom Navigation - 4 items only */
         .bottom-nav {
             display: flex;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.3);
             padding: 8px 0 12px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 90;
         }
 
         .nav-item {
@@ -603,71 +622,14 @@
             font-size: 11px;
         }
 
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 9999px;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-            color: white;
-            font-size: 14px;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* Contact Cards */
-        .support-section {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .contact-card {
-            display: flex;
-            gap: 16px;
-            padding: 18px;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            align-items: center;
-        }
-
-        .contact-icon {
-            font-size: 36px;
-            width: 55px;
-            text-align: center;
-            color: #2c7da0;
-        }
-
-        .response-time {
-            text-align: center;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-            margin-top: 16px;
-            font-size: 12px;
-            color: #4a4a6a;
-        }
-
-        /* Responsive */
         @media (max-width: 480px) {
-            .books-grid {
+            .books-grid, .all-books-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
             }
             .content {
                 padding: 16px 12px;
+                padding-bottom: 70px;
             }
         }
     </style>
@@ -691,7 +653,7 @@
 
         <!-- Content -->
         <div class="content" id="content">
-            <!-- Home View -->
+            <!-- Home View (Only View with Books) -->
             <div id="homeView" class="view active">
                 <div class="hero">
                     <div class="hero-icon"><i class="fas fa-stethoscope"></i></div>
@@ -708,20 +670,8 @@
                 <h2 class="section-title"><i class="fas fa-fire"></i> Featured Books</h2>
                 <div class="books-grid" id="featuredBooks"></div>
 
-                <div class="quick-actions">
-                    <button class="action-btn primary-btn" onclick="window.switchToView('books')"><i class="fas fa-book-open"></i> Browse All Books</button>
-                    <button class="action-btn secondary-btn" onclick="window.viewCart()"><i class="fas fa-shopping-cart"></i> View Cart (<span id="cartCount">0</span>)</button>
-                </div>
-            </div>
-
-            <!-- Books View -->
-            <div id="booksView" class="view">
-                <div class="search-bar">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Search medical books..." onkeyup="window.filterBooks()">
-                </div>
-                <div class="category-pills" id="categoryPills"></div>
-                <div class="books-list" id="booksList"></div>
+                <h2 class="section-title" style="margin-top: 20px;"><i class="fas fa-book-open"></i> All Medical Books</h2>
+                <div class="all-books-grid" id="allBooksGrid"></div>
             </div>
 
             <!-- Cart View -->
@@ -729,9 +679,27 @@
                 <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Your Cart</h2>
                 <div id="cartItems" class="cart-items"></div>
                 <div id="cartSummary"></div>
-                <div class="cart-actions">
-                    <button class="action-btn primary-btn" onclick="window.checkoutFromWebApp()"><i class="fas fa-credit-card"></i> Checkout</button>
-                    <button class="action-btn secondary-btn" onclick="window.switchToView('books')"><i class="fas fa-book"></i> Continue Shopping</button>
+            </div>
+
+            <!-- Book Detail View -->
+            <div id="detailView" class="view">
+                <div id="bookDetail"></div>
+            </div>
+
+            <!-- Sample Viewer View -->
+            <div id="sampleView" class="view">
+                <div class="sample-header">
+                    <i class="fas fa-file-pdf" style="font-size: 32px; color: #e74c3c;"></i>
+                    <h3 id="sampleTitle">Book Sample</h3>
+                    <p><i class="fas fa-eye"></i> Preview - First 3 pages</p>
+                </div>
+                <div class="pdf-viewer" id="pdfViewer">
+                    <iframe id="pdfFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+                </div>
+                <div class="sample-actions">
+                    <button class="action-btn primary-btn" id="purchaseFromSampleBtn">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
                 </div>
             </div>
 
@@ -740,29 +708,45 @@
                 <div class="support-section">
                     <div class="contact-card"><div class="contact-icon"><i class="fab fa-telegram-plane"></i></div><div class="contact-info"><h3>Telegram Support</h3><p>@MedicalBooksSupport</p><button class="small-btn" onclick="window.openTelegramChat()"><i class="fab fa-telegram"></i> Chat Now</button></div></div>
                     <div class="contact-card"><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-info"><h3>Email Us</h3><p>support@medicalbooks.com</p><button class="small-btn" onclick="window.sendEmail()"><i class="fas fa-paper-plane"></i> Send Email</button></div></div>
+                    <div class="contact-card"><div class="contact-icon"><i class="fas fa-mobile-alt"></i></div><div class="contact-info"><h3>Vodafone Cash</h3><p>0100 123 4567</p><button class="small-btn" onclick="window.copyNumber()"><i class="fas fa-copy"></i> Copy Number</button></div></div>
                 </div>
                 <div class="response-time"><i class="fas fa-clock"></i> Response time: 24-48 hours</div>
             </div>
 
             <!-- About View -->
             <div id="aboutView" class="view">
-                <div class="about-content" style="text-align:center">
-                    <div class="about-logo" style="font-size:72px;margin-bottom:16px"><i class="fas fa-book-medical"></i></div>
+                <div style="text-align:center">
+                    <div class="about-logo"><i class="fas fa-book-medical"></i></div>
                     <h2>Medical Book Store</h2>
                     <p style="color:#8a8a9e;margin-bottom:28px">Version 2.0.0</p>
-                    <div style="background:rgba(255,255,255,0.85);border-radius:20px;padding:18px;margin-bottom:20px;text-align:left">
+                    <div class="about-section">
                         <h3><i class="fas fa-info-circle"></i> About Us</h3>
-                        <p style="margin-top:10px">We provide high-quality medical ebooks for students, residents, and practicing physicians.</p>
+                        <p>We provide high-quality medical ebooks for students, residents, and practicing physicians. Our collection is carefully curated to ensure accuracy and relevance.</p>
+                    </div>
+                    <div class="about-section">
+                        <h3><i class="fas fa-star"></i> Features</h3>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-bolt"></i> Instant delivery after purchase</li>
+                            <li><i class="fas fa-infinity"></i> Lifetime access</li>
+                            <li><i class="fas fa-file-pdf"></i> PDF format - works on all devices</li>
+                            <li><i class="fas fa-lock"></i> Secure payment via Vodafone Cash</li>
+                            <li><i class="fas fa-undo-alt"></i> 24-hour refund policy</li>
+                        </ul>
+                    </div>
+                    <div class="about-section">
+                        <h3><i class="fas fa-credit-card"></i> Payment Methods</h3>
+                        <div class="payment-icons">
+                            <span><i class="fas fa-mobile-alt"></i> Vodafone Cash</span>
+                        </div>
                     </div>
                     <button class="action-btn primary-btn" onclick="window.openBot()"><i class="fas fa-robot"></i> Open Bot to Purchase</button>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
+        <!-- Bottom Navigation (4 items - no Books tab) -->
         <div class="bottom-nav">
             <button class="nav-item" onclick="window.switchToView('home')" data-view="home"><i class="fas fa-home nav-icon"></i><span class="nav-label">Home</span></button>
-            <button class="nav-item" onclick="window.switchToView('books')" data-view="books"><i class="fas fa-book nav-icon"></i><span class="nav-label">Books</span></button>
             <button class="nav-item" onclick="window.viewCart()" data-view="cart"><i class="fas fa-shopping-cart nav-icon"></i><span class="nav-label">Cart</span></button>
             <button class="nav-item" onclick="window.switchToView('support')" data-view="support"><i class="fas fa-headset nav-icon"></i><span class="nav-label">Support</span></button>
             <button class="nav-item" onclick="window.switchToView('about')" data-view="about"><i class="fas fa-info-circle nav-icon"></i><span class="nav-label">About</span></button>
@@ -773,25 +757,28 @@
 
     <script>
         // ============================================
-        // COMPLETE WORKING SCRIPT
+        // MEDICAL BOOK STORE - COMPLETE SCRIPT
+        // No Stars, Only Vodafone Cash
+        // Main Button for Checkout
         // ============================================
         
-        // Make sure Telegram WebApp is loaded
         const tg = window.Telegram?.WebApp;
         
-        // Book Database
+        // Book Database (No Stars prices)
         const books = [
-            { id: "anatomy_2024", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations.", price: 299, stars: 460, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, searchQuery: "clinical anatomy" },
-            { id: "pharmacology", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects.", price: 249, stars: 383, category: "pharmacology", icon: "fas fa-capsules", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, searchQuery: "pharmacology handbook" },
-            { id: "cardiology", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies.", price: 289, stars: 445, category: "cardiology", icon: "fas fa-heart", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: false, searchQuery: "cardiology made easy" },
-            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders.", price: 269, stars: 414, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: false, searchQuery: "neurology essentials" },
-            { id: "pediatrics", title: "Pediatrics Guide", description: "Child development, common diseases, vaccinations.", price: 259, stars: 398, category: "pediatrics", icon: "fas fa-child", color: "linear-gradient(135deg, #f39c12, #e67e22)", featured: false, searchQuery: "pediatrics guide" }
+            { id: "anatomy_2024", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/anatomy-sample.pdf" },
+            { id: "pharmacology", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", icon: "fas fa-capsules", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
+            { id: "cardiology", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", icon: "fas fa-heart", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
+            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" },
+            { id: "pediatrics", title: "Pediatrics Guide", description: "Child development, common diseases, vaccinations, and emergency protocols.", price: 259, category: "pediatrics", icon: "fas fa-child", color: "linear-gradient(135deg, #f39c12, #e67e22)", featured: false, sample: "samples/pediatrics-sample.pdf" },
+            { id: "pathology", title: "Pathophysiology", description: "Understanding disease mechanisms, clinical manifestations, and diagnostic approaches.", price: 279, category: "pathology", icon: "fas fa-disease", color: "linear-gradient(135deg, #9b59b6, #8e44ad)", featured: false, sample: "samples/pathology-sample.pdf" },
+            { id: "radiology", title: "Radiology Basics", description: "X-ray, CT, MRI interpretation. Essential for clinical practice.", price: 289, category: "radiology", icon: "fas fa-x-ray", color: "linear-gradient(135deg, #34495e, #2c3e50)", featured: false, sample: "samples/radiology-sample.pdf" }
         ];
         
         // Cart
         let cart = [];
-        let currentCategory = 'all';
         let navigationStack = ['home'];
+        let currentBookForSample = null;
         
         // Initialize
         function init() {
@@ -799,16 +786,42 @@
                 tg.expand();
                 tg.enableClosingConfirmation();
                 tg.ready();
+                setupMainButton();
             }
             
             loadCartFromStorage();
             loadFeaturedBooks();
-            loadBooksList();
-            loadCategoryPills();
+            loadAllBooks();
             updateCartUI();
+            setupMainButtonVisibility();
             
-            // Set active nav
             document.querySelector('.nav-item[data-view="home"]').classList.add('active');
+        }
+        
+        // Setup Main Button (Telegram native button)
+        function setupMainButton() {
+            if (!tg) return;
+            
+            tg.MainButton.setText("💳 Proceed to Checkout");
+            tg.MainButton.onClick(() => {
+                checkoutFromWebApp();
+            });
+        }
+        
+        // Show/hide Main Button based on cart
+        function setupMainButtonVisibility() {
+            if (!tg) return;
+            
+            if (cart.length > 0) {
+                tg.MainButton.show();
+                tg.MainButton.setText(`💳 Checkout • ${getCartTotal()} EGP`);
+            } else {
+                tg.MainButton.hide();
+            }
+        }
+        
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + item.price, 0);
         }
         
         // Cart Functions
@@ -820,18 +833,21 @@
         function saveCartToStorage() {
             localStorage.setItem('medical_cart', JSON.stringify(cart));
             updateCartUI();
+            setupMainButtonVisibility();
         }
         
         function updateCartUI() {
             const badge = document.getElementById('cartBadge');
-            const cartCountSpan = document.getElementById('cartCount');
             if (cart.length > 0) {
                 badge.textContent = cart.length;
                 badge.classList.remove('hidden');
-                if (cartCountSpan) cartCountSpan.textContent = cart.length;
             } else {
                 badge.classList.add('hidden');
-                if (cartCountSpan) cartCountSpan.textContent = '0';
+            }
+            
+            // Update cart count in any displayed views
+            if (document.getElementById('cartView').classList.contains('active')) {
+                displayCartItems();
             }
         }
         
@@ -846,14 +862,14 @@
             
             cart.push({ id: book.id, title: book.title, price: book.price, icon: book.icon, color: book.color });
             saveCartToStorage();
-            showToast(`${book.title} added to cart!`);
+            showToast(`✅ ${book.title} added to cart!`);
         }
         
         function removeFromCart(bookId) {
             const book = books.find(b => b.id === bookId);
             cart = cart.filter(item => item.id !== bookId);
             saveCartToStorage();
-            showToast(`${book?.title || 'Book'} removed`);
+            showToast(`❌ ${book?.title || 'Book'} removed`);
             if (document.getElementById('cartView').classList.contains('active')) displayCartItems();
         }
         
@@ -867,7 +883,7 @@
             const summaryContainer = document.getElementById('cartSummary');
             
             if (cart.length === 0) {
-                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:#8a8a9e"></i><p>Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('books')">Browse Books →</button></div>`;
+                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:#8a8a9e"></i><p>Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
                 summaryContainer.innerHTML = '';
                 return;
             }
@@ -887,8 +903,13 @@
                 return;
             }
             
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const checkoutData = { action: 'checkout', items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), total: total, timestamp: Date.now() };
+            const total = getCartTotal();
+            const checkoutData = { 
+                action: 'checkout', 
+                items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), 
+                total: total, 
+                timestamp: Date.now() 
+            };
             
             if (tg) {
                 tg.sendData(JSON.stringify(checkoutData));
@@ -902,46 +923,55 @@
         // Book Display Functions
         function loadFeaturedBooks() {
             const container = document.getElementById('featuredBooks');
-            const featured = books.filter(b => b.featured);
-            container.innerHTML = featured.map(book => `<div class="book-card"><div class="book-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-info"><div class="book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-price">${book.price} EGP</div><div class="book-actions"><button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
+            const featured = books.filter(b => b.featured).slice(0, 4);
+            container.innerHTML = featured.map(book => `<div class="book-card"><div class="book-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-info"><div class="book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-price">${book.price} EGP</div><div class="book-actions"><button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button><button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
         }
         
-        function loadBooksList() {
-            const container = document.getElementById('booksList');
-            let filtered = books;
-            if (currentCategory !== 'all') filtered = books.filter(b => b.category === currentCategory);
-            
-            container.innerHTML = filtered.map(book => `<div class="book-list-item"><div class="book-list-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-list-info"><div class="book-list-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-list-desc">${book.description.substring(0,80)}...</div><div class="book-list-price">${book.price} EGP</div><div class="book-list-actions"><button class="small-btn" onclick="window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
-        }
-        
-        function filterBooks() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const container = document.getElementById('booksList');
-            let filtered = books;
-            if (currentCategory !== 'all') filtered = filtered.filter(b => b.category === currentCategory);
-            if (searchTerm) filtered = filtered.filter(b => b.title.toLowerCase().includes(searchTerm) || b.description.toLowerCase().includes(searchTerm));
-            container.innerHTML = filtered.map(book => `<div class="book-list-item"><div class="book-list-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-list-info"><div class="book-list-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-list-desc">${book.description.substring(0,80)}...</div><div class="book-list-price">${book.price} EGP</div><div class="book-list-actions"><button class="small-btn" onclick="window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
-        }
-        
-        function filterByCategory(category) {
-            currentCategory = category;
-            document.querySelectorAll('.category-btn').forEach(btn => { btn.classList.remove('active'); if (btn.textContent.toLowerCase() === category || (category === 'all' && btn.textContent === 'All')) btn.classList.add('active'); });
-            loadBooksList();
-        }
-        
-        function loadCategoryPills() {
-            const container = document.getElementById('categoryPills');
-            const categories = ['All', 'Anatomy', 'Pharmacology', 'Cardiology', 'Neurology', 'Pediatrics'];
-            container.innerHTML = categories.map(cat => `<button class="category-btn ${cat === 'All' ? 'active' : ''}" onclick="window.filterByCategory('${cat.toLowerCase()}')">${cat}</button>`).join('');
+        function loadAllBooks() {
+            const container = document.getElementById('allBooksGrid');
+            container.innerHTML = books.map(book => `<div class="book-card"><div class="book-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-info"><div class="book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-price">${book.price} EGP</div><div class="book-actions"><button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button><button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
         }
         
         function showBookDetail(bookId) {
             const book = books.find(b => b.id === bookId);
             if (!book) return;
             
-            const detailHtml = `<div style="animation:fadeInUp 0.3s ease"><div style="padding:48px;text-align:center;border-radius:28px;margin-bottom:24px;background:${book.color};border:1px solid rgba(255,255,255,0.3)"><i class="${book.icon}" style="font-size:80px;color:white"></i></div><h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:#1a1a2e">${book.title}</h2><p style="font-size:28px;font-weight:700;color:#2c7da0;text-align:center;margin-bottom:20px">${book.price} EGP (${book.stars} Stars)</p><p style="font-size:15px;line-height:1.6;color:#4a4a6a;margin-bottom:28px;padding:0 8px">${book.description}</p><div style="display:flex;flex-direction:column;gap:12px"><button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button><button class="action-btn secondary-btn" onclick="window.switchToView('books')"><i class="fas fa-book"></i> Back to Books</button></div></div>`;
+            const detailHtml = `
+                <div style="animation:fadeInUp 0.3s ease">
+                    <div style="padding:48px;text-align:center;border-radius:28px;margin-bottom:24px;background:${book.color};border:1px solid rgba(255,255,255,0.3)">
+                        <i class="${book.icon}" style="font-size:80px;color:white"></i>
+                    </div>
+                    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:#1a1a2e">${book.title}</h2>
+                    <p style="font-size:28px;font-weight:700;color:#2c7da0;text-align:center;margin-bottom:20px">${book.price} EGP</p>
+                    <p style="font-size:15px;line-height:1.6;color:#4a4a6a;margin-bottom:28px;padding:0 8px">${book.description}</p>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button>
+                        <button class="action-btn secondary-btn" onclick="window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> View Sample Pages</button>
+                        <button class="action-btn secondary-btn" onclick="window.switchToView('home')"><i class="fas fa-arrow-left"></i> Back to Books</button>
+                    </div>
+                </div>
+            `;
             document.getElementById('bookDetail').innerHTML = detailHtml;
             switchToView('detail');
+        }
+        
+        // Sample Viewer
+        function viewSample(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            
+            currentBookForSample = book;
+            document.getElementById('sampleTitle').textContent = book.title;
+            const pdfFrame = document.getElementById('pdfFrame');
+            const sampleUrl = book.sample;
+            pdfFrame.src = `https://docs.google.com/gview?url=${encodeURIComponent(window.location.origin + '/' + sampleUrl)}&embedded=true`;
+            
+            document.getElementById('purchaseFromSampleBtn').onclick = () => {
+                addToCart(book.id);
+                switchToView('cart');
+            };
+            
+            switchToView('sample');
         }
         
         // Navigation
@@ -958,7 +988,7 @@
             if (viewName !== navigationStack[navigationStack.length - 1]) navigationStack.push(viewName);
             if (viewName === 'cart') displayCartItems();
             
-            const titles = { home: 'Medical Book Store', books: 'Browse Books', cart: 'Your Cart', support: 'Support', about: 'About Us', detail: 'Book Details' };
+            const titles = { home: 'Medical Book Store', cart: 'Your Cart', support: 'Support', about: 'About Us', detail: 'Book Details', sample: 'Sample Preview' };
             document.querySelector('.header-title span').textContent = titles[viewName] || 'Medical Book Store';
         }
         
@@ -976,9 +1006,25 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
         
-        function openTelegramChat() { window.open('https://t.me/ahmed7a7medbot', '_blank'); }
+        // Support Functions
+        function openTelegramChat() { 
+            if (tg) tg.openTelegramLink('https://t.me/MedicalBooksSupport');
+            else window.open('https://t.me/MedicalBooksSupport', '_blank');
+        }
+        
         function sendEmail() { window.location.href = 'mailto:support@medicalbooks.com'; }
-        function openBot() { window.open('https://t.me/ahmed7a7medbot', '_blank'); }
+        
+        function copyNumber() {
+            const number = '01001234567';
+            navigator.clipboard.writeText(number);
+            showToast('Phone number copied!');
+        }
+        
+        function openBot() { 
+            const botUsername = 'YourMedicalBookBot';
+            if (tg) tg.openTelegramLink(`https://t.me/${botUsername}`);
+            else window.open(`https://t.me/${botUsername}`, '_blank');
+        }
         
         // Expose functions globally
         window.switchToView = switchToView;
@@ -987,10 +1033,10 @@
         window.removeFromCart = removeFromCart;
         window.checkoutFromWebApp = checkoutFromWebApp;
         window.showBookDetail = showBookDetail;
-        window.filterBooks = filterBooks;
-        window.filterByCategory = filterByCategory;
+        window.viewSample = viewSample;
         window.openTelegramChat = openTelegramChat;
         window.sendEmail = sendEmail;
+        window.copyNumber = copyNumber;
         window.openBot = openBot;
         window.goBack = goBack;
         
