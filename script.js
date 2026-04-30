@@ -11,7 +11,8 @@ const books = [
         stars: 460,
         category: "anatomy",
         sample: "samples/anatomy-sample.pdf",
-        cover: "📖",
+        icon: "fas fa-heartbeat",  // Medical icon
+        color: "linear-gradient(135deg, #e74c3c, #c0392b)",
         featured: true
     },
     {
@@ -22,7 +23,8 @@ const books = [
         stars: 383,
         category: "pharmacology",
         sample: "samples/pharmacology-sample.pdf",
-        cover: "💊",
+        icon: "fas fa-capsules",
+        color: "linear-gradient(135deg, #3498db, #2980b9)",
         featured: true
     },
     {
@@ -33,7 +35,8 @@ const books = [
         stars: 429,
         category: "pathology",
         sample: "samples/pathology-sample.pdf",
-        cover: "🫀",
+        icon: "fas fa-disease",
+        color: "linear-gradient(135deg, #9b59b6, #8e44ad)",
         featured: true
     },
     {
@@ -44,7 +47,8 @@ const books = [
         stars: 414,
         category: "neurology",
         sample: "samples/neurology-sample.pdf",
-        cover: "🧠",
+        icon: "fas fa-brain",
+        color: "linear-gradient(135deg, #1abc9c, #16a085)",
         featured: false
     },
     {
@@ -55,7 +59,8 @@ const books = [
         stars: 445,
         category: "cardiology",
         sample: "samples/cardiology-sample.pdf",
-        cover: "❤️",
+        icon: "fas fa-heart",
+        color: "linear-gradient(135deg, #e74c3c, #c0392b)",
         featured: false
     },
     {
@@ -66,11 +71,35 @@ const books = [
         stars: 398,
         category: "pediatrics",
         sample: "samples/pediatrics-sample.pdf",
-        cover: "👶",
+        icon: "fas fa-child",
+        color: "linear-gradient(135deg, #f39c12, #e67e22)",
+        featured: false
+    },
+    {
+        id: "radiology",
+        title: "Radiology Basics",
+        description: "X-ray, CT, MRI interpretation. Essential for clinical practice and board exams.",
+        price: 289,
+        stars: 445,
+        category: "radiology",
+        sample: "samples/radiology-sample.pdf",
+        icon: "fas fa-x-ray",
+        color: "linear-gradient(135deg, #34495e, #2c3e50)",
+        featured: false
+    },
+    {
+        id: "emergency",
+        title: "Emergency Medicine",
+        description: "Critical care protocols, trauma management, and emergency procedures.",
+        price: 299,
+        stars: 460,
+        category: "emergency",
+        sample: "samples/emergency-sample.pdf",
+        icon: "fas fa-truck-medical",
+        color: "linear-gradient(135deg, #e74c3c, #c0392b)",
         featured: false
     }
 ];
-
 // Initialize Telegram WebApp
 function initTelegramApp() {
     if (tg) {
@@ -147,7 +176,7 @@ function switchToView(viewName) {
     document.querySelector('.header-title span:last-child').textContent = titles[viewName] || 'Medical Book Store';
 }
 
-// Load featured books
+// Load featured books with icons
 function loadFeaturedBooks() {
     const featured = books.filter(book => book.featured);
     const container = document.getElementById('featuredBooks');
@@ -156,33 +185,80 @@ function loadFeaturedBooks() {
     
     container.innerHTML = featured.map(book => `
         <div class="book-card" onclick="showBookDetail('${book.id}')">
-            <div class="book-cover">${book.cover}</div>
+            <div class="book-cover" style="background: ${book.color}">
+                <i class="${book.icon}" style="font-size: 48px;"></i>
+            </div>
             <div class="book-info">
                 <div class="book-title">${book.title}</div>
                 <div class="book-price">${book.price} EGP</div>
                 <div class="book-actions">
-                    <button class="sample-link" onclick="event.stopPropagation(); viewSample('${book.id}')">📄 Sample</button>
+                    <button class="sample-link" onclick="event.stopPropagation(); viewSample('${book.id}')">
+                        <i class="fas fa-file-pdf"></i> Sample
+                    </button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-// Load all books in list view
+// Load all books in list view with icons
 function loadBooksList() {
     const container = document.getElementById('booksList');
     if (!container) return;
     
     container.innerHTML = books.map(book => `
         <div class="book-list-item" onclick="showBookDetail('${book.id}')">
-            <div class="book-list-cover">${book.cover}</div>
+            <div class="book-list-cover" style="background: ${book.color}">
+                <i class="${book.icon}" style="font-size: 32px; color: white;"></i>
+            </div>
             <div class="book-list-info">
                 <div class="book-list-title">${book.title}</div>
                 <div class="book-list-desc">${book.description.substring(0, 80)}...</div>
-                <div class="book-list-price">${book.price} EGP (${book.stars} Stars)</div>
+                <div class="book-list-price">
+                    <i class="fas fa-tag"></i> ${book.price} EGP 
+                    (<i class="fab fa-telegram"></i> ${book.stars} Stars)
+                </div>
             </div>
         </div>
     `).join('');
+}
+
+// Show book detail with icons
+function showBookDetail(bookId) {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return;
+    
+    const container = document.getElementById('bookDetail');
+    container.innerHTML = `
+        <div class="book-detail-card">
+            <div class="detail-cover" style="background: ${book.color}; padding: 40px; text-align: center; border-radius: 20px; margin-bottom: 20px;">
+                <i class="${book.icon}" style="font-size: 80px; color: white;"></i>
+            </div>
+            
+            <h2>${book.title}</h2>
+            <p class="detail-price">
+                <i class="fas fa-tag"></i> ${book.price} EGP 
+                (<i class="fab fa-telegram"></i> ${book.stars} Stars)
+            </p>
+            <p class="detail-description">
+                <i class="fas fa-align-left"></i> ${book.description}
+            </p>
+            
+            <div class="detail-actions">
+                <button class="action-btn primary-btn" onclick="purchaseBook('${book.id}', 'stars')">
+                    <i class="fab fa-telegram"></i> Pay ${book.stars} Stars
+                </button>
+                <button class="action-btn primary-btn" onclick="purchaseBook('${book.id}', 'cash')">
+                    <i class="fas fa-mobile-alt"></i> Pay ${book.price} EGP
+                </button>
+                <button class="action-btn secondary-btn" onclick="viewSample('${book.id}')">
+                    <i class="fas fa-file-pdf"></i> View Sample Pages
+                </button>
+            </div>
+        </div>
+    `;
+    
+    switchToView('detail');
 }
 
 // Filter books by search
@@ -206,39 +282,6 @@ function filterBooks() {
             </div>
         </div>
     `).join('');
-}
-
-// Show book detail
-function showBookDetail(bookId) {
-    const book = books.find(b => b.id === bookId);
-    if (!book) return;
-    
-    const container = document.getElementById('bookDetail');
-    container.innerHTML = `
-        <div class="book-detail-card">
-            <div class="detail-cover" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 40px; text-align: center; border-radius: 20px; margin-bottom: 20px;">
-                <span style="font-size: 80px;">${book.cover}</span>
-            </div>
-            
-            <h2>${book.title}</h2>
-            <p class="detail-price">${book.price} EGP (${book.stars} Stars)</p>
-            <p class="detail-description">${book.description}</p>
-            
-            <div class="detail-actions">
-                <button class="action-btn primary-btn" onclick="purchaseBook('${book.id}', 'stars')">
-                    ⭐ Pay ${book.stars} Stars
-                </button>
-                <button class="action-btn primary-btn" onclick="purchaseBook('${book.id}', 'cash')">
-                    💵 Pay ${book.price} EGP
-                </button>
-                <button class="action-btn secondary-btn" onclick="viewSample('${book.id}')">
-                    📄 View Sample Pages
-                </button>
-            </div>
-        </div>
-    `;
-    
-    switchToView('detail');
 }
 
 // View PDF sample
