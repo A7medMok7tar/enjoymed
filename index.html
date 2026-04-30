@@ -1,47 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Book a Printed Book</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: var(--tg-theme-bg-color);
-      color: var(--tg-theme-text-color);
-      padding: 20px;
-    }
-    .form-control, .form-select {
-      background-color: var(--tg-theme-secondary-bg-color);
-      color: var(--tg-theme-text-color);
-      border: 1px solid #ccc;
-    }
-    .btn-primary {
-      background-color: var(--tg-theme-button-color);
-      color: var(--tg-theme-button-text-color);
-      border: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Medical Book Store</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h4 class="mb-3">Select Books</h4>
-  <select class="form-select" id="bookSelect" multiple>
-    <option value="Book A">Book A</option>
-    <option value="Book B">Book B</option>
-    <option value="Book C">Book C</option>
-    <option value="Book D">Book D</option>
-  </select>
+    <div class="app-container">
+        <!-- Header with Back Button -->
+        <div class="header">
+            <button class="back-btn" id="backBtn" style="display: none;">←</button>
+            <div class="header-title">
+                <span class="logo">📚</span>
+                <span>Medical Book Store</span>
+            </div>
+            <button class="close-btn" id="closeBtn">✕</button>
+        </div>
 
-  <h4 class="mt-4">Your Info</h4>
-  <div class="mb-3">
-    <input type="text" class="form-control" id="name" placeholder="Your Name">
-  </div>
-  <div class="mb-3">
-    <input type="text" class="form-control" id="whatsapp" placeholder="WhatsApp Number">
-  </div>
-  <button class="btn btn-primary w-100" onclick="submitForm()">Submit</button>
+        <!-- Main Content -->
+        <div class="content" id="content">
+            <!-- Home View -->
+            <div id="homeView" class="view active">
+                <!-- Hero Section -->
+                <div class="hero">
+                    <div class="hero-icon">🏥</div>
+                    <h1>Medical Knowledge<br>At Your Fingertips</h1>
+                    <p>Trusted by 500+ medical professionals worldwide</p>
+                </div>
 
-  <script src="script.js"></script>
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Medical Books</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Instant Access</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">⭐ 4.9</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                </div>
+
+                <!-- Featured Books -->
+                <h2 class="section-title">📖 Featured Books</h2>
+                <div class="books-grid" id="featuredBooks"></div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn primary-btn" onclick="switchToView('books')">
+                        📚 Browse All Books
+                    </button>
+                    <button class="action-btn secondary-btn" onclick="switchToView('support')">
+                        💬 Support & Contact
+                    </button>
+                </div>
+            </div>
+
+            <!-- Books View -->
+            <div id="booksView" class="view">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="🔍 Search medical books..." onkeyup="filterBooks()">
+                </div>
+                <div class="books-list" id="booksList"></div>
+            </div>
+
+            <!-- Book Detail View -->
+            <div id="detailView" class="view">
+                <div id="bookDetail"></div>
+            </div>
+
+            <!-- Sample Viewer View -->
+            <div id="sampleView" class="view">
+                <div class="sample-header">
+                    <h3 id="sampleTitle">Book Sample</h3>
+                    <p>Preview - First 3 pages</p>
+                </div>
+                <div class="pdf-viewer" id="pdfViewer">
+                    <iframe id="pdfFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
+                </div>
+                <div class="sample-actions">
+                    <button class="action-btn primary-btn" id="purchaseFromSampleBtn">🛒 Purchase Full Book</button>
+                </div>
+            </div>
+
+            <!-- Support View -->
+            <div id="supportView" class="view">
+                <div class="support-section">
+                    <div class="contact-card">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-info">
+                            <h3>Telegram Support</h3>
+                            <p>@MedicalBooksSupport</p>
+                            <button class="small-btn" onclick="openTelegramChat()">Chat Now →</button>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-info">
+                            <h3>Email Us</h3>
+                            <p>support@medicalbooks.com</p>
+                            <button class="small-btn" onclick="sendEmail()">Send Email →</button>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-info">
+                            <h3>Vodafone Cash</h3>
+                            <p>0100 123 4567</p>
+                            <button class="small-btn" onclick="copyNumber()">Copy Number</button>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">❓</div>
+                        <div class="contact-info">
+                            <h3>FAQ</h3>
+                            <p>How to download? • Refund policy? • Payment methods?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="response-time">
+                    <span>⏰ Response time: 24-48 hours</span>
+                </div>
+            </div>
+
+            <!-- About View -->
+            <div id="aboutView" class="view">
+                <div class="about-content">
+                    <div class="about-logo">📚</div>
+                    <h2>Medical Book Store</h2>
+                    <p class="version">Version 2.0.0</p>
+                    
+                    <div class="about-section">
+                        <h3>About Us</h3>
+                        <p>We provide high-quality medical ebooks for students, residents, and practicing physicians. Our collection is carefully curated to ensure accuracy and relevance.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>Features</h3>
+                        <ul class="feature-list">
+                            <li>✓ Instant delivery after purchase</li>
+                            <li>✓ Lifetime access to all purchased books</li>
+                            <li>✓ PDF format - works on all devices</li>
+                            <li>✓ Secure payment (Stars & Vodafone Cash)</li>
+                            <li>✓ 24-hour refund policy</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>Payment Methods</h3>
+                        <div class="payment-icons">
+                            <span>⭐ Telegram Stars</span>
+                            <span>💵 Vodafone Cash</span>
+                        </div>
+                    </div>
+
+                    <button class="action-btn primary-btn" onclick="openBot()">
+                        🤖 Open Bot to Purchase
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item" onclick="switchToView('home')" data-view="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item" onclick="switchToView('books')" data-view="books">
+                <span class="nav-icon">📚</span>
+                <span class="nav-label">Books</span>
+            </button>
+            <button class="nav-item" onclick="switchToView('support')" data-view="support">
+                <span class="nav-icon">💬</span>
+                <span class="nav-label">Support</span>
+            </button>
+            <button class="nav-item" onclick="switchToView('about')" data-view="about">
+                <span class="nav-icon">ℹ️</span>
+                <span class="nav-label">About</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
