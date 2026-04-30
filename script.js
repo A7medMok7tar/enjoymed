@@ -100,6 +100,47 @@ const books = [
         featured: false
     }
 ];
+
+// Story sharing function
+function shareToStory(bookTitle, bookCoverUrl) {
+    // Check if Telegram WebApp and shareToStory API are available
+    if (!window.Telegram || !window.Telegram.WebApp) {
+        console.error('Telegram WebApp not available');
+        alert('This feature only works inside Telegram');
+        return;
+    }
+    
+    const webapp = window.Telegram.WebApp;
+    
+    // Check if shareToStory method exists
+    if (typeof webapp.shareToStory !== 'function') {
+        console.warn('shareToStory API not available. Make sure you have the latest Telegram version.');
+        alert('Please update Telegram to the latest version to use this feature');
+        return;
+    }
+    
+    // Create a widget/text overlay for the story
+    // In a production app, you'd generate an image dynamically
+    const storyMediaUrl = bookCoverUrl || 'https://your-domain.com/default-share-image.jpg';
+    
+    // Optional: Add text widget overlay
+    const params = {
+        text: `📚 Just discovered "${bookTitle}" at Medical Book Store!\n\nGet yours today →`,
+        widget_link: {
+            url: `https://t.me/YourMedicalBookBot?start=book_${bookTitle.toLowerCase().replace(/\s+/g, '_')}`,
+            name: 'Get This Book'
+        }
+    };
+    
+    // Open the story editor
+    try {
+        webapp.shareToStory(storyMediaUrl, params);
+        webapp.close(); // Optional: close mini app after sharing
+    } catch (error) {
+        console.error('Error sharing to story:', error);
+        alert('Unable to share. Please try again.');
+    }
+}
 // Initialize Telegram WebApp
 function initTelegramApp() {
     if (tg) {
