@@ -264,7 +264,7 @@ function loadBooksList() {
     `).join('');
 }
 
-// Show book detail with icons
+// Show book detail with share button
 function showBookDetail(bookId) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
@@ -295,13 +295,15 @@ function showBookDetail(bookId) {
                 <button class="action-btn secondary-btn" onclick="viewSample('${book.id}')">
                     <i class="fas fa-file-pdf"></i> View Sample Pages
                 </button>
+                <button class="action-btn secondary-btn" onclick="shareToStory('${book.title}', '${book.coverUrl || ''}')">
+                    <i class="fas fa-share-alt"></i> Share to Story
+                </button>
             </div>
         </div>
     `;
     
     switchToView('detail');
 }
-
 // Filter books by search
 function filterBooks() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
