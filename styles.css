@@ -1,3 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Telegram theme variables (will be overridden by Telegram) */
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #000000;
+    --tg-hint-color: #999999;
+    --tg-link-color: #2481cc;
+    --tg-button-color: #2481cc;
+    --tg-button-text-color: #ffffff;
+    --tg-secondary-bg-color: #f0f0f0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--tg-bg-color);
+    color: var(--tg-text-color);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: var(--tg-bg-color);
+    border-bottom: 1px solid var(--tg-secondary-bg-color);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--tg-link-color);
+    padding: 0 8px;
+    line-height: 1;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--tg-hint-color);
+    padding: 0 8px;
+    line-height: 1;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.logo {
+    font-size: 24px;
+}
+
+/* Content Area */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.view {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 24px 0;
+    background: linear-gradient(135deg, var(--tg-link-color) 0%, #1a5a8a 100%);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.hero-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.hero h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.hero p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--tg-link-color);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--tg-hint-color);
+}
+
+/* Section Title */
+.section-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--tg-text-color);
+}
+
+/* Books Grid */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.book-card {
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+}
+
+.book-cover {
+    height: 180px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.book-info {
+    padding: 12px;
+}
+
+.book-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--tg-link-color);
+    margin-bottom: 8px;
+}
+
+.book-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.sample-link {
+    font-size: 12px;
+    color: var(--tg-link-color);
+    text-decoration: none;
+}
+
+/* Books List View */
 /* Add to styles.css */
 
 /* Search Bar with Icon */
@@ -91,4 +312,282 @@
 .stat-label i {
     margin-right: 6px;
     font-size: 12px;
+}
+
+.books-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.book-list-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.book-list-cover {
+    width: 60px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.book-list-info {
+    flex: 1;
+}
+
+.book-list-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.book-list-desc {
+    font-size: 12px;
+    color: var(--tg-hint-color);
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-list-price {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--tg-link-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.action-btn {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.action-btn:active {
+    opacity: 0.7;
+}
+
+.primary-btn {
+    background: var(--tg-button-color);
+    color: var(--tg-button-text-color);
+}
+
+.secondary-btn {
+    background: var(--tg-secondary-bg-color);
+    color: var(--tg-text-color);
+}
+
+/* PDF Viewer */
+.pdf-viewer {
+    height: 70vh;
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.pdf-viewer iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.sample-header {
+    text-align: center;
+    padding: 16px;
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.sample-actions {
+    margin-top: 16px;
+}
+
+/* Support Section */
+.support-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+    align-items: center;
+}
+
+.contact-icon {
+    font-size: 32px;
+    width: 50px;
+    text-align: center;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-info h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.contact-info p {
+    font-size: 13px;
+    color: var(--tg-hint-color);
+    margin-bottom: 8px;
+}
+
+.small-btn {
+    padding: 6px 12px;
+    background: var(--tg-link-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.response-time {
+    text-align: center;
+    padding: 16px;
+    color: var(--tg-hint-color);
+    font-size: 12px;
+    margin-top: 16px;
+}
+
+/* About Section */
+.about-content {
+    text-align: center;
+}
+
+.about-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.about-content h2 {
+    margin-bottom: 8px;
+}
+
+.version {
+    color: var(--tg-hint-color);
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+
+.about-section {
+    text-align: left;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--tg-secondary-bg-color);
+    border-radius: 12px;
+}
+
+.about-section h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.feature-list {
+    list-style: none;
+}
+
+.feature-list li {
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.payment-icons span {
+    padding: 8px 16px;
+    background: var(--tg-bg-color);
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    display: flex;
+    background: var(--tg-bg-color);
+    border-top: 1px solid var(--tg-secondary-bg-color);
+    padding: 8px 0;
+    position: sticky;
+    bottom: 0;
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--tg-hint-color);
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: var(--tg-link-color);
+}
+
+.nav-icon {
+    font-size: 22px;
+}
+
+.nav-label {
+    font-size: 11px;
+}
+
+/* No Scroll */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --tg-bg-color: #1c1c1e;
+        --tg-text-color: #ffffff;
+        --tg-secondary-bg-color: #2c2c2e;
+        --tg-hint-color: #8e8e93;
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
