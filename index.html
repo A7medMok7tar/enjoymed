@@ -19,6 +19,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Telegram Theme Variables - Will be updated by JS */
+        :root {
+            --tg-bg-color: #ffffff;
+            --tg-text-color: #1a1a2e;
+            --tg-hint-color: #999999;
+            --tg-link-color: #2481cc;
+            --tg-button-color: #2481cc;
+            --tg-button-text-color: #ffffff;
+            --tg-secondary-bg-color: #f0f0f0;
+            --tg-section-bg: rgba(255, 255, 255, 0.85);
+            --tg-section-border: rgba(255, 255, 255, 0.3);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -48,7 +61,6 @@
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Header */
@@ -57,16 +69,16 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--tg-section-bg);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid var(--tg-section-border);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             z-index: 100;
         }
 
         .back-btn, .cart-icon-btn {
             background: rgba(128, 128, 128, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--tg-section-border);
             border-radius: 50%;
             width: 36px;
             height: 36px;
@@ -74,14 +86,9 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
             font-size: 18px;
             transition: all 0.2s ease;
-        }
-
-        .back-btn:hover, .cart-icon-btn:hover {
-            background: rgba(128, 128, 128, 0.25);
-            transform: scale(1.05);
         }
 
         .cart-icon-btn {
@@ -114,15 +121,11 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
         }
 
         .header-title i {
-            color: #2c7da0;
-        }
-
-        .spacer {
-            width: 36px;
+            color: var(--tg-link-color);
         }
 
         /* Content */
@@ -198,9 +201,9 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--tg-section-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
             padding: 16px 12px;
             text-align: center;
@@ -218,7 +221,7 @@
 
         .stat-label {
             font-size: 12px;
-            color: #4a4a6a;
+            color: var(--tg-hint-color);
         }
 
         /* Section Title */
@@ -229,98 +232,85 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
         }
 
         .section-title i {
             font-size: 22px;
-            color: #2c7da0;
+            color: var(--tg-link-color);
         }
 
-        /* Books Grid */
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        /* Home Books List - Each book in its own row */
+        .home-books-list {
+            display: flex;
+            flex-direction: column;
             gap: 16px;
             margin-bottom: 24px;
         }
 
-        .book-card {
-            background: rgba(255, 255, 255, 0.85);
+        .home-book-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--tg-section-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
-            overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .book-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        .home-book-item:hover {
+            transform: translateX(6px);
+            background: rgba(128, 128, 128, 0.15);
         }
 
-        .book-cover {
-            height: 180px;
+        .home-book-cover {
+            width: 80px;
+            height: 100px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
-        .book-card:hover .book-cover {
-            transform: scale(1.05);
-        }
-
-        .book-cover i {
-            font-size: 56px;
+        .home-book-cover i {
+            font-size: 40px;
             color: white;
         }
 
-        .book-info {
-            padding: 14px;
+        .home-book-info {
+            flex: 1;
         }
 
-        .book-title {
-            font-size: 14px;
-            font-weight: 600;
+        .home-book-title {
+            font-weight: 700;
+            font-size: 16px;
             margin-bottom: 6px;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
         }
 
-        .book-price {
+        .home-book-desc {
+            font-size: 12px;
+            color: var(--tg-hint-color);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .home-book-price {
             font-size: 16px;
             font-weight: 700;
-            color: #2c7da0;
+            color: var(--tg-link-color);
             margin-bottom: 10px;
         }
 
-        .book-actions {
+        .home-book-actions {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .sample-link {
-            font-size: 12px;
-            color: #2c7da0;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            background: rgba(128, 128, 128, 0.1);
-            border-radius: 8px;
-            cursor: pointer;
-            border: none;
-        }
-
-        /* All Books List (Grid style for home) */
-        .all-books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
+            gap: 10px;
         }
 
         /* Buttons */
@@ -345,9 +335,23 @@
         }
 
         .action-btn.secondary-btn {
-            background: rgba(255, 255, 255, 0.85);
-            color: #1a1a2e;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--tg-section-bg);
+            color: var(--tg-text-color);
+            border: 1px solid var(--tg-section-border);
+        }
+
+        .sample-link {
+            font-size: 12px;
+            color: var(--tg-link-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: rgba(128, 128, 128, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
         }
 
         /* Cart Items */
@@ -362,8 +366,8 @@
             display: flex;
             gap: 14px;
             padding: 14px;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--tg-section-bg);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
             align-items: center;
         }
@@ -390,13 +394,13 @@
             font-weight: 600;
             font-size: 14px;
             margin-bottom: 4px;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
         }
 
         .cart-item-price {
             font-size: 14px;
             font-weight: 600;
-            color: #2c7da0;
+            color: var(--tg-link-color);
         }
 
         .cart-item-remove {
@@ -413,10 +417,11 @@
         }
 
         .cart-summary-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--tg-section-bg);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
             padding: 18px;
+            margin-bottom: 20px;
         }
 
         .summary-row {
@@ -424,16 +429,16 @@
             justify-content: space-between;
             padding: 8px 0;
             font-size: 14px;
-            color: #4a4a6a;
+            color: var(--tg-hint-color);
         }
 
         .summary-row.total {
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 1px solid var(--tg-section-border);
             margin-top: 8px;
             padding-top: 12px;
             font-size: 18px;
             font-weight: 700;
-            color: #2c7da0;
+            color: var(--tg-link-color);
         }
 
         .empty-cart {
@@ -441,13 +446,64 @@
             padding: 40px 20px;
         }
 
+        /* Checkout Button Container - Above bottom nav */
+        .checkout-container {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 12px 16px;
+            background: transparent;
+            z-index: 85;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            display: flex;
+            background: var(--tg-section-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--tg-section-border);
+            padding: 8px 0 12px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 90;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--tg-hint-color);
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            color: var(--tg-link-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+        }
+
         /* Sample Viewer */
         .sample-header {
             text-align: center;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--tg-section-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
             margin-bottom: 20px;
         }
@@ -455,7 +511,7 @@
         .sample-header h3 {
             margin: 10px 0 5px;
             font-size: 18px;
-            color: #1a1a2e;
+            color: var(--tg-text-color);
         }
 
         .pdf-viewer {
@@ -463,8 +519,8 @@
             margin: 16px 0;
             border-radius: 20px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--tg-section-bg);
+            border: 1px solid var(--tg-section-border);
         }
 
         .pdf-viewer iframe {
@@ -484,8 +540,8 @@
             display: flex;
             gap: 16px;
             padding: 18px;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--tg-section-bg);
+            border: 1px solid var(--tg-section-border);
             border-radius: 20px;
             align-items: center;
         }
@@ -494,12 +550,12 @@
             font-size: 36px;
             width: 55px;
             text-align: center;
-            color: #2c7da0;
+            color: var(--tg-link-color);
         }
 
         .small-btn {
             padding: 6px 12px;
-            background: #2c7da0;
+            background: var(--tg-link-color);
             color: white;
             border: none;
             border-radius: 8px;
@@ -513,56 +569,17 @@
         .response-time {
             text-align: center;
             padding: 14px;
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--tg-section-bg);
             border-radius: 20px;
             margin-top: 16px;
             font-size: 12px;
-            color: #4a4a6a;
-        }
-
-        /* About Section */
-        .about-logo {
-            font-size: 72px;
-            margin-bottom: 16px;
-        }
-
-        .about-section {
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-top: 10px;
-        }
-
-        .feature-list li {
-            padding: 6px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .payment-icons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .payment-icons span {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
+            color: var(--tg-hint-color);
         }
 
         /* Toast */
         .toast {
             position: fixed;
-            bottom: 80px;
+            bottom: 140px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: rgba(0, 0, 0, 0.8);
@@ -582,54 +599,14 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Bottom Navigation - 4 items only */
-        .bottom-nav {
-            display: flex;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 0 12px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 90;
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: #8a8a9e;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item.active {
-            color: #2c7da0;
-        }
-
-        .nav-icon {
-            font-size: 22px;
-        }
-
-        .nav-label {
-            font-size: 11px;
-        }
-
         @media (max-width: 480px) {
-            .books-grid, .all-books-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
             .content {
                 padding: 16px 12px;
-                padding-bottom: 70px;
+                padding-bottom: 80px;
+            }
+            .home-book-cover {
+                width: 70px;
+                height: 90px;
             }
         }
     </style>
@@ -653,7 +630,7 @@
 
         <!-- Content -->
         <div class="content" id="content">
-            <!-- Home View (Only View with Books) -->
+            <!-- Home View -->
             <div id="homeView" class="view active">
                 <div class="hero">
                     <div class="hero-icon"><i class="fas fa-stethoscope"></i></div>
@@ -668,10 +645,7 @@
                 </div>
 
                 <h2 class="section-title"><i class="fas fa-fire"></i> Featured Books</h2>
-                <div class="books-grid" id="featuredBooks"></div>
-
-                <h2 class="section-title" style="margin-top: 20px;"><i class="fas fa-book-open"></i> All Medical Books</h2>
-                <div class="all-books-grid" id="allBooksGrid"></div>
+                <div class="home-books-list" id="featuredBooksList"></div>
             </div>
 
             <!-- Cart View -->
@@ -716,35 +690,34 @@
             <!-- About View -->
             <div id="aboutView" class="view">
                 <div style="text-align:center">
-                    <div class="about-logo"><i class="fas fa-book-medical"></i></div>
-                    <h2>Medical Book Store</h2>
-                    <p style="color:#8a8a9e;margin-bottom:28px">Version 2.0.0</p>
-                    <div class="about-section">
-                        <h3><i class="fas fa-info-circle"></i> About Us</h3>
-                        <p>We provide high-quality medical ebooks for students, residents, and practicing physicians. Our collection is carefully curated to ensure accuracy and relevance.</p>
+                    <div style="font-size:72px;margin-bottom:16px"><i class="fas fa-book-medical"></i></div>
+                    <h2 style="color:var(--tg-text-color)">Medical Book Store</h2>
+                    <p style="color:var(--tg-hint-color);margin-bottom:28px">Version 2.0.0</p>
+                    <div style="background:var(--tg-section-bg);border-radius:20px;padding:18px;margin-bottom:20px;text-align:left">
+                        <h3 style="color:var(--tg-text-color);margin-bottom:10px"><i class="fas fa-info-circle"></i> About Us</h3>
+                        <p style="color:var(--tg-hint-color)">We provide high-quality medical ebooks for students, residents, and practicing physicians.</p>
                     </div>
-                    <div class="about-section">
-                        <h3><i class="fas fa-star"></i> Features</h3>
-                        <ul class="feature-list">
-                            <li><i class="fas fa-bolt"></i> Instant delivery after purchase</li>
-                            <li><i class="fas fa-infinity"></i> Lifetime access</li>
-                            <li><i class="fas fa-file-pdf"></i> PDF format - works on all devices</li>
-                            <li><i class="fas fa-lock"></i> Secure payment via Vodafone Cash</li>
-                            <li><i class="fas fa-undo-alt"></i> 24-hour refund policy</li>
+                    <div style="background:var(--tg-section-bg);border-radius:20px;padding:18px;margin-bottom:20px;text-align:left">
+                        <h3 style="color:var(--tg-text-color);margin-bottom:10px"><i class="fas fa-star"></i> Features</h3>
+                        <ul style="list-style:none;color:var(--tg-hint-color)">
+                            <li style="padding:6px 0"><i class="fas fa-bolt"></i> Instant delivery after purchase</li>
+                            <li style="padding:6px 0"><i class="fas fa-infinity"></i> Lifetime access</li>
+                            <li style="padding:6px 0"><i class="fas fa-file-pdf"></i> PDF format - works on all devices</li>
                         </ul>
-                    </div>
-                    <div class="about-section">
-                        <h3><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                        <div class="payment-icons">
-                            <span><i class="fas fa-mobile-alt"></i> Vodafone Cash</span>
-                        </div>
                     </div>
                     <button class="action-btn primary-btn" onclick="window.openBot()"><i class="fas fa-robot"></i> Open Bot to Purchase</button>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Navigation (4 items - no Books tab) -->
+        <!-- Checkout Button Container - Above Bottom Nav -->
+        <div class="checkout-container" id="checkoutContainer" style="display: none;">
+            <button class="action-btn primary-btn" id="checkoutBtn">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <button class="nav-item" onclick="window.switchToView('home')" data-view="home"><i class="fas fa-home nav-icon"></i><span class="nav-label">Home</span></button>
             <button class="nav-item" onclick="window.viewCart()" data-view="cart"><i class="fas fa-shopping-cart nav-icon"></i><span class="nav-label">Cart</span></button>
@@ -758,21 +731,40 @@
     <script>
         // ============================================
         // MEDICAL BOOK STORE - COMPLETE SCRIPT
-        // No Stars, Only Vodafone Cash
-        // Main Button for Checkout
+        // With Telegram Theme Support
         // ============================================
         
         const tg = window.Telegram?.WebApp;
         
-        // Book Database (No Stars prices)
+        // Apply Telegram theme
+        function applyTelegramTheme() {
+            if (tg && tg.themeParams) {
+                const theme = tg.themeParams;
+                document.documentElement.style.setProperty('--tg-bg-color', theme.bg_color || '#ffffff');
+                document.documentElement.style.setProperty('--tg-text-color', theme.text_color || '#1a1a2e');
+                document.documentElement.style.setProperty('--tg-hint-color', theme.hint_color || '#999999');
+                document.documentElement.style.setProperty('--tg-link-color', theme.link_color || '#2481cc');
+                document.documentElement.style.setProperty('--tg-button-color', theme.button_color || '#2481cc');
+                document.documentElement.style.setProperty('--tg-button-text-color', theme.button_text_color || '#ffffff');
+                document.documentElement.style.setProperty('--tg-secondary-bg-color', theme.secondary_bg_color || '#f0f0f0');
+                
+                // Glass effects based on theme
+                if (theme.bg_color && theme.bg_color.includes('1a1a')) {
+                    document.documentElement.style.setProperty('--tg-section-bg', 'rgba(30, 30, 50, 0.85)');
+                    document.documentElement.style.setProperty('--tg-section-border', 'rgba(255, 255, 255, 0.12)');
+                } else {
+                    document.documentElement.style.setProperty('--tg-section-bg', 'rgba(255, 255, 255, 0.85)');
+                    document.documentElement.style.setProperty('--tg-section-border', 'rgba(255, 255, 255, 0.3)');
+                }
+            }
+        }
+        
+        // Book Database (IDs match bot database)
         const books = [
             { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/anatomy-sample.pdf" },
             { id: "forensic", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", icon: "fas fa-capsules", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
             { id: "musculoskeletal", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", icon: "fas fa-heart", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
-            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" },
-            { id: "pediatrics", title: "Pediatrics Guide", description: "Child development, common diseases, vaccinations, and emergency protocols.", price: 259, category: "pediatrics", icon: "fas fa-child", color: "linear-gradient(135deg, #f39c12, #e67e22)", featured: false, sample: "samples/pediatrics-sample.pdf" },
-            { id: "pathology", title: "Pathophysiology", description: "Understanding disease mechanisms, clinical manifestations, and diagnostic approaches.", price: 279, category: "pathology", icon: "fas fa-disease", color: "linear-gradient(135deg, #9b59b6, #8e44ad)", featured: false, sample: "samples/pathology-sample.pdf" },
-            { id: "radiology", title: "Radiology Basics", description: "X-ray, CT, MRI interpretation. Essential for clinical practice.", price: 289, category: "radiology", icon: "fas fa-x-ray", color: "linear-gradient(135deg, #34495e, #2c3e50)", featured: false, sample: "samples/radiology-sample.pdf" }
+            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" }
         ];
         
         // Cart
@@ -782,46 +774,43 @@
         
         // Initialize
         function init() {
+            applyTelegramTheme();
+            
             if (tg) {
                 tg.expand();
                 tg.enableClosingConfirmation();
                 tg.ready();
-                setupMainButton();
             }
             
             loadCartFromStorage();
             loadFeaturedBooks();
-            loadAllBooks();
             updateCartUI();
-            setupMainButtonVisibility();
+            setupCheckoutButton();
             
             document.querySelector('.nav-item[data-view="home"]').classList.add('active');
         }
         
-        // Setup Main Button (Telegram native button)
-        function setupMainButton() {
-            if (!tg) return;
+        // Load Featured Books - Each in its own row (4 books max)
+        function loadFeaturedBooks() {
+            const container = document.getElementById('featuredBooksList');
+            const featured = books.filter(b => b.featured).slice(0, 4);
             
-            tg.MainButton.setText("💳 Proceed to Checkout");
-            tg.MainButton.onClick(() => {
-                checkoutFromWebApp();
-            });
-        }
-        
-        // Show/hide Main Button based on cart
-        function setupMainButtonVisibility() {
-            if (!tg) return;
-            
-            if (cart.length > 0) {
-                tg.MainButton.show();
-                tg.MainButton.setText(`💳 Checkout • ${getCartTotal()} EGP`);
-            } else {
-                tg.MainButton.hide();
-            }
-        }
-        
-        function getCartTotal() {
-            return cart.reduce((sum, item) => sum + item.price, 0);
+            container.innerHTML = featured.map(book => `
+                <div class="home-book-item">
+                    <div class="home-book-cover" style="background: ${book.color}" onclick="window.showBookDetail('${book.id}')">
+                        <i class="${book.icon}"></i>
+                    </div>
+                    <div class="home-book-info">
+                        <div class="home-book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div>
+                        <div class="home-book-desc" onclick="window.showBookDetail('${book.id}')">${book.description.substring(0, 80)}...</div>
+                        <div class="home-book-price">${book.price} EGP</div>
+                        <div class="home-book-actions">
+                            <button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button>
+                            <button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
         
         // Cart Functions
@@ -833,7 +822,7 @@
         function saveCartToStorage() {
             localStorage.setItem('medical_cart', JSON.stringify(cart));
             updateCartUI();
-            setupMainButtonVisibility();
+            setupCheckoutButton();
         }
         
         function updateCartUI() {
@@ -845,7 +834,6 @@
                 badge.classList.add('hidden');
             }
             
-            // Update cart count in any displayed views
             if (document.getElementById('cartView').classList.contains('active')) {
                 displayCartItems();
             }
@@ -883,7 +871,7 @@
             const summaryContainer = document.getElementById('cartSummary');
             
             if (cart.length === 0) {
-                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:#8a8a9e"></i><p>Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
+                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:var(--tg-hint-color)"></i><p style="color:var(--tg-text-color)">Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
                 summaryContainer.innerHTML = '';
                 return;
             }
@@ -891,10 +879,23 @@
             let total = 0;
             container.innerHTML = cart.map(item => {
                 total += item.price;
-                return `<div class="cart-item"><div class="cart-item-cover" style="background:${item.color}"><i class="${item.icon}"></i></div><div class="cart-item-info"><div class="cart-item-title">${item.title}</div><div class="cart-item-price">${item.price} EGP</div></div><button class="cart-item-remove" onclick="window.removeFromCart('${item.id}')"><i class="fas fa-trash-alt"></i></button></div>`;
+                return `<div class="cart-item"><div class="cart-item-cover" style="background:${item.color}"><i class="${item.icon}"></i></div><div class="cart-item-info"><div class="cart-item-title" style="color:var(--tg-text-color)">${item.title}</div><div class="cart-item-price">${item.price} EGP</div></div><button class="cart-item-remove" onclick="window.removeFromCart('${item.id}')"><i class="fas fa-trash-alt"></i></button></div>`;
             }).join('');
             
             summaryContainer.innerHTML = `<div class="cart-summary-card"><div class="summary-row"><span>Subtotal:</span><span>${total} EGP</span></div><div class="summary-row"><span>Delivery:</span><span>Free</span></div><div class="summary-row total"><span>Total:</span><span>${total} EGP</span></div></div>`;
+        }
+        
+        // Setup Checkout Button (appears only when cart has items)
+        function setupCheckoutButton() {
+            const checkoutContainer = document.getElementById('checkoutContainer');
+            if (cart.length > 0) {
+                checkoutContainer.style.display = 'block';
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                checkoutBtn.innerHTML = `<i class="fas fa-credit-card"></i> Checkout • ${total} EGP`;
+            } else {
+                checkoutContainer.style.display = 'none';
+            }
         }
         
         function checkoutFromWebApp() {
@@ -903,7 +904,7 @@
                 return;
             }
             
-            const total = getCartTotal();
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
             const checkoutData = { 
                 action: 'checkout', 
                 items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), 
@@ -920,18 +921,7 @@
             }
         }
         
-        // Book Display Functions
-        function loadFeaturedBooks() {
-            const container = document.getElementById('featuredBooks');
-            const featured = books.filter(b => b.featured).slice(0, 4);
-            container.innerHTML = featured.map(book => `<div class="book-card"><div class="book-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-info"><div class="book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-price">${book.price} EGP</div><div class="book-actions"><button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button><button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
-        }
-        
-        function loadAllBooks() {
-            const container = document.getElementById('allBooksGrid');
-            container.innerHTML = books.map(book => `<div class="book-card"><div class="book-cover" style="background:${book.color}" onclick="window.showBookDetail('${book.id}')"><i class="${book.icon}"></i></div><div class="book-info"><div class="book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div><div class="book-price">${book.price} EGP</div><div class="book-actions"><button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button><button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add</button></div></div></div>`).join('');
-        }
-        
+        // Book Functions
         function showBookDetail(bookId) {
             const book = books.find(b => b.id === bookId);
             if (!book) return;
@@ -941,9 +931,9 @@
                     <div style="padding:48px;text-align:center;border-radius:28px;margin-bottom:24px;background:${book.color};border:1px solid rgba(255,255,255,0.3)">
                         <i class="${book.icon}" style="font-size:80px;color:white"></i>
                     </div>
-                    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:#1a1a2e">${book.title}</h2>
-                    <p style="font-size:28px;font-weight:700;color:#2c7da0;text-align:center;margin-bottom:20px">${book.price} EGP</p>
-                    <p style="font-size:15px;line-height:1.6;color:#4a4a6a;margin-bottom:28px;padding:0 8px">${book.description}</p>
+                    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:var(--tg-text-color)">${book.title}</h2>
+                    <p style="font-size:28px;font-weight:700;color:var(--tg-link-color);text-align:center;margin-bottom:20px">${book.price} EGP</p>
+                    <p style="font-size:15px;line-height:1.6;color:var(--tg-hint-color);margin-bottom:28px;padding:0 8px">${book.description}</p>
                     <div style="display:flex;flex-direction:column;gap:12px">
                         <button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button>
                         <button class="action-btn secondary-btn" onclick="window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> View Sample Pages</button>
@@ -955,7 +945,6 @@
             switchToView('detail');
         }
         
-        // Sample Viewer
         function viewSample(bookId) {
             const book = books.find(b => b.id === bookId);
             if (!book) return;
@@ -1043,6 +1032,7 @@
         // Event listeners
         document.getElementById('backBtn').addEventListener('click', goBack);
         document.getElementById('cartIconBtn').addEventListener('click', viewCart);
+        document.getElementById('checkoutBtn').addEventListener('click', checkoutFromWebApp);
         
         // Start
         init();
