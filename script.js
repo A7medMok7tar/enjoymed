@@ -1,3 +1,7 @@
+// ============================================
+// MEDICAL BOOK STORE - COMPLETE SCRIPT
+// ============================================
+
 // Telegram WebApp initialization
 let tg = window.Telegram?.WebApp;
 
@@ -11,9 +15,10 @@ const books = [
         stars: 460,
         category: "anatomy",
         sample: "samples/anatomy-sample.pdf",
-        icon: "fas fa-heartbeat",  // Medical icon
+        icon: "fas fa-heartbeat",
         color: "linear-gradient(135deg, #e74c3c, #c0392b)",
-        featured: true
+        featured: true,
+        searchQuery: "clinical anatomy"
     },
     {
         id: "pharmacology",
@@ -25,7 +30,8 @@ const books = [
         sample: "samples/pharmacology-sample.pdf",
         icon: "fas fa-capsules",
         color: "linear-gradient(135deg, #3498db, #2980b9)",
-        featured: true
+        featured: true,
+        searchQuery: "pharmacology handbook"
     },
     {
         id: "pathophysiology",
@@ -37,7 +43,8 @@ const books = [
         sample: "samples/pathology-sample.pdf",
         icon: "fas fa-disease",
         color: "linear-gradient(135deg, #9b59b6, #8e44ad)",
-        featured: true
+        featured: true,
+        searchQuery: "pathophysiology"
     },
     {
         id: "neurology",
@@ -49,7 +56,8 @@ const books = [
         sample: "samples/neurology-sample.pdf",
         icon: "fas fa-brain",
         color: "linear-gradient(135deg, #1abc9c, #16a085)",
-        featured: false
+        featured: false,
+        searchQuery: "neurology essentials"
     },
     {
         id: "cardiology",
@@ -61,7 +69,8 @@ const books = [
         sample: "samples/cardiology-sample.pdf",
         icon: "fas fa-heart",
         color: "linear-gradient(135deg, #e74c3c, #c0392b)",
-        featured: false
+        featured: false,
+        searchQuery: "cardiology made easy"
     },
     {
         id: "pediatrics",
@@ -73,123 +82,48 @@ const books = [
         sample: "samples/pediatrics-sample.pdf",
         icon: "fas fa-child",
         color: "linear-gradient(135deg, #f39c12, #e67e22)",
-        featured: false
-    },
-    {
-        id: "radiology",
-        title: "Radiology Basics",
-        description: "X-ray, CT, MRI interpretation. Essential for clinical practice and board exams.",
-        price: 289,
-        stars: 445,
-        category: "radiology",
-        sample: "samples/radiology-sample.pdf",
-        icon: "fas fa-x-ray",
-        color: "linear-gradient(135deg, #34495e, #2c3e50)",
-        featured: false
-    },
-    {
-        id: "emergency",
-        title: "Emergency Medicine",
-        description: "Critical care protocols, trauma management, and emergency procedures.",
-        price: 299,
-        stars: 460,
-        category: "emergency",
-        sample: "samples/emergency-sample.pdf",
-        icon: "fas fa-truck-medical",
-        color: "linear-gradient(135deg, #e74c3c, #c0392b)",
-        featured: false
+        featured: false,
+        searchQuery: "pediatrics guide"
     }
 ];
 
-// Story sharing function
-function shareToStory(bookTitle, bookCoverUrl) {
-    // Check if Telegram WebApp and shareToStory API are available
-    if (!window.Telegram || !window.Telegram.WebApp) {
-        console.error('Telegram WebApp not available');
-        alert('This feature only works inside Telegram');
-        return;
-    }
-    
-    const webapp = window.Telegram.WebApp;
-    
-    // Check if shareToStory method exists
-    if (typeof webapp.shareToStory !== 'function') {
-        console.warn('shareToStory API not available. Make sure you have the latest Telegram version.');
-        alert('Please update Telegram to the latest version to use this feature');
-        return;
-    }
-    
-    // Create a widget/text overlay for the story
-    // In a production app, you'd generate an image dynamically
-    const storyMediaUrl = bookCoverUrl || 'https://your-domain.com/default-share-image.jpg';
-    
-    // Optional: Add text widget overlay
-    const params = {
-        text: `📚 Just discovered "${bookTitle}" at Medical Book Store!\n\nGet yours today →`,
-        widget_link: {
-            url: `https://t.me/YourMedicalBookBot?start=book_${bookTitle.toLowerCase().replace(/\s+/g, '_')}`,
-            name: 'Get This Book'
-        }
-    };
-    
-    // Open the story editor
-    try {
-        webapp.shareToStory(storyMediaUrl, params);
-        webapp.close(); // Optional: close mini app after sharing
-    } catch (error) {
-        console.error('Error sharing to story:', error);
-        alert('Unable to share. Please try again.');
-    }
-}
+// Current category filter
+let currentCategory = 'all';
+
+// Navigation stack
+let navigationStack = ['home'];
+
 // Initialize Telegram WebApp
 function initTelegramApp() {
     if (tg) {
-        // Expand to full height
         tg.expand();
-        
-        // Enable closing confirmation
         tg.enableClosingConfirmation();
-        
-        // Apply theme colors
         applyTelegramTheme();
-        
-        // Handle theme changes
-        tg.onEvent('themeChanged', applyTelegramTheme);
-        
-        // Show main button if needed
-        // tg.MainButton.setText("Open Bot").show();
-        // tg.MainButton.onClick(openBot);
-        
-        // Ready
         tg.ready();
     }
 }
 
-// Apply Telegram theme to CSS variables
+// Apply Telegram theme
 function applyTelegramTheme() {
     if (tg && tg.themeParams) {
         const theme = tg.themeParams;
         document.documentElement.style.setProperty('--tg-bg-color', theme.bg_color || '#ffffff');
-        document.documentElement.style.setProperty('--tg-text-color', theme.text_color || '#000000');
-        document.documentElement.style.setProperty('--tg-hint-color', theme.hint_color || '#999999');
-        document.documentElement.style.setProperty('--tg-link-color', theme.link_color || '#2481cc');
-        document.documentElement.style.setProperty('--tg-button-color', theme.button_color || '#2481cc');
+        document.documentElement.style.setProperty('--tg-text-color', theme.text_color || '#1a1a2e');
+        document.documentElement.style.setProperty('--tg-hint-color', theme.hint_color || '#666666');
+        document.documentElement.style.setProperty('--tg-link-color', theme.link_color || '#2c7da0');
+        document.documentElement.style.setProperty('--tg-button-color', theme.button_color || '#2c7da0');
         document.documentElement.style.setProperty('--tg-button-text-color', theme.button_text_color || '#ffffff');
-        document.documentElement.style.setProperty('--tg-secondary-bg-color', theme.secondary_bg_color || '#f0f0f0');
     }
 }
 
-// Navigation
+// Switch views with navigation stack
 function switchToView(viewName) {
-    // Hide all views
     document.querySelectorAll('.view').forEach(view => {
         view.classList.remove('active');
     });
     
-    // Show selected view
     document.getElementById(`${viewName}View`).classList.add('active');
     
-    // Update active nav item
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         if (item.getAttribute('data-view') === viewName) {
@@ -197,12 +131,18 @@ function switchToView(viewName) {
         }
     });
     
-    // Show/hide back button
+    // Update navigation stack
+    if (viewName !== navigationStack[navigationStack.length - 1]) {
+        navigationStack.push(viewName);
+    }
+    
+    // Update back button visibility
     const backBtn = document.getElementById('backBtn');
-    if (viewName === 'detail' || viewName === 'sample') {
+    if (navigationStack.length > 1 && viewName !== 'home') {
         backBtn.style.display = 'flex';
     } else {
-        backBtn.style.display = 'none';
+        backBtn.style.display = 'flex';
+        backBtn.style.opacity = '0.5';
     }
     
     // Update header title
@@ -214,10 +154,19 @@ function switchToView(viewName) {
         detail: 'Book Details',
         sample: 'Sample Preview'
     };
-    document.querySelector('.header-title span:last-child').textContent = titles[viewName] || 'Medical Book Store';
+    document.querySelector('.header-title span').textContent = titles[viewName] || 'Medical Book Store';
 }
 
-// Load featured books with icons
+// Go back
+function goBack() {
+    if (navigationStack.length > 1) {
+        navigationStack.pop();
+        const previousView = navigationStack[navigationStack.length - 1];
+        switchToView(previousView);
+    }
+}
+
+// Load featured books
 function loadFeaturedBooks() {
     const featured = books.filter(book => book.featured);
     const container = document.getElementById('featuredBooks');
@@ -225,15 +174,53 @@ function loadFeaturedBooks() {
     if (!container) return;
     
     container.innerHTML = featured.map(book => `
-        <div class="book-card" onclick="showBookDetail('${book.id}')">
-            <div class="book-cover" style="background: ${book.color}">
-                <i class="${book.icon}" style="font-size: 48px;"></i>
+        <div class="book-card">
+            <div class="book-cover" style="background: ${book.color}" onclick="showBookDetail('${book.id}')">
+                <i class="${book.icon}"></i>
             </div>
             <div class="book-info">
-                <div class="book-title">${book.title}</div>
+                <div class="book-title" onclick="showBookDetail('${book.id}')">${book.title}</div>
                 <div class="book-price">${book.price} EGP</div>
                 <div class="book-actions">
                     <button class="sample-link" onclick="event.stopPropagation(); viewSample('${book.id}')">
+                        <i class="fas fa-file-pdf"></i> Sample
+                    </button>
+                    <button class="sample-link" onclick="event.stopPropagation(); shareBookToTelegram('${book.id}')">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Load all books in list view
+function loadBooksList() {
+    const container = document.getElementById('booksList');
+    if (!container) return;
+    
+    let filteredBooks = books;
+    if (currentCategory !== 'all') {
+        filteredBooks = books.filter(book => book.category === currentCategory);
+    }
+    
+    container.innerHTML = filteredBooks.map(book => `
+        <div class="book-list-item">
+            <div class="book-list-cover" style="background: ${book.color}" onclick="showBookDetail('${book.id}')">
+                <i class="${book.icon}"></i>
+            </div>
+            <div class="book-list-info">
+                <div class="book-list-title" onclick="showBookDetail('${book.id}')">${book.title}</div>
+                <div class="book-list-desc" onclick="showBookDetail('${book.id}')">${book.description.substring(0, 80)}...</div>
+                <div class="book-list-price">
+                    <i class="fas fa-tag"></i> ${book.price} EGP 
+                    (<i class="fab fa-telegram"></i> ${book.stars} Stars)
+                </div>
+                <div class="book-list-actions">
+                    <button class="small-btn" onclick="shareBookToTelegram('${book.id}')">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    <button class="small-btn" onclick="viewSample('${book.id}')">
                         <i class="fas fa-file-pdf"></i> Sample
                     </button>
                 </div>
@@ -242,29 +229,22 @@ function loadFeaturedBooks() {
     `).join('');
 }
 
-// Load all books in list view with icons
-function loadBooksList() {
-    const container = document.getElementById('booksList');
-    if (!container) return;
+// Filter by category
+function filterByCategory(category) {
+    currentCategory = category;
     
-    container.innerHTML = books.map(book => `
-        <div class="book-list-item" onclick="showBookDetail('${book.id}')">
-            <div class="book-list-cover" style="background: ${book.color}">
-                <i class="${book.icon}" style="font-size: 32px; color: white;"></i>
-            </div>
-            <div class="book-list-info">
-                <div class="book-list-title">${book.title}</div>
-                <div class="book-list-desc">${book.description.substring(0, 80)}...</div>
-                <div class="book-list-price">
-                    <i class="fas fa-tag"></i> ${book.price} EGP 
-                    (<i class="fab fa-telegram"></i> ${book.stars} Stars)
-                </div>
-            </div>
-        </div>
-    `).join('');
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.toLowerCase() === category || 
+            (category === 'all' && btn.textContent === 'All')) {
+            btn.classList.add('active');
+        }
+    });
+    
+    loadBooksList();
 }
 
-// Show book detail with share button
+// Show book detail
 function showBookDetail(bookId) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
@@ -272,8 +252,8 @@ function showBookDetail(bookId) {
     const container = document.getElementById('bookDetail');
     container.innerHTML = `
         <div class="book-detail-card">
-            <div class="detail-cover" style="background: ${book.color}; padding: 40px; text-align: center; border-radius: 20px; margin-bottom: 20px;">
-                <i class="${book.icon}" style="font-size: 80px; color: white;"></i>
+            <div class="detail-cover" style="background: ${book.color}">
+                <i class="${book.icon}"></i>
             </div>
             
             <h2>${book.title}</h2>
@@ -295,14 +275,30 @@ function showBookDetail(bookId) {
                 <button class="action-btn secondary-btn" onclick="viewSample('${book.id}')">
                     <i class="fas fa-file-pdf"></i> View Sample Pages
                 </button>
-                <button class="action-btn secondary-btn" onclick="shareToStory('${book.title}', '${book.coverUrl || ''}')">
-                    <i class="fas fa-share-alt"></i> Share to Story
+                <button class="action-btn secondary-btn" onclick="shareBookToTelegram('${book.id}')">
+                    <i class="fas fa-share-alt"></i> Share to Telegram
                 </button>
             </div>
         </div>
     `;
     
     switchToView('detail');
+}
+
+// Share book to Telegram using inline query
+function shareBookToTelegram(bookId) {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return;
+    
+    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
+    const searchQuery = book.searchQuery || book.title;
+    const shareUrl = `https://t.me/${botUsername}?q=${encodeURIComponent(searchQuery)}`;
+    
+    if (tg) {
+        tg.openTelegramLink(shareUrl);
+    } else {
+        window.open(shareUrl, '_blank');
+    }
 }
 
 // View PDF sample
@@ -312,12 +308,9 @@ function viewSample(bookId) {
     
     document.getElementById('sampleTitle').textContent = book.title;
     const pdfFrame = document.getElementById('pdfFrame');
-    
-    // Use Google PDF viewer for better compatibility
-    const sampleUrl = book.sample || `samples/${bookId}-sample.pdf`;
+    const sampleUrl = book.sample;
     pdfFrame.src = `https://docs.google.com/gview?url=${encodeURIComponent(window.location.origin + '/' + sampleUrl)}&embedded=true`;
     
-    // Store current book for purchase button
     document.getElementById('purchaseFromSampleBtn').onclick = () => showBookDetail(bookId);
     
     switchToView('sample');
@@ -328,8 +321,7 @@ function purchaseBook(bookId, method) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
     
-    // Open bot with purchase intent
-    const botUsername = 'YourMedicalBookBot'; // Replace with your bot username
+    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
     const startParam = `buy_${bookId}_${method}`;
     
     if (tg) {
@@ -337,6 +329,18 @@ function purchaseBook(bookId, method) {
     } else {
         window.open(`https://t.me/${botUsername}?start=${startParam}`, '_blank');
     }
+}
+
+// Show toast notification
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
 
 // Support functions
@@ -355,11 +359,11 @@ function sendEmail() {
 function copyNumber() {
     const number = '01001234567';
     navigator.clipboard.writeText(number);
-    alert('Phone number copied: ' + number);
+    showToast('Phone number copied!');
 }
 
 function openBot() {
-    const botUsername = 'YourMedicalBookBot'; // Replace with your bot username
+    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
     if (tg) {
         tg.openTelegramLink(`https://t.me/${botUsername}`);
     } else {
@@ -368,23 +372,7 @@ function openBot() {
 }
 
 // Back button handler
-document.getElementById('backBtn').addEventListener('click', () => {
-    const activeView = document.querySelector('.view.active').id;
-    if (activeView === 'detailView' || activeView === 'sampleView') {
-        switchToView('books');
-    } else {
-        switchToView('home');
-    }
-});
-
-// Close button handler
-document.getElementById('closeBtn').addEventListener('click', () => {
-    if (tg) {
-        tg.close();
-    } else {
-        window.close();
-    }
-});
+document.getElementById('backBtn').addEventListener('click', goBack);
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -392,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedBooks();
     loadBooksList();
     
-    // Set default active nav
+    // Set navigation stack
+    navigationStack = ['home'];
     document.querySelector('.nav-item[data-view="home"]').classList.add('active');
 });
