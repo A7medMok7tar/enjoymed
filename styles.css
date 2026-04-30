@@ -1,16 +1,13 @@
 /* ============================================
-   MEDICAL BOOK STORE - CONSISTENT TEXT COLORS
-   Fixed for Light & Dark Mode
+   MEDICAL BOOK STORE - COMPLETE STYLES
+   Glassmorphism + Medical Theme
    ============================================ */
 
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
 
-/* ============================================
-   CSS VARIABLES (Telegram Theme Compatible)
-   ============================================ */
+/* CSS Variables */
 :root {
-    /* Base colors (will be overridden by Telegram) */
     --tg-bg-color: #ffffff;
     --tg-text-color: #1a1a2e;
     --tg-hint-color: #666666;
@@ -19,102 +16,50 @@
     --tg-button-text-color: #ffffff;
     --tg-secondary-bg-color: #f5f5f5;
     
-    /* Glassmorphism variables */
     --glass-bg-light: rgba(255, 255, 255, 0.85);
-    --glass-bg-dark: rgba(0, 0, 0, 0.75);
     --glass-border-light: rgba(255, 255, 255, 0.3);
-    --glass-border-dark: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
     --glass-blur: blur(12px);
     --glass-blur-strong: blur(20px);
     
-    /* Text colors */
     --text-primary: #1a1a2e;
     --text-secondary: #4a4a6a;
     --text-muted: #8a8a9e;
-    --text-inverse: #ffffff;
     --text-link: #2c7da0;
     --text-success: #2ecc71;
-    --text-warning: #f39c12;
-    --text-danger: #e74c3c;
     
-    /* Medical theme colors */
-    --medical-primary: #2c7da0;
-    --medical-secondary: #61a5c2;
-    --medical-accent: #89c2d9;
-    
-    /* Gradients */
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-primary-glass: linear-gradient(135deg, 
-        rgba(102, 126, 234, 0.9) 0%, 
-        rgba(118, 75, 162, 0.9) 100%);
+    --gradient-primary-glass: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
     
-    /* Spacing */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    
-    /* Border radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 28px;
     --radius-full: 9999px;
     
-    /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
 
-/* Dark mode color overrides */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
         --tg-bg-color: #1a1a2e;
         --tg-text-color: #e0e0e0;
         --tg-hint-color: #a0a0b0;
         --tg-link-color: #61a5c2;
-        --tg-button-color: #61a5c2;
         --tg-secondary-bg-color: #2a2a3e;
-        
         --glass-bg-light: rgba(30, 30, 50, 0.85);
         --glass-border-light: rgba(255, 255, 255, 0.12);
-        
         --text-primary: #e0e0e0;
         --text-secondary: #b0b0c0;
         --text-muted: #808090;
-        --text-inverse: #1a1a2e;
         --text-link: #61a5c2;
     }
 }
 
-/* Telegram theme application */
-[data-theme="dark"] {
-    --tg-bg-color: #1a1a2e;
-    --tg-text-color: #e0e0e0;
-    --tg-hint-color: #a0a0b0;
-    --tg-link-color: #61a5c2;
-    --text-primary: #e0e0e0;
-    --text-secondary: #b0b0c0;
-    --text-muted: #808090;
-}
-
-[data-theme="light"] {
-    --tg-bg-color: #ffffff;
-    --tg-text-color: #1a1a2e;
-    --tg-hint-color: #666666;
-    --tg-link-color: #2c7da0;
-    --text-primary: #1a1a2e;
-    --text-secondary: #4a4a6a;
-    --text-muted: #8a8a9e;
-}
-
-/* ============================================
-   BASE STYLES
-   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -156,9 +101,7 @@ body::before {
     overflow: hidden;
 }
 
-/* ============================================
-   HEADER & NAVIGATION
-   ============================================ */
+/* Header */
 .header {
     position: sticky;
     top: 0;
@@ -168,13 +111,12 @@ body::before {
     padding: 12px 16px;
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--glass-border-light);
     box-shadow: var(--glass-shadow);
     z-index: 100;
 }
 
-.back-btn, .close-btn {
+.back-btn {
     background: rgba(128, 128, 128, 0.15);
     backdrop-filter: blur(8px);
     border: 1px solid var(--glass-border-light);
@@ -185,12 +127,12 @@ body::before {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all var(--transition-fast);
     color: var(--text-primary);
     font-size: 18px;
+    transition: all var(--transition-fast);
 }
 
-.back-btn:hover, .close-btn:hover {
+.back-btn:hover {
     background: rgba(128, 128, 128, 0.25);
     transform: scale(1.05);
 }
@@ -208,18 +150,18 @@ body::before {
     color: var(--text-link);
 }
 
-/* ============================================
-   CONTENT AREA
-   ============================================ */
+.spacer {
+    width: 36px;
+}
+
+/* Content */
 .content {
     flex: 1;
     overflow-y: auto;
     padding: 20px 16px;
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
 .content::-webkit-scrollbar {
     width: 5px;
 }
@@ -233,12 +175,10 @@ body::before {
     border-radius: 10px;
 }
 
-/* ============================================
-   VIEW TRANSITIONS
-   ============================================ */
+/* Views */
 .view {
     display: none;
-    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.4s ease;
 }
 
 .view.active {
@@ -256,17 +196,12 @@ body::before {
     }
 }
 
-/* ============================================
-   HERO SECTION
-   ============================================ */
+/* Hero Section */
 .hero {
     text-align: center;
     padding: 32px 24px;
-    background: linear-gradient(135deg, 
-        rgba(102, 126, 234, 0.85) 0%, 
-        rgba(118, 75, 162, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--radius-xl);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: var(--glass-shadow);
@@ -276,7 +211,6 @@ body::before {
 .hero-icon {
     font-size: 64px;
     margin-bottom: 16px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     animation: float 3s ease-in-out infinite;
 }
 
@@ -289,7 +223,7 @@ body::before {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 10px;
-    color: #ffffff;
+    color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -298,9 +232,7 @@ body::before {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* ============================================
-   STATS GRID
-   ============================================ */
+/* Stats Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -311,7 +243,6 @@ body::before {
 .stat-card {
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     padding: 16px 12px;
@@ -346,12 +277,9 @@ body::before {
 
 .stat-label i {
     font-size: 12px;
-    color: var(--text-muted);
 }
 
-/* ============================================
-   SECTION TITLES
-   ============================================ */
+/* Section Title */
 .section-title {
     font-size: 20px;
     font-weight: 600;
@@ -367,9 +295,7 @@ body::before {
     color: var(--text-link);
 }
 
-/* ============================================
-   BOOKS GRID
-   ============================================ */
+/* Books Grid */
 .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -380,7 +306,6 @@ body::before {
 .book-card {
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -399,7 +324,6 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gradient-primary);
     transition: transform var(--transition-normal);
 }
 
@@ -425,8 +349,8 @@ body::before {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.4;
     color: var(--text-primary);
+    line-height: 1.4;
 }
 
 .book-price {
@@ -438,7 +362,7 @@ body::before {
 
 .book-actions {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
 .sample-link {
@@ -451,6 +375,7 @@ body::before {
     padding: 5px 10px;
     background: rgba(128, 128, 128, 0.1);
     border-radius: var(--radius-sm);
+    cursor: pointer;
     transition: all var(--transition-fast);
 }
 
@@ -458,9 +383,42 @@ body::before {
     background: rgba(128, 128, 128, 0.2);
 }
 
-/* ============================================
-   BOOKS LIST VIEW
-   ============================================ */
+/* Category Pills */
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.category-btn {
+    padding: 8px 18px;
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-full);
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.category-btn.active {
+    background: var(--gradient-primary-glass);
+    border-color: transparent;
+    color: white;
+}
+
+.category-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(128, 128, 128, 0.2);
+}
+
+/* Books List View */
 .books-list {
     display: flex;
     flex-direction: column;
@@ -473,33 +431,24 @@ body::before {
     padding: 14px;
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-lg);
-    cursor: pointer;
     transition: all var(--transition-normal);
-}
-
-.book-list-item:hover {
-    transform: translateX(6px);
-    background: rgba(128, 128, 128, 0.15);
-    border-color: var(--glass-border-light);
-    box-shadow: var(--glass-shadow);
 }
 
 .book-list-cover {
     width: 70px;
     height: 90px;
-    background: var(--gradient-primary);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    cursor: pointer;
     transition: transform var(--transition-fast);
 }
 
-.book-list-item:hover .book-list-cover {
+.book-list-cover:hover {
     transform: scale(1.05);
 }
 
@@ -516,7 +465,12 @@ body::before {
     font-weight: 600;
     font-size: 16px;
     margin-bottom: 6px;
+    cursor: pointer;
     color: var(--text-primary);
+}
+
+.book-list-title:hover {
+    color: var(--text-link);
 }
 
 .book-list-desc {
@@ -527,7 +481,7 @@ body::before {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    line-height: 1.4;
+    cursor: pointer;
 }
 
 .book-list-price {
@@ -537,16 +491,15 @@ body::before {
     display: flex;
     align-items: center;
     gap: 6px;
+    margin-bottom: 10px;
 }
 
-.book-list-price i {
-    font-size: 12px;
-    color: var(--text-link);
+.book-list-actions {
+    display: flex;
+    gap: 8px;
 }
 
-/* ============================================
-   BOOK DETAIL VIEW
-   ============================================ */
+/* Book Detail View */
 .book-detail-card {
     animation: fadeInUp 0.4s ease;
 }
@@ -556,7 +509,6 @@ body::before {
     text-align: center;
     border-radius: var(--radius-xl);
     margin-bottom: 24px;
-    background: var(--gradient-primary);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: var(--glass-shadow);
@@ -602,9 +554,7 @@ body::before {
     gap: 12px;
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
+/* Buttons */
 .action-btn {
     padding: 14px 20px;
     border: none;
@@ -626,7 +576,7 @@ body::before {
 
 .action-btn.primary-btn {
     background: var(--gradient-primary-glass);
-    color: #ffffff;
+    color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
@@ -649,18 +599,18 @@ body::before {
 }
 
 .small-btn {
-    padding: 8px 16px;
+    padding: 6px 12px;
     background: var(--text-link);
-    color: #ffffff;
+    color: white;
     border: none;
-    border-radius: var(--radius-md);
-    font-size: 13px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-fast);
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .small-btn:hover {
@@ -668,9 +618,15 @@ body::before {
     opacity: 0.9;
 }
 
-/* ============================================
-   SUPPORT SECTION
-   ============================================ */
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* Support Section */
 .support-section {
     display: flex;
     flex-direction: column;
@@ -683,7 +639,6 @@ body::before {
     padding: 18px;
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     align-items: center;
@@ -736,9 +691,7 @@ body::before {
     gap: 8px;
 }
 
-/* ============================================
-   ABOUT SECTION
-   ============================================ */
+/* About Section */
 .about-content {
     text-align: center;
 }
@@ -840,9 +793,7 @@ body::before {
     background: rgba(128, 128, 128, 0.15);
 }
 
-/* ============================================
-   SAMPLE VIEWER
-   ============================================ */
+/* Sample Viewer */
 .sample-header {
     text-align: center;
     padding: 20px;
@@ -884,14 +835,11 @@ body::before {
     margin-top: 20px;
 }
 
-/* ============================================
-   BOTTOM NAVIGATION
-   ============================================ */
+/* Bottom Navigation */
 .bottom-nav {
     display: flex;
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur-strong);
-    -webkit-backdrop-filter: var(--glass-blur-strong);
     border-top: 1px solid var(--glass-border-light);
     padding: 8px 0 12px;
     position: sticky;
@@ -931,28 +879,42 @@ body::before {
     font-weight: 500;
 }
 
-/* ============================================
-   TRUST BADGE
-   ============================================ */
-.trust-badge {
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
     background: var(--glass-bg-light);
-    backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur-strong);
     border: 1px solid var(--glass-border-light);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
-    margin: 20px 0;
+    border-radius: var(--radius-full);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    box-shadow: var(--glass-shadow);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.trust-badge p {
-    margin: 6px 0;
-    font-size: 13px;
-    color: var(--text-secondary);
+.toast.show {
+    transform: translateX(-50%) translateY(0);
 }
 
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
+.toast i {
+    font-size: 18px;
+    color: var(--text-success);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Responsive */
 @media (max-width: 480px) {
     .books-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -994,17 +956,4 @@ body::before {
         margin: 0 auto;
         width: 100%;
     }
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
 }
