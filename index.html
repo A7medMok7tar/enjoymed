@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Medical Book Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
         <!-- Header with Back Button -->
         <div class="header">
-            <button class="back-btn" id="backBtn" style="display: none;">←</button>
+            <button class="back-btn" id="backBtn" style="display: none;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
             <div class="header-title">
-                <span class="logo">📚</span>
+                <i class="fas fa-book-medical" style="font-size: 24px; color: var(--tg-link-color);"></i>
                 <span>Medical Book Store</span>
             </div>
-            <button class="close-btn" id="closeBtn">✕</button>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <!-- Main Content -->
@@ -24,7 +29,9 @@
             <div id="homeView" class="view active">
                 <!-- Hero Section -->
                 <div class="hero">
-                    <div class="hero-icon">🏥</div>
+                    <div class="hero-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
                     <h1>Medical Knowledge<br>At Your Fingertips</h1>
                     <p>Trusted by 500+ medical professionals worldwide</p>
                 </div>
@@ -33,29 +40,31 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number">50+</div>
-                        <div class="stat-label">Medical Books</div>
+                        <div class="stat-label"><i class="fas fa-book"></i> Medical Books</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">24/7</div>
-                        <div class="stat-label">Instant Access</div>
+                        <div class="stat-label"><i class="fas fa-clock"></i> Instant Access</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">⭐ 4.9</div>
-                        <div class="stat-label">User Rating</div>
+                        <div class="stat-label"><i class="fas fa-star"></i> User Rating</div>
                     </div>
                 </div>
 
                 <!-- Featured Books -->
-                <h2 class="section-title">📖 Featured Books</h2>
+                <h2 class="section-title">
+                    <i class="fas fa-fire" style="color: #ff6b35;"></i> Featured Books
+                </h2>
                 <div class="books-grid" id="featuredBooks"></div>
 
                 <!-- Quick Actions -->
                 <div class="quick-actions">
                     <button class="action-btn primary-btn" onclick="switchToView('books')">
-                        📚 Browse All Books
+                        <i class="fas fa-book-open"></i> Browse All Books
                     </button>
                     <button class="action-btn secondary-btn" onclick="switchToView('support')">
-                        💬 Support & Contact
+                        <i class="fas fa-headset"></i> Support & Contact
                     </button>
                 </div>
             </div>
@@ -63,7 +72,8 @@
             <!-- Books View -->
             <div id="booksView" class="view">
                 <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="🔍 Search medical books..." onkeyup="filterBooks()">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search medical books by title, author, or specialty..." onkeyup="filterBooks()">
                 </div>
                 <div class="books-list" id="booksList"></div>
             </div>
@@ -76,14 +86,17 @@
             <!-- Sample Viewer View -->
             <div id="sampleView" class="view">
                 <div class="sample-header">
+                    <i class="fas fa-file-pdf" style="font-size: 32px; color: #e74c3c;"></i>
                     <h3 id="sampleTitle">Book Sample</h3>
-                    <p>Preview - First 3 pages</p>
+                    <p><i class="fas fa-eye"></i> Preview - First 3 pages</p>
                 </div>
                 <div class="pdf-viewer" id="pdfViewer">
                     <iframe id="pdfFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
                 </div>
                 <div class="sample-actions">
-                    <button class="action-btn primary-btn" id="purchaseFromSampleBtn">🛒 Purchase Full Book</button>
+                    <button class="action-btn primary-btn" id="purchaseFromSampleBtn">
+                        <i class="fas fa-shopping-cart"></i> Purchase Full Book
+                    </button>
                 </div>
             </div>
 
@@ -91,34 +104,48 @@
             <div id="supportView" class="view">
                 <div class="support-section">
                     <div class="contact-card">
-                        <div class="contact-icon">💬</div>
+                        <div class="contact-icon">
+                            <i class="fab fa-telegram-plane"></i>
+                        </div>
                         <div class="contact-info">
                             <h3>Telegram Support</h3>
                             <p>@MedicalBooksSupport</p>
-                            <button class="small-btn" onclick="openTelegramChat()">Chat Now →</button>
+                            <button class="small-btn" onclick="openTelegramChat()">
+                                <i class="fab fa-telegram"></i> Chat Now →
+                            </button>
                         </div>
                     </div>
 
                     <div class="contact-card">
-                        <div class="contact-icon">📧</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
                         <div class="contact-info">
                             <h3>Email Us</h3>
                             <p>support@medicalbooks.com</p>
-                            <button class="small-btn" onclick="sendEmail()">Send Email →</button>
+                            <button class="small-btn" onclick="sendEmail()">
+                                <i class="fas fa-paper-plane"></i> Send Email →
+                            </button>
                         </div>
                     </div>
 
                     <div class="contact-card">
-                        <div class="contact-icon">📱</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
                         <div class="contact-info">
                             <h3>Vodafone Cash</h3>
                             <p>0100 123 4567</p>
-                            <button class="small-btn" onclick="copyNumber()">Copy Number</button>
+                            <button class="small-btn" onclick="copyNumber()">
+                                <i class="fas fa-copy"></i> Copy Number
+                            </button>
                         </div>
                     </div>
 
                     <div class="contact-card">
-                        <div class="contact-icon">❓</div>
+                        <div class="contact-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
                         <div class="contact-info">
                             <h3>FAQ</h3>
                             <p>How to download? • Refund policy? • Payment methods?</p>
@@ -127,43 +154,45 @@
                 </div>
 
                 <div class="response-time">
-                    <span>⏰ Response time: 24-48 hours</span>
+                    <i class="fas fa-clock"></i> Response time: 24-48 hours
                 </div>
             </div>
 
             <!-- About View -->
             <div id="aboutView" class="view">
                 <div class="about-content">
-                    <div class="about-logo">📚</div>
+                    <div class="about-logo">
+                        <i class="fas fa-book-medical"></i>
+                    </div>
                     <h2>Medical Book Store</h2>
                     <p class="version">Version 2.0.0</p>
                     
                     <div class="about-section">
-                        <h3>About Us</h3>
+                        <h3><i class="fas fa-info-circle"></i> About Us</h3>
                         <p>We provide high-quality medical ebooks for students, residents, and practicing physicians. Our collection is carefully curated to ensure accuracy and relevance.</p>
                     </div>
 
                     <div class="about-section">
-                        <h3>Features</h3>
+                        <h3><i class="fas fa-star"></i> Features</h3>
                         <ul class="feature-list">
-                            <li>✓ Instant delivery after purchase</li>
-                            <li>✓ Lifetime access to all purchased books</li>
-                            <li>✓ PDF format - works on all devices</li>
-                            <li>✓ Secure payment (Stars & Vodafone Cash)</li>
-                            <li>✓ 24-hour refund policy</li>
+                            <li><i class="fas fa-bolt"></i> Instant delivery after purchase</li>
+                            <li><i class="fas fa-infinity"></i> Lifetime access to all purchased books</li>
+                            <li><i class="fas fa-file-pdf"></i> PDF format - works on all devices</li>
+                            <li><i class="fas fa-lock"></i> Secure payment (Stars & Vodafone Cash)</li>
+                            <li><i class="fas fa-undo-alt"></i> 24-hour refund policy</li>
                         </ul>
                     </div>
 
                     <div class="about-section">
-                        <h3>Payment Methods</h3>
+                        <h3><i class="fas fa-credit-card"></i> Payment Methods</h3>
                         <div class="payment-icons">
-                            <span>⭐ Telegram Stars</span>
-                            <span>💵 Vodafone Cash</span>
+                            <span><i class="fab fa-telegram"></i> Telegram Stars</span>
+                            <span><i class="fas fa-mobile-alt"></i> Vodafone Cash</span>
                         </div>
                     </div>
 
                     <button class="action-btn primary-btn" onclick="openBot()">
-                        🤖 Open Bot to Purchase
+                        <i class="fas fa-robot"></i> Open Bot to Purchase
                     </button>
                 </div>
             </div>
@@ -172,19 +201,19 @@
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <button class="nav-item" onclick="switchToView('home')" data-view="home">
-                <span class="nav-icon">🏠</span>
+                <i class="fas fa-home nav-icon"></i>
                 <span class="nav-label">Home</span>
             </button>
             <button class="nav-item" onclick="switchToView('books')" data-view="books">
-                <span class="nav-icon">📚</span>
+                <i class="fas fa-book nav-icon"></i>
                 <span class="nav-label">Books</span>
             </button>
             <button class="nav-item" onclick="switchToView('support')" data-view="support">
-                <span class="nav-icon">💬</span>
+                <i class="fas fa-headset nav-icon"></i>
                 <span class="nav-label">Support</span>
             </button>
             <button class="nav-item" onclick="switchToView('about')" data-view="about">
-                <span class="nav-icon">ℹ️</span>
+                <i class="fas fa-info-circle nav-icon"></i>
                 <span class="nav-label">About</span>
             </button>
         </div>
