@@ -290,7 +290,7 @@ function shareBookToTelegram(bookId) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
     
-    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
+    const botUsername = "ahmed7a7medbot"; // Replace with your bot username
     const searchQuery = book.searchQuery || book.title;
     const shareUrl = `https://t.me/${botUsername}?q=${encodeURIComponent(searchQuery)}`;
     
@@ -321,7 +321,7 @@ function purchaseBook(bookId, method) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
     
-    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
+    const botUsername = "ahmed7a7medbot"; // Replace with your bot username
     const startParam = `buy_${bookId}_${method}`;
     
     if (tg) {
@@ -346,9 +346,9 @@ function showToast(message) {
 // Support functions
 function openTelegramChat() {
     if (tg) {
-        tg.openTelegramLink('https://t.me/MedicalBooksSupport');
+        tg.openTelegramLink('https://t.me/ahmed7a7medbot');
     } else {
-        window.open('https://t.me/MedicalBooksSupport', '_blank');
+        window.open('https://t.me/ahmed7a7medbot', '_blank');
     }
 }
 
@@ -363,7 +363,7 @@ function copyNumber() {
 }
 
 function openBot() {
-    const botUsername = "YourMedicalBookBot"; // Replace with your bot username
+    const botUsername = "ahmed7a7medbot"; // Replace with your bot username
     if (tg) {
         tg.openTelegramLink(`https://t.me/${botUsername}`);
     } else {
