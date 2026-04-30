@@ -1,6 +1,6 @@
 /* ============================================
-   MEDICAL BOOK STORE - COMPLETE GLASS STYLES
-   Glassmorphism + Medical Theme + Telegram Integration
+   MEDICAL BOOK STORE - CONSISTENT TEXT COLORS
+   Fixed for Light & Dark Mode
    ============================================ */
 
 /* Import Google Fonts */
@@ -10,40 +10,45 @@
    CSS VARIABLES (Telegram Theme Compatible)
    ============================================ */
 :root {
-    /* Telegram theme variables (will be overridden by Telegram) */
+    /* Base colors (will be overridden by Telegram) */
     --tg-bg-color: #ffffff;
-    --tg-text-color: #000000;
-    --tg-hint-color: #999999;
-    --tg-link-color: #2481cc;
-    --tg-button-color: #2481cc;
+    --tg-text-color: #1a1a2e;
+    --tg-hint-color: #666666;
+    --tg-link-color: #2c7da0;
+    --tg-button-color: #2c7da0;
     --tg-button-text-color: #ffffff;
-    --tg-secondary-bg-color: #f0f0f0;
+    --tg-secondary-bg-color: #f5f5f5;
     
     /* Glassmorphism variables */
-    --glass-bg-light: rgba(255, 255, 255, 0.15);
-    --glass-bg-dark: rgba(0, 0, 0, 0.25);
-    --glass-border-light: rgba(255, 255, 255, 0.25);
+    --glass-bg-light: rgba(255, 255, 255, 0.85);
+    --glass-bg-dark: rgba(0, 0, 0, 0.75);
+    --glass-border-light: rgba(255, 255, 255, 0.3);
     --glass-border-dark: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
     --glass-blur: blur(12px);
     --glass-blur-strong: blur(20px);
+    
+    /* Text colors */
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --text-muted: #8a8a9e;
+    --text-inverse: #ffffff;
+    --text-link: #2c7da0;
+    --text-success: #2ecc71;
+    --text-warning: #f39c12;
+    --text-danger: #e74c3c;
     
     /* Medical theme colors */
     --medical-primary: #2c7da0;
     --medical-secondary: #61a5c2;
     --medical-accent: #89c2d9;
-    --medical-success: #2ecc71;
-    --medical-danger: #e74c3c;
-    --medical-warning: #f39c12;
-    --medical-info: #3498db;
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-medical: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    --gradient-glass: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
+    --gradient-primary-glass: linear-gradient(135deg, 
+        rgba(102, 126, 234, 0.9) 0%, 
+        rgba(118, 75, 162, 0.9) 100%);
     
     /* Spacing */
     --spacing-xs: 4px;
@@ -65,14 +70,46 @@
     --transition-slow: 0.5s ease;
 }
 
-/* Dark mode glass adjustments */
+/* Dark mode color overrides */
 @media (prefers-color-scheme: dark) {
     :root {
-        --glass-bg-light: rgba(0, 0, 0, 0.3);
-        --glass-border-light: rgba(255, 255, 255, 0.08);
-        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+        --tg-bg-color: #1a1a2e;
+        --tg-text-color: #e0e0e0;
+        --tg-hint-color: #a0a0b0;
+        --tg-link-color: #61a5c2;
+        --tg-button-color: #61a5c2;
+        --tg-secondary-bg-color: #2a2a3e;
+        
+        --glass-bg-light: rgba(30, 30, 50, 0.85);
+        --glass-border-light: rgba(255, 255, 255, 0.12);
+        
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0c0;
+        --text-muted: #808090;
+        --text-inverse: #1a1a2e;
+        --text-link: #61a5c2;
     }
+}
+
+/* Telegram theme application */
+[data-theme="dark"] {
+    --tg-bg-color: #1a1a2e;
+    --tg-text-color: #e0e0e0;
+    --tg-hint-color: #a0a0b0;
+    --tg-link-color: #61a5c2;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0c0;
+    --text-muted: #808090;
+}
+
+[data-theme="light"] {
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #1a1a2e;
+    --tg-hint-color: #666666;
+    --tg-link-color: #2c7da0;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --text-muted: #8a8a9e;
 }
 
 /* ============================================
@@ -89,7 +126,7 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     background-attachment: fixed;
-    color: var(--tg-text-color);
+    color: var(--text-primary);
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
@@ -103,14 +140,13 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.06"><path fill="white" d="M50,10 L60,30 L80,30 L65,45 L75,65 L50,55 L25,65 L35,45 L20,30 L40,30 Z"/><circle cx="50" cy="50" r="4"/><path d="M50,20 L55,35 L70,40 L60,50 L65,65 L50,58 L35,65 L40,50 L30,40 L45,35 Z" fill="white"/></svg>');
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.04"><path fill="white" d="M50,10 L60,30 L80,30 L65,45 L75,65 L50,55 L25,65 L35,45 L20,30 L40,30 Z"/><circle cx="50" cy="50" r="4"/></svg>');
     background-repeat: repeat;
     background-size: 60px;
     pointer-events: none;
     z-index: 0;
 }
 
-/* Glass container for main app */
 .app-container {
     position: relative;
     z-index: 1;
@@ -121,7 +157,7 @@ body::before {
 }
 
 /* ============================================
-   HEADER & NAVIGATION (Glass)
+   HEADER & NAVIGATION
    ============================================ */
 .header {
     position: sticky;
@@ -139,7 +175,7 @@ body::before {
 }
 
 .back-btn, .close-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.15);
     backdrop-filter: blur(8px);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-full);
@@ -150,17 +186,13 @@ body::before {
     justify-content: center;
     cursor: pointer;
     transition: all var(--transition-fast);
-    color: var(--tg-text-color);
+    color: var(--text-primary);
     font-size: 18px;
 }
 
 .back-btn:hover, .close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(128, 128, 128, 0.25);
     transform: scale(1.05);
-}
-
-.back-btn:active, .close-btn:active {
-    transform: scale(0.95);
 }
 
 .header-title {
@@ -169,11 +201,11 @@ body::before {
     gap: 10px;
     font-size: 18px;
     font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
 }
 
 .header-title i {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    color: var(--text-link);
 }
 
 /* ============================================
@@ -197,12 +229,8 @@ body::before {
 }
 
 .content::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(128, 128, 128, 0.3);
     border-radius: 10px;
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
 }
 
 /* ============================================
@@ -229,7 +257,7 @@ body::before {
 }
 
 /* ============================================
-   HERO SECTION (Glass)
+   HERO SECTION
    ============================================ */
 .hero {
     text-align: center;
@@ -261,7 +289,7 @@ body::before {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 10px;
-    color: white;
+    color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -271,7 +299,7 @@ body::before {
 }
 
 /* ============================================
-   STATS GRID (Glass)
+   STATS GRID
    ============================================ */
 .stats-grid {
     display: grid;
@@ -293,9 +321,8 @@ body::before {
 
 .stat-card:hover {
     transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.15);
     box-shadow: var(--glass-shadow-hover);
-    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .stat-number {
@@ -310,7 +337,7 @@ body::before {
 
 .stat-label {
     font-size: 12px;
-    color: var(--tg-hint-color);
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -319,6 +346,7 @@ body::before {
 
 .stat-label i {
     font-size: 12px;
+    color: var(--text-muted);
 }
 
 /* ============================================
@@ -331,16 +359,16 @@ body::before {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--tg-text-color);
+    color: var(--text-primary);
 }
 
 .section-title i {
     font-size: 22px;
-    color: var(--tg-link-color);
+    color: var(--text-link);
 }
 
 /* ============================================
-   BOOKS GRID (Glass Cards)
+   BOOKS GRID
    ============================================ */
 .books-grid {
     display: grid;
@@ -363,8 +391,7 @@ body::before {
 .book-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--glass-shadow-hover);
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.15);
 }
 
 .book-cover {
@@ -399,12 +426,13 @@ body::before {
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.4;
+    color: var(--text-primary);
 }
 
 .book-price {
     font-size: 16px;
     font-weight: 700;
-    color: var(--tg-link-color);
+    color: var(--text-link);
     margin-bottom: 10px;
 }
 
@@ -415,23 +443,23 @@ body::before {
 
 .sample-link {
     font-size: 12px;
-    color: var(--tg-link-color);
+    color: var(--text-link);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(128, 128, 128, 0.1);
     border-radius: var(--radius-sm);
     transition: all var(--transition-fast);
 }
 
 .sample-link:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(128, 128, 128, 0.2);
 }
 
 /* ============================================
-   BOOKS LIST VIEW (Glass)
+   BOOKS LIST VIEW
    ============================================ */
 .books-list {
     display: flex;
@@ -454,8 +482,8 @@ body::before {
 
 .book-list-item:hover {
     transform: translateX(6px);
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(128, 128, 128, 0.15);
+    border-color: var(--glass-border-light);
     box-shadow: var(--glass-shadow);
 }
 
@@ -488,11 +516,12 @@ body::before {
     font-weight: 600;
     font-size: 16px;
     margin-bottom: 6px;
+    color: var(--text-primary);
 }
 
 .book-list-desc {
     font-size: 12px;
-    color: var(--tg-hint-color);
+    color: var(--text-secondary);
     margin-bottom: 8px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -504,7 +533,7 @@ body::before {
 .book-list-price {
     font-size: 14px;
     font-weight: 600;
-    color: var(--tg-link-color);
+    color: var(--text-link);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -512,10 +541,11 @@ body::before {
 
 .book-list-price i {
     font-size: 12px;
+    color: var(--text-link);
 }
 
 /* ============================================
-   BOOK DETAIL VIEW (Glass)
+   BOOK DETAIL VIEW
    ============================================ */
 .book-detail-card {
     animation: fadeInUp 0.4s ease;
@@ -543,12 +573,13 @@ body::before {
     font-weight: 700;
     margin-bottom: 12px;
     text-align: center;
+    color: var(--text-primary);
 }
 
 .detail-price {
     font-size: 28px;
     font-weight: 700;
-    color: var(--tg-link-color);
+    color: var(--text-link);
     text-align: center;
     margin-bottom: 20px;
     display: flex;
@@ -560,7 +591,7 @@ body::before {
 .detail-description {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--tg-text-color);
+    color: var(--text-secondary);
     margin-bottom: 28px;
     padding: 0 8px;
 }
@@ -572,7 +603,7 @@ body::before {
 }
 
 /* ============================================
-   BUTTONS (Glass with Gradients)
+   BUTTONS
    ============================================ */
 .action-btn {
     padding: 14px 20px;
@@ -594,10 +625,8 @@ body::before {
 }
 
 .action-btn.primary-btn {
-    background: linear-gradient(135deg, 
-        rgba(102, 126, 234, 0.95) 0%, 
-        rgba(118, 75, 162, 0.95) 100%);
-    color: white;
+    background: var(--gradient-primary-glass);
+    color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
@@ -610,19 +639,19 @@ body::before {
 .action-btn.secondary-btn {
     background: var(--glass-bg-light);
     backdrop-filter: var(--glass-blur);
-    color: var(--tg-text-color);
+    color: var(--text-primary);
     border: 1px solid var(--glass-border-light);
 }
 
 .action-btn.secondary-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.2);
     transform: translateY(-2px);
 }
 
 .small-btn {
     padding: 8px 16px;
-    background: var(--tg-link-color);
-    color: white;
+    background: var(--text-link);
+    color: #ffffff;
     border: none;
     border-radius: var(--radius-md);
     font-size: 13px;
@@ -640,17 +669,7 @@ body::before {
 }
 
 /* ============================================
-   QUICK ACTIONS
-   ============================================ */
-.quick-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-/* ============================================
-   SUPPORT SECTION (Glass Cards)
+   SUPPORT SECTION
    ============================================ */
 .support-section {
     display: flex;
@@ -673,7 +692,7 @@ body::before {
 
 .contact-card:hover {
     transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.15);
     box-shadow: var(--glass-shadow);
 }
 
@@ -681,7 +700,7 @@ body::before {
     font-size: 36px;
     width: 55px;
     text-align: center;
-    color: var(--tg-link-color);
+    color: var(--text-link);
 }
 
 .contact-info {
@@ -692,11 +711,12 @@ body::before {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 5px;
+    color: var(--text-primary);
 }
 
 .contact-info p {
     font-size: 13px;
-    color: var(--tg-hint-color);
+    color: var(--text-secondary);
     margin-bottom: 10px;
 }
 
@@ -707,7 +727,7 @@ body::before {
     backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border-light);
     border-radius: var(--radius-lg);
-    color: var(--tg-hint-color);
+    color: var(--text-secondary);
     font-size: 12px;
     margin-top: 16px;
     display: flex;
@@ -717,7 +737,7 @@ body::before {
 }
 
 /* ============================================
-   ABOUT SECTION (Glass)
+   ABOUT SECTION
    ============================================ */
 .about-content {
     text-align: center;
@@ -737,10 +757,11 @@ body::before {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
+    color: var(--text-primary);
 }
 
 .version {
-    color: var(--tg-hint-color);
+    color: var(--text-muted);
     font-size: 12px;
     margin-bottom: 28px;
 }
@@ -757,7 +778,7 @@ body::before {
 }
 
 .about-section:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(128, 128, 128, 0.1);
 }
 
 .about-section h3 {
@@ -767,6 +788,11 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-primary);
+}
+
+.about-section h3 i {
+    color: var(--text-link);
 }
 
 .feature-list {
@@ -779,11 +805,12 @@ body::before {
     display: flex;
     align-items: center;
     gap: 10px;
+    color: var(--text-secondary);
 }
 
 .feature-list li i {
     width: 22px;
-    color: var(--tg-link-color);
+    color: var(--text-link);
     font-size: 14px;
 }
 
@@ -804,16 +831,17 @@ body::before {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-primary);
     transition: all var(--transition-fast);
 }
 
 .payment-icons span:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(128, 128, 128, 0.15);
 }
 
 /* ============================================
-   SAMPLE VIEWER (Glass)
+   SAMPLE VIEWER
    ============================================ */
 .sample-header {
     text-align: center;
@@ -828,10 +856,11 @@ body::before {
 .sample-header h3 {
     margin: 10px 0 5px;
     font-size: 18px;
+    color: var(--text-primary);
 }
 
 .sample-header p {
-    color: var(--tg-hint-color);
+    color: var(--text-secondary);
     font-size: 13px;
 }
 
@@ -856,7 +885,7 @@ body::before {
 }
 
 /* ============================================
-   BOTTOM NAVIGATION (Glass)
+   BOTTOM NAVIGATION
    ============================================ */
 .bottom-nav {
     display: flex;
@@ -880,9 +909,9 @@ body::before {
     border: none;
     cursor: pointer;
     padding: 8px;
-    color: var(--tg-hint-color);
     transition: all var(--transition-fast);
     border-radius: var(--radius-md);
+    color: var(--text-muted);
 }
 
 .nav-item:active {
@@ -890,7 +919,7 @@ body::before {
 }
 
 .nav-item.active {
-    color: var(--tg-link-color);
+    color: var(--text-link);
 }
 
 .nav-icon {
@@ -903,7 +932,7 @@ body::before {
 }
 
 /* ============================================
-   TRUST BADGE (Glass)
+   TRUST BADGE
    ============================================ */
 .trust-badge {
     background: var(--glass-bg-light);
@@ -918,66 +947,7 @@ body::before {
 .trust-badge p {
     margin: 6px 0;
     font-size: 13px;
-}
-
-/* ============================================
-   LOADING & SHIMMER EFFECTS
-   ============================================ */
-@keyframes shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-.glass-shimmer {
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.15),
-        transparent
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
-}
-
-/* ============================================
-   CATEGORY PILLS (Optional)
-   ============================================ */
-.category-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-    padding-bottom: 5px;
-}
-
-.category-btn {
-    padding: 8px 18px;
-    border: 1px solid var(--glass-border-light);
-    border-radius: var(--radius-full);
-    background: var(--glass-bg-light);
-    backdrop-filter: var(--glass-blur);
-    color: var(--tg-text-color);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-}
-
-.category-btn.active {
-    background: var(--gradient-primary);
-    border-color: transparent;
-    color: white;
-}
-
-.category-btn:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary);
 }
 
 /* ============================================
@@ -1027,67 +997,14 @@ body::before {
 }
 
 /* ============================================
-   UTILITY CLASSES
-   ============================================ */
-.text-center {
-    text-align: center;
-}
-
-.mt-1 { margin-top: 8px; }
-.mt-2 { margin-top: 16px; }
-.mt-3 { margin-top: 24px; }
-.mb-1 { margin-bottom: 8px; }
-.mb-2 { margin-bottom: 16px; }
-.mb-3 { margin-bottom: 24px; }
-
-.hidden {
-    display: none !important;
-}
-
-/* ============================================
    ANIMATIONS
    ============================================ */
 @keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* ============================================
-   NO SCROLL (For modals)
-   ============================================ */
-body.no-scroll {
-    overflow: hidden;
-}
-
-/* ============================================
-   TELEGRAM THEME OVERRIDES
-   ============================================ */
-/* These will be applied dynamically by Telegram */
-[data-tg-theme="dark"] {
-    --glass-bg-light: rgba(0, 0, 0, 0.3);
-    --glass-border-light: rgba(255, 255, 255, 0.08);
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
