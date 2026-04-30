@@ -1,9 +1,14 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ============================================
+   MEDICAL BOOK STORE - COMPLETE GLASS STYLES
+   Glassmorphism + Medical Theme + Telegram Integration
+   ============================================ */
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+/* ============================================
+   CSS VARIABLES (Telegram Theme Compatible)
+   ============================================ */
 :root {
     /* Telegram theme variables (will be overridden by Telegram) */
     --tg-bg-color: #ffffff;
@@ -13,24 +18,111 @@
     --tg-button-color: #2481cc;
     --tg-button-text-color: #ffffff;
     --tg-secondary-bg-color: #f0f0f0;
+    
+    /* Glassmorphism variables */
+    --glass-bg-light: rgba(255, 255, 255, 0.15);
+    --glass-bg-dark: rgba(0, 0, 0, 0.25);
+    --glass-border-light: rgba(255, 255, 255, 0.25);
+    --glass-border-dark: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --glass-blur: blur(12px);
+    --glass-blur-strong: blur(20px);
+    
+    /* Medical theme colors */
+    --medical-primary: #2c7da0;
+    --medical-secondary: #61a5c2;
+    --medical-accent: #89c2d9;
+    --medical-success: #2ecc71;
+    --medical-danger: #e74c3c;
+    --medical-warning: #f39c12;
+    --medical-info: #3498db;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-medical: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --gradient-glass: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 100%);
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Border radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-full: 9999px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--tg-bg-color);
-    color: var(--tg-text-color);
-    overflow-x: hidden;
+/* Dark mode glass adjustments */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg-light: rgba(0, 0, 0, 0.3);
+        --glass-border-light: rgba(255, 255, 255, 0.08);
+        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
 
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    color: var(--tg-text-color);
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Medical pattern overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.06"><path fill="white" d="M50,10 L60,30 L80,30 L65,45 L75,65 L50,55 L25,65 L35,45 L20,30 L40,30 Z"/><circle cx="50" cy="50" r="4"/><path d="M50,20 L55,35 L70,40 L60,50 L65,65 L50,58 L35,65 L40,50 L30,40 L45,35 Z" fill="white"/></svg>');
+    background-repeat: repeat;
+    background-size: 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Glass container for main app */
 .app-container {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
 }
 
-/* Header */
+/* ============================================
+   HEADER & NAVIGATION (Glass)
+   ============================================ */
 .header {
     position: sticky;
     top: 0;
@@ -38,139 +130,218 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background-color: var(--tg-bg-color);
-    border-bottom: 1px solid var(--tg-secondary-bg-color);
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border-light);
+    box-shadow: var(--glass-shadow);
     z-index: 100;
-    backdrop-filter: blur(10px);
 }
 
-.back-btn {
-    background: none;
-    border: none;
-    font-size: 28px;
+.back-btn, .close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-full);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    color: var(--tg-link-color);
-    padding: 0 8px;
-    line-height: 1;
+    transition: all var(--transition-fast);
+    color: var(--tg-text-color);
+    font-size: 18px;
 }
 
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--tg-hint-color);
-    padding: 0 8px;
-    line-height: 1;
+.back-btn:hover, .close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.back-btn:active, .close-btn:active {
+    transform: scale(0.95);
 }
 
 .header-title {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-size: 18px;
     font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-    font-size: 24px;
+.header-title i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-/* Share button specific styling */
-.action-btn.secondary-btn i.fa-share-alt {
-    margin-right: 8px;
-}
-
-/* Optional: Add hover effect */
-.action-btn.secondary-btn:hover {
-    background: var(--tg-link-color);
-    color: white;
-    transform: translateY(-2px);
-    transition: all 0.2s ease;
-}
-
-/* Content Area */
+/* ============================================
+   CONTENT AREA
+   ============================================ */
 .content {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 20px 16px;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 }
 
+/* Custom scrollbar */
+.content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   VIEW TRANSITIONS
+   ============================================ */
 .view {
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .view.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Hero Section */
+/* ============================================
+   HERO SECTION (Glass)
+   ============================================ */
 .hero {
     text-align: center;
-    padding: 24px 0;
-    background: linear-gradient(135deg, var(--tg-link-color) 0%, #1a5a8a 100%);
-    border-radius: 20px;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, 
+        rgba(102, 126, 234, 0.85) 0%, 
+        rgba(118, 75, 162, 0.85) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--glass-shadow);
     margin-bottom: 20px;
-    color: white;
 }
 
 .hero-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+    font-size: 64px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
 }
 
 .hero h1 {
     font-size: 24px;
-    margin-bottom: 8px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .hero p {
     font-size: 14px;
-    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-/* Stats Grid */
+/* ============================================
+   STATS GRID (Glass)
+   ============================================ */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .stat-card {
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
-    padding: 16px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    padding: 16px 12px;
     text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--glass-shadow-hover);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .stat-number {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--tg-link-color);
-    margin-bottom: 4px;
+    font-size: 28px;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 6px;
 }
 
 .stat-label {
     font-size: 12px;
     color: var(--tg-hint-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-/* Section Title */
+.stat-label i {
+    font-size: 12px;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
 .section-title {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 600;
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: var(--tg-text-color);
 }
 
-/* Books Grid */
+.section-title i {
+    font-size: 22px;
+    color: var(--tg-link-color);
+}
+
+/* ============================================
+   BOOKS GRID (Glass Cards)
+   ============================================ */
 .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -179,99 +350,429 @@ body {
 }
 
 .book-card {
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all var(--transition-normal);
 }
 
 .book-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
+    box-shadow: var(--glass-shadow-hover);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .book-cover {
     height: 180px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    background: var(--gradient-primary);
+    transition: transform var(--transition-normal);
+}
+
+.book-card:hover .book-cover {
+    transform: scale(1.05);
+}
+
+.book-cover i {
+    font-size: 56px;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
 .book-info {
-    padding: 12px;
+    padding: 14px;
 }
 
 .book-title {
     font-size: 14px;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.4;
 }
 
 .book-price {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
     color: var(--tg-link-color);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .book-actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .sample-link {
     font-size: 12px;
     color: var(--tg-link-color);
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
 }
 
-/* Books List View */
-/* Add to styles.css */
-
-/* Search Bar with Icon */
-.search-bar {
-    position: relative;
-    margin-bottom: 16px;
+.sample-link:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
-.search-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--tg-hint-color);
-    font-size: 16px;
-    z-index: 1;
+/* ============================================
+   BOOKS LIST VIEW (Glass)
+   ============================================ */
+.books-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-.search-bar input {
-    width: 100%;
-    padding: 12px 16px 12px 44px;
-    border: 1px solid var(--tg-secondary-bg-color);
-    border-radius: 12px;
-    background: var(--tg-bg-color);
-    color: var(--tg-text-color);
-    font-size: 16px;
+.book-list-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
 }
 
-/* Book Cover with Medical Icons */
-.book-cover {
-    height: 180px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.book-list-item:hover {
+    transform: translateX(6px);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: var(--glass-shadow);
+}
+
+.book-list-cover {
+    width: 70px;
+    height: 90px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.book-list-item:hover .book-list-cover {
+    transform: scale(1.05);
+}
+
+.book-list-cover i {
+    font-size: 32px;
     color: white;
 }
 
-/* Feature List Icons */
+.book-list-info {
+    flex: 1;
+}
+
+.book-list-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.book-list-desc {
+    font-size: 12px;
+    color: var(--tg-hint-color);
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+.book-list-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tg-link-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.book-list-price i {
+    font-size: 12px;
+}
+
+/* ============================================
+   BOOK DETAIL VIEW (Glass)
+   ============================================ */
+.book-detail-card {
+    animation: fadeInUp 0.4s ease;
+}
+
+.detail-cover {
+    padding: 48px;
+    text-align: center;
+    border-radius: var(--radius-xl);
+    margin-bottom: 24px;
+    background: var(--gradient-primary);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--glass-shadow);
+}
+
+.detail-cover i {
+    font-size: 80px;
+    color: white;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+.book-detail-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.detail-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--tg-link-color);
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.detail-description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--tg-text-color);
+    margin-bottom: 28px;
+    padding: 0 8px;
+}
+
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============================================
+   BUTTONS (Glass with Gradients)
+   ============================================ */
+.action-btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+}
+
+.action-btn:active {
+    transform: scale(0.97);
+}
+
+.action-btn.primary-btn {
+    background: linear-gradient(135deg, 
+        rgba(102, 126, 234, 0.95) 0%, 
+        rgba(118, 75, 162, 0.95) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.action-btn.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+}
+
+.action-btn.secondary-btn {
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    color: var(--tg-text-color);
+    border: 1px solid var(--glass-border-light);
+}
+
+.action-btn.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.small-btn {
+    padding: 8px 16px;
+    background: var(--tg-link-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.small-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+/* ============================================
+   QUICK ACTIONS
+   ============================================ */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* ============================================
+   SUPPORT SECTION (Glass Cards)
+   ============================================ */
+.support-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.contact-card {
+    display: flex;
+    gap: 16px;
+    padding: 18px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    align-items: center;
+    transition: all var(--transition-normal);
+}
+
+.contact-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--glass-shadow);
+}
+
+.contact-icon {
+    font-size: 36px;
+    width: 55px;
+    text-align: center;
+    color: var(--tg-link-color);
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.contact-info p {
+    font-size: 13px;
+    color: var(--tg-hint-color);
+    margin-bottom: 10px;
+}
+
+.response-time {
+    text-align: center;
+    padding: 14px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    color: var(--tg-hint-color);
+    font-size: 12px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ============================================
+   ABOUT SECTION (Glass)
+   ============================================ */
+.about-content {
+    text-align: center;
+}
+
+.about-logo {
+    font-size: 72px;
+    margin-bottom: 16px;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.about-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.version {
+    color: var(--tg-hint-color);
+    font-size: 12px;
+    margin-bottom: 28px;
+}
+
+.about-section {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 18px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal);
+}
+
+.about-section:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.about-section h3 {
+    margin-bottom: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-list {
+    list-style: none;
+}
+
 .feature-list li {
     padding: 8px 0;
     font-size: 14px;
@@ -281,142 +782,67 @@ body {
 }
 
 .feature-list li i {
-    width: 24px;
+    width: 22px;
     color: var(--tg-link-color);
-    font-size: 16px;
-}
-
-/* Payment Icons */
-.payment-icons span i {
-    margin-right: 8px;
-}
-
-/* Button Icons */
-.action-btn i, .small-btn i {
-    margin-right: 8px;
-}
-
-/* Contact Card Icons */
-.contact-icon {
-    font-size: 32px;
-    width: 50px;
-    text-align: center;
-    color: var(--tg-link-color);
-}
-
-/* Hero Icon */
-.hero-icon {
-    font-size: 64px;
-    margin-bottom: 16px;
-    color: white;
-}
-
-/* Section Title Icons */
-.section-title i {
-    margin-right: 8px;
-}
-
-/* Nav Icons */
-.nav-icon {
-    font-size: 22px;
-}
-
-/* Stat Card Icons */
-.stat-label i {
-    margin-right: 6px;
-    font-size: 12px;
-}
-
-.books-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.book-list-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px;
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.book-list-cover {
-    width: 60px;
-    height: 80px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-}
-
-.book-list-info {
-    flex: 1;
-}
-
-.book-list-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.book-list-desc {
-    font-size: 12px;
-    color: var(--tg-hint-color);
-    margin-bottom: 6px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.book-list-price {
     font-size: 14px;
-    font-weight: bold;
-    color: var(--tg-link-color);
 }
 
-/* Quick Actions */
-.quick-actions {
+.payment-icons {
     display: flex;
-    flex-direction: column;
     gap: 12px;
-    margin-top: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.action-btn {
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
+.payment-icons span {
+    padding: 8px 18px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
 }
 
-.action-btn:active {
-    opacity: 0.7;
+.payment-icons span:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
 }
 
-.primary-btn {
-    background: var(--tg-button-color);
-    color: var(--tg-button-text-color);
+/* ============================================
+   SAMPLE VIEWER (Glass)
+   ============================================ */
+.sample-header {
+    text-align: center;
+    padding: 20px;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
 }
 
-.secondary-btn {
-    background: var(--tg-secondary-bg-color);
-    color: var(--tg-text-color);
+.sample-header h3 {
+    margin: 10px 0 5px;
+    font-size: 18px;
 }
 
-/* PDF Viewer */
+.sample-header p {
+    color: var(--tg-hint-color);
+    font-size: 13px;
+}
+
 .pdf-viewer {
-    height: 70vh;
+    height: 65vh;
     margin: 16px 0;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    background: #f5f5f5;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
 }
 
 .pdf-viewer iframe {
@@ -425,136 +851,23 @@ body {
     border: none;
 }
 
-.sample-header {
-    text-align: center;
-    padding: 16px;
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
-    margin-bottom: 16px;
-}
-
 .sample-actions {
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
-/* Support Section */
-.support-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-card {
-    display: flex;
-    gap: 16px;
-    padding: 16px;
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
-    align-items: center;
-}
-
-.contact-icon {
-    font-size: 32px;
-    width: 50px;
-    text-align: center;
-}
-
-.contact-info {
-    flex: 1;
-}
-
-.contact-info h3 {
-    font-size: 16px;
-    margin-bottom: 4px;
-}
-
-.contact-info p {
-    font-size: 13px;
-    color: var(--tg-hint-color);
-    margin-bottom: 8px;
-}
-
-.small-btn {
-    padding: 6px 12px;
-    background: var(--tg-link-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.response-time {
-    text-align: center;
-    padding: 16px;
-    color: var(--tg-hint-color);
-    font-size: 12px;
-    margin-top: 16px;
-}
-
-/* About Section */
-.about-content {
-    text-align: center;
-}
-
-.about-logo {
-    font-size: 64px;
-    margin-bottom: 16px;
-}
-
-.about-content h2 {
-    margin-bottom: 8px;
-}
-
-.version {
-    color: var(--tg-hint-color);
-    font-size: 12px;
-    margin-bottom: 24px;
-}
-
-.about-section {
-    text-align: left;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: var(--tg-secondary-bg-color);
-    border-radius: 12px;
-}
-
-.about-section h3 {
-    margin-bottom: 12px;
-    font-size: 16px;
-}
-
-.feature-list {
-    list-style: none;
-}
-
-.feature-list li {
-    padding: 6px 0;
-    font-size: 14px;
-}
-
-.payment-icons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.payment-icons span {
-    padding: 8px 16px;
-    background: var(--tg-bg-color);
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-/* Bottom Navigation */
+/* ============================================
+   BOTTOM NAVIGATION (Glass)
+   ============================================ */
 .bottom-nav {
     display: flex;
-    background: var(--tg-bg-color);
-    border-top: 1px solid var(--tg-secondary-bg-color);
-    padding: 8px 0;
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur-strong);
+    -webkit-backdrop-filter: var(--glass-blur-strong);
+    border-top: 1px solid var(--glass-border-light);
+    padding: 8px 0 12px;
     position: sticky;
     bottom: 0;
+    z-index: 90;
 }
 
 .nav-item {
@@ -562,13 +875,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     background: none;
     border: none;
     cursor: pointer;
     padding: 8px;
     color: var(--tg-hint-color);
-    transition: color 0.2s;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-md);
+}
+
+.nav-item:active {
+    transform: scale(0.95);
 }
 
 .nav-item.active {
@@ -581,26 +899,195 @@ body {
 
 .nav-label {
     font-size: 11px;
+    font-weight: 500;
 }
 
-/* No Scroll */
+/* ============================================
+   TRUST BADGE (Glass)
+   ============================================ */
+.trust-badge {
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.trust-badge p {
+    margin: 6px 0;
+    font-size: 13px;
+}
+
+/* ============================================
+   LOADING & SHIMMER EFFECTS
+   ============================================ */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.glass-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   CATEGORY PILLS (Optional)
+   ============================================ */
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.category-btn {
+    padding: 8px 18px;
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-full);
+    background: var(--glass-bg-light);
+    backdrop-filter: var(--glass-blur);
+    color: var(--tg-text-color);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.category-btn.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+}
+
+.category-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 480px) {
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .hero {
+        padding: 24px 16px;
+    }
+    
+    .hero h1 {
+        font-size: 20px;
+    }
+    
+    .stat-number {
+        font-size: 22px;
+    }
+    
+    .book-detail-card h2 {
+        font-size: 20px;
+    }
+    
+    .detail-price {
+        font-size: 24px;
+    }
+    
+    .content {
+        padding: 16px 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .content {
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   NO SCROLL (For modals)
+   ============================================ */
 body.no-scroll {
     overflow: hidden;
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --tg-bg-color: #1c1c1e;
-        --tg-text-color: #ffffff;
-        --tg-secondary-bg-color: #2c2c2e;
-        --tg-hint-color: #8e8e93;
-    }
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-    .books-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+/* ============================================
+   TELEGRAM THEME OVERRIDES
+   ============================================ */
+/* These will be applied dynamically by Telegram */
+[data-tg-theme="dark"] {
+    --glass-bg-light: rgba(0, 0, 0, 0.3);
+    --glass-border-light: rgba(255, 255, 255, 0.08);
 }
