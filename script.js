@@ -304,28 +304,6 @@ function showBookDetail(bookId) {
     
     switchToView('detail');
 }
-// Filter books by search
-function filterBooks() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const container = document.getElementById('booksList');
-    
-    const filtered = books.filter(book => 
-        book.title.toLowerCase().includes(searchTerm) ||
-        book.description.toLowerCase().includes(searchTerm) ||
-        book.category.toLowerCase().includes(searchTerm)
-    );
-    
-    container.innerHTML = filtered.map(book => `
-        <div class="book-list-item" onclick="showBookDetail('${book.id}')">
-            <div class="book-list-cover">${book.cover}</div>
-            <div class="book-list-info">
-                <div class="book-list-title">${book.title}</div>
-                <div class="book-list-desc">${book.description.substring(0, 80)}...</div>
-                <div class="book-list-price">${book.price} EGP (${book.stars} Stars)</div>
-            </div>
-        </div>
-    `).join('');
-}
 
 // View PDF sample
 function viewSample(bookId) {
