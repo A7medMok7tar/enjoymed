@@ -76,6 +76,19 @@ body {
     font-size: 24px;
 }
 
+/* Share button specific styling */
+.action-btn.secondary-btn i.fa-share-alt {
+    margin-right: 8px;
+}
+
+/* Optional: Add hover effect */
+.action-btn.secondary-btn:hover {
+    background: var(--tg-link-color);
+    color: white;
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
 /* Content Area */
 .content {
     flex: 1;
