@@ -609,6 +609,17 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* Complete image protection */
+        img {
+            pointer-events: none;           /* Prevents clicking */
+            user-select: none;              /* Prevents selection */
+            -webkit-user-drag: none;        /* Prevents dragging */
+            user-drag: none;                /* Prevents dragging */
+            -webkit-tap-highlight-color: transparent;  /* Removes tap highlight */
+            -webkit-touch-callout: none;    /* Prevents long-press menu on iOS */
+            draggable: false;               /* HTML attribute alternative */
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             display: flex;
