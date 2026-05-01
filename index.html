@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Medical Book Store</title>
+    <title>ENJOYMED Book Store</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Telegram WebApp Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -48,6 +49,28 @@
             height: 100vh;
             overflow: hidden;
             background: var(--tg-bg-color);
+        }
+        
+        /* Complete Protection */
+        body, .app-container, .view, .content, h1, h2, h3, p, span, div, 
+        .book-title, .book-desc, .book-price, .section-title, .stat-label,
+        .hero p, .contact-info p, .home-book-title, .home-book-desc, 
+        .cart-item-title, .summary-row, .feature-list li, .about-section p {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        input, textarea, .search-bar input {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        * {
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Header */
@@ -677,7 +700,7 @@
             </button>
             <div class="header-title">
                 <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; border-radius: 8px;">
-                <span>Medical Book Store</span>
+                <span>ENJOYMED Book Store</span>
             </div>
             <button class="cart-icon-btn" id="cartIconBtn">
                 <i class="fas fa-shopping-cart"></i>
