@@ -1007,7 +1007,7 @@
         
         // Book Database (IDs match bot database)
         const books = [
-            { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/anatomy-sample.pdf" },
+            { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "https://drive.google.com/file/d/1JEERhagCXuJweyyRwCQfdg3ZU31jrk-8/preview" },
             { id: "forensic", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", icon: "fas fa-capsules", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
             { id: "musculoskeletal", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", icon: "fas fa-heart", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
             { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" }
@@ -1197,18 +1197,37 @@
     
             document.getElementById('sampleTitle').textContent = book.title;
             const pdfFrame = document.getElementById('pdfFrame');
-            const sampleUrl = book.sample;
+            let sampleUrl = book.sample;
     
-            // Debug: Log the URL
-            console.log("Trying to load:", sampleUrl);
+            // Check if it's a Google Drive link
+            if (sampleUrl.includes('drive.google.com')) {
+                // Extract file ID and use Google's embedded viewer
+                const fileIdMatch = sampleUrl.match(/\/d\/(.+?)\//);
+                if (fileIdMatch) {
+                    const fileId = fileIdMatch[1];
+                    sampleUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+                }
+            }
     
-            // Try direct PDF loading instead of Google Viewer
             pdfFrame.src = sampleUrl;
     
-            // If that doesn't work, show error
-            pdfFrame.onerror = function() {
-                document.getElementById('sampleTitle').innerHTML = '❌ Sample not found';
-                document.getElementById('sampleTitle').style.color = 'red';
+            // Add loading indicator
+            pdfFrame.onload = () => {
+                console.log('Sample loaded successfully');
+            };
+    
+            pdfFrame.onerror = () => {
+                pdfFrame.srcdoc = `
+                    <html>
+                    <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;color:#666;">
+                        <div style="text-align:center">
+                            <i class="fas fa-exclamation-triangle" style="font-size:48px;color:#e74c3c"></i>
+                            <h3>Sample Not Available</h3>
+                            <p>Please check your connection or contact support.</p>
+                        </div>
+                    </body>
+                    </html>
+                `;
             };
     
             document.getElementById('purchaseFromSampleBtn').onclick = () => {
