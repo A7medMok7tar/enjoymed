@@ -648,181 +648,181 @@
    FLOATING BOTTOM NAVIGATION - IPHONE STYLE
    ============================================ */
 
-.bottom-nav {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background: var(--tg-secondary-bg-color);
-    backdrop-filter: blur(20px);
-    border-radius: 30px;
-    margin: 10px 16px 12px 16px;
-    padding: 6px 8px;
-    z-index: 100;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
+        .bottom-nav {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background: var(--tg-secondary-bg-color);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            margin: 10px 16px 12px 16px;
+            padding: 6px 8px;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
 
-/* Floating animation on open */
-.bottom-nav {
-    animation: floatUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-}
+        /* Floating animation on open */
+        .bottom-nav {
+            animation: floatUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
 
-@keyframes floatUp {
-    0% {
-        transform: translateY(100px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
 
-/* Individual nav items */
-.nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px 0;
-    border-radius: 25px;
-    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    position: relative;
-    overflow: hidden;
-    color: var(--tg-hint-color);
-}
+        /* Individual nav items */
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px 0;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            position: relative;
+            overflow: hidden;
+            color: var(--tg-hint-color);
+        }
 
-/* Hover effect (desktop) */
-.nav-item:hover {
-    background: rgba(128, 128, 128, 0.1);
-    transform: translateY(-2px);
-}
+        /* Hover effect (desktop) */
+        .nav-item:hover {
+            background: rgba(128, 128, 128, 0.1);
+            transform: translateY(-2px);
+        }
 
-/* Active/Selected state */
-.nav-item.active {
-    color: var(--tg-link-color);
-    background: rgba(128, 128, 128, 0.08);
-    transform: translateY(-2px);
-}
+        /* Active/Selected state */
+        .nav-item.active {
+            color: var(--tg-link-color);
+            background: rgba(128, 128, 128, 0.08);
+            transform: translateY(-2px);
+        }
 
-/* Ripple effect on click */
-.nav-item::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(128, 128, 128, 0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.4s, height 0.4s;
-}
+        /* Ripple effect on click */
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(128, 128, 128, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
 
-.nav-item:active::after {
-    width: 100px;
-    height: 100px;
-}
+        .nav-item:active::after {
+            width: 100px;
+            height: 100px;
+        }
 
-/* Icon styling */
-.nav-icon {
-    font-size: 22px;
-    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-}
+        /* Icon styling */
+        .nav-icon {
+            font-size: 22px;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
 
-/* Icon bounce when active */
-.nav-item.active .nav-icon {
-    transform: scale(1.1);
-    animation: iconBounce 0.4s ease;
-}
+        /* Icon bounce when active */
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+            animation: iconBounce 0.4s ease;
+        }
 
-@keyframes iconBounce {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1.1);
-    }
-}
+        @keyframes iconBounce {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Label styling */
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            opacity: 0.9;
+        }
+        
+        /* Active label becomes slightly bolder */
+        .nav-item.active .nav-label {
+            font-weight: 600;
+            opacity: 1;
+        }
 
-/* Label styling */
-.nav-label {
-    font-size: 10px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    opacity: 0.9;
-}
-
-/* Active label becomes slightly bolder */
-.nav-item.active .nav-label {
-    font-weight: 600;
-    opacity: 1;
-}
-
-/* Sliding indicator (optional - underline effect) */
-.nav-item.active::before {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 3px;
-    background: var(--tg-link-color);
-    border-radius: 3px;
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    0% {
-        width: 0;
-        opacity: 0;
-    }
-    100% {
-        width: 20px;
-        opacity: 1;
-    }
-}
-
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-    .bottom-nav {
-        background: rgba(30, 30, 40, 0.95);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-}
-
-/* Mobile optimization */
-@media (max-width: 480px) {
-    .bottom-nav {
-        margin: 8px 12px 10px 12px;
-        padding: 4px 6px;
-    }
-    
-    .nav-icon {
-        font-size: 20px;
-    }
-    
-    .nav-label {
-        font-size: 9px;
-    }
-    
-    .nav-item.active::before {
-        width: 16px;
-        bottom: 3px;
-    }
-}
-    </style>
+        /* Sliding indicator (optional - underline effect) */
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: var(--tg-link-color);
+            border-radius: 3px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+            100% {
+                width: 20px;
+                opacity: 1;
+            }
+        }
+        
+        /* Dark mode adjustments */
+        @media (prefers-color-scheme: dark) {
+            .bottom-nav {
+                background: rgba(30, 30, 40, 0.95);
+                backdrop-filter: blur(20px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 480px) {
+            .bottom-nav {
+                margin: 8px 12px 10px 12px;
+                padding: 4px 6px;
+            }
+            
+            .nav-icon {
+                font-size: 20px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+            
+            .nav-item.active::before {
+                width: 16px;
+                bottom: 3px;
+            }
+        }
+        </style>
 </head>
 <body>
     <div class="app-container">
@@ -1194,20 +1194,30 @@
         function viewSample(bookId) {
             const book = books.find(b => b.id === bookId);
             if (!book) return;
-            
+    
             document.getElementById('sampleTitle').textContent = book.title;
             const pdfFrame = document.getElementById('pdfFrame');
             const sampleUrl = book.sample;
-            pdfFrame.src = `https://docs.google.com/gview?url=${encodeURIComponent(window.location.origin + '/' + sampleUrl)}&embedded=true`;
-            
+    
+            // Debug: Log the URL
+            console.log("Trying to load:", sampleUrl);
+    
+            // Try direct PDF loading instead of Google Viewer
+            pdfFrame.src = sampleUrl;
+    
+            // If that doesn't work, show error
+            pdfFrame.onerror = function() {
+                document.getElementById('sampleTitle').innerHTML = '❌ Sample not found';
+                document.getElementById('sampleTitle').style.color = 'red';
+            };
+    
             document.getElementById('purchaseFromSampleBtn').onclick = () => {
                 addToCart(book.id);
                 switchToView('cart');
             };
-            
+    
             switchToView('sample');
-        }
-        
+        }        
         // Navigation
 // Smooth navigation transition
 function switchToView(viewName) {
