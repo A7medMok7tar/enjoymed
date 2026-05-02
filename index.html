@@ -699,7 +699,7 @@
                 <i class="fas fa-arrow-left"></i>
             </button>
             <div class="header-title">
-                <img src="logo.png" alt="Logo" style="width: 28px; height: 28px; border-radius: 8px;">
+                <img src="logo.svg" alt="Logo" style="width: 28px; height: 28px; border-radius: 8px; object-fit: cover;">
                 <span>ENJOYMED Book Store</span>
             </div>
             <button class="cart-icon-btn" id="cartIconBtn">
@@ -796,8 +796,11 @@
             <!-- About View -->
             <div id="aboutView" class="view">
                 <div style="text-align:center">
-                    <div style="font-size:72px;margin-bottom:16px"><i class="fas fa-book-medical"></i></div>
-                    <h2 style="color:var(--tg-text-color)">Medical Book Store</h2>
+                    <div style="margin-bottom: 16px">
+                      <img src="logo.svg" alt="Medical Book Store Logo" 
+             style="width: 100px; height: 100px; border-radius: 20px; object-fit: contain;">
+                    </div>
+                    <h2 style="color:var(--tg-text-color)">ENJOYMED Book Store</h2>
                     <p style="color:var(--tg-hint-color);margin-bottom:28px">Version 2.0.0</p>
                     
                     <div class="about-section">
@@ -839,14 +842,10 @@
     <div id="toast" class="toast hidden"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
 
     <script>
-        // ============================================
-        // MEDICAL BOOK STORE - COMPLETE SCRIPT
-        // Pure Telegram Theme Support - No Glass Effects
-        // ============================================
         
         const tg = window.Telegram?.WebApp;
         
-        // Apply Telegram theme (pure colors, no glass)
+        // Apply Telegram theme
         function applyTelegramTheme() {
             if (tg && tg.themeParams) {
                 const theme = tg.themeParams;
@@ -1078,9 +1077,9 @@
             if (viewName !== navigationStack[navigationStack.length - 1]) navigationStack.push(viewName);
             if (viewName === 'cart') displayCartItems();
             
-            const titles = { home: 'Medical Book Store', cart: 'Your Cart', support: 'Support', about: 'About Us', detail: 'Book Details', sample: 'Sample Preview' };
+            const titles = { home: 'ENJOYMED Book Store', cart: 'Your Cart', support: 'Support', about: 'About Us', detail: 'Book Details', sample: 'Sample Preview' };
             const titleSpan = document.querySelector('.header-title span');
-            if (titleSpan) titleSpan.textContent = titles[viewName] || 'Medical Book Store';
+            if (titleSpan) titleSpan.textContent = titles[viewName] || 'ENJOYMED Book Store';
         }
         
         function goBack() {
@@ -1112,7 +1111,7 @@
         }
         
         function openBot() { 
-            const botUsername = 'YourMedicalBookBot';
+            const botUsername = 'enjoymedbot';
             if (tg) tg.openTelegramLink(`https://t.me/${botUsername}`);
             else window.open(`https://t.me/${botUsername}`, '_blank');
         }
