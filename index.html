@@ -644,51 +644,184 @@
         }
 
         /* Bottom Navigation */
-        .bottom-nav {
-            display: flex;
-            background: var(--tg-bg-color);
-            border-top: 1px solid var(--tg-border-color);
-            padding: 8px 0 12px;
-            position: sticky;
-            bottom: 0;
-            z-index: 90;
-        }
+        /* ============================================
+   FLOATING BOTTOM NAVIGATION - IPHONE STYLE
+   ============================================ */
 
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: var(--tg-hint-color);
-            transition: all 0.2s ease;
-        }
+.bottom-nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--tg-secondary-bg-color);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    margin: 10px 16px 12px 16px;
+    padding: 6px 8px;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
 
-        .nav-item.active {
-            color: var(--tg-link-color);
-        }
+/* Floating animation on open */
+.bottom-nav {
+    animation: floatUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
 
-        .nav-icon {
-            font-size: 22px;
-        }
+@keyframes floatUp {
+    0% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
-        .nav-label {
-            font-size: 11px;
-        }
+/* Individual nav items */
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    position: relative;
+    overflow: hidden;
+    color: var(--tg-hint-color);
+}
 
-        @media (max-width: 480px) {
-            .content {
-                padding: 16px 12px;
-            }
-            .home-book-cover {
-                width: 70px;
-                height: 90px;
-            }
-        }
+/* Hover effect (desktop) */
+.nav-item:hover {
+    background: rgba(128, 128, 128, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Active/Selected state */
+.nav-item.active {
+    color: var(--tg-link-color);
+    background: rgba(128, 128, 128, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Ripple effect on click */
+.nav-item::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(128, 128, 128, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+}
+
+.nav-item:active::after {
+    width: 100px;
+    height: 100px;
+}
+
+/* Icon styling */
+.nav-icon {
+    font-size: 22px;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+/* Icon bounce when active */
+.nav-item.active .nav-icon {
+    transform: scale(1.1);
+    animation: iconBounce 0.4s ease;
+}
+
+@keyframes iconBounce {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* Label styling */
+.nav-label {
+    font-size: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    opacity: 0.9;
+}
+
+/* Active label becomes slightly bolder */
+.nav-item.active .nav-label {
+    font-weight: 600;
+    opacity: 1;
+}
+
+/* Sliding indicator (optional - underline effect) */
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background: var(--tg-link-color);
+    border-radius: 3px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    100% {
+        width: 20px;
+        opacity: 1;
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .bottom-nav {
+        background: rgba(30, 30, 40, 0.95);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Mobile optimization */
+@media (max-width: 480px) {
+    .bottom-nav {
+        margin: 8px 12px 10px 12px;
+        padding: 4px 6px;
+    }
+    
+    .nav-icon {
+        font-size: 20px;
+    }
+    
+    .nav-label {
+        font-size: 9px;
+    }
+    
+    .nav-item.active::before {
+        width: 16px;
+        bottom: 3px;
+    }
+}
     </style>
 </head>
 <body>
@@ -830,12 +963,24 @@
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
+        <!-- Bottom Navigation - Floating Style -->
         <div class="bottom-nav">
-            <button class="nav-item" onclick="window.switchToView('home')" data-view="home"><i class="fas fa-home nav-icon"></i><span class="nav-label">Home</span></button>
-            <button class="nav-item" onclick="window.viewCart()" data-view="cart"><i class="fas fa-shopping-cart nav-icon"></i><span class="nav-label">Cart</span></button>
-            <button class="nav-item" onclick="window.switchToView('support')" data-view="support"><i class="fas fa-headset nav-icon"></i><span class="nav-label">Support</span></button>
-            <button class="nav-item" onclick="window.switchToView('about')" data-view="about"><i class="fas fa-info-circle nav-icon"></i><span class="nav-label">About</span></button>
+            <button class="nav-item" onclick="window.switchToView('home')" data-view="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item" onclick="window.viewCart()" data-view="cart">
+                <i class="fas fa-shopping-cart nav-icon"></i>
+                <span class="nav-label">Cart</span>
+            </button>
+            <button class="nav-item" onclick="window.switchToView('support')" data-view="support">
+                <i class="fas fa-headset nav-icon"></i>
+                <span class="nav-label">Support</span>
+            </button>
+            <button class="nav-item" onclick="window.switchToView('about')" data-view="about">
+                <i class="fas fa-info-circle nav-icon"></i>
+                <span class="nav-label">About</span>
+            </button>
         </div>
     </div>
 
@@ -1064,23 +1209,80 @@
         }
         
         // Navigation
-        function switchToView(viewName) {
-            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
-            const target = document.getElementById(`${viewName}View`);
-            if (target) target.classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-view') === viewName) item.classList.add('active');
-            });
-            
-            if (viewName !== navigationStack[navigationStack.length - 1]) navigationStack.push(viewName);
-            if (viewName === 'cart') displayCartItems();
-            
-            const titles = { home: 'ENJOYMED Book Store', cart: 'Your Cart', support: 'Support', about: 'About Us', detail: 'Book Details', sample: 'Sample Preview' };
-            const titleSpan = document.querySelector('.header-title span');
-            if (titleSpan) titleSpan.textContent = titles[viewName] || 'ENJOYMED Book Store';
+// Smooth navigation transition
+function switchToView(viewName) {
+    // Add leaving animation to current view
+    const currentView = document.querySelector('.view.active');
+    if (currentView) {
+        currentView.style.animation = 'fadeOut 0.2s ease forwards';
+    }
+    
+    // Small delay to let fadeOut complete
+    setTimeout(() => {
+        // Hide all views
+        document.querySelectorAll('.view').forEach(view => {
+            view.classList.remove('active');
+            view.style.animation = '';
+        });
+        
+        // Show selected view
+        const target = document.getElementById(`${viewName}View`);
+        if (target) {
+            target.classList.add('active');
+            target.style.animation = 'fadeInUp 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
         }
+        
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('data-view') === viewName) {
+                item.classList.add('active');
+                // Add haptic feedback on mobile (optional)
+                if (tg && tg.HapticFeedback) {
+                    tg.HapticFeedback.impactOccurred('light');
+                }
+            }
+        });
+        
+        // Update navigation stack
+        if (viewName !== navigationStack[navigationStack.length - 1]) {
+            navigationStack.push(viewName);
+        }
+        
+        if (viewName === 'cart') displayCartItems();
+        
+        // Update header title
+        const titles = { 
+            home: 'Medical Book Store', 
+            cart: 'Your Cart', 
+            support: 'Support & Contact', 
+            about: 'About Us', 
+            detail: 'Book Details', 
+            sample: 'Sample Preview' 
+        };
+        const titleSpan = document.querySelector('.header-title span');
+        if (titleSpan) titleSpan.textContent = titles[viewName] || 'Medical Book Store';
+        
+        // Scroll to top when switching views
+        document.querySelector('.content').scrollTop = 0;
+    }, 150);
+}
+
+// Add fadeOut animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    }
+`;
+document.head.appendChild(style);
         
         function goBack() {
             if (navigationStack.length > 1) {
