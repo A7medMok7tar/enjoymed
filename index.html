@@ -1144,28 +1144,72 @@
             updateCheckoutButton();
         }
         
-        function checkoutFromWebApp() {
-            if (cart.length === 0) {
-                showToast('Your cart is empty!');
-                return;
-            }
+// Flask server URL - Replace with your actual server URL
+const FLASK_SERVER = "https://3ef2-156-211-13-148.ngrok-free.app/webapp-data";
+
+function checkoutFromWebApp() {
+    if (cart.length === 0) {
+        showToast('Your cart is empty!');
+        return;
+    }
+    
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    // Get user ID from Telegram
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+    }
+    
+    if (!userId) {
+        showToast('Unable to get user information. Please open from Telegram.');
+        return;
+    }
+    
+    const checkoutData = {
+        user_id: userId,
+        action: 'checkout',
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.title,
+            price: item.price
+        })),
+        total: total,
+        timestamp: Date.now()
+    };
+    
+    showToast('Sending cart to bot...');
+    
+    // Send to Flask server
+    fetch(FLASK_SERVER, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(checkoutData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'ok') {
+            showToast('✓ Cart sent! Check your Telegram bot.');
+            // Clear local cart after successful send
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
             
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const checkoutData = { 
-                action: 'checkout', 
-                items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), 
-                total: total, 
-                timestamp: Date.now() 
-            };
-            
-            if (tg) {
-                tg.sendData(JSON.stringify(checkoutData));
-                showToast('Redirecting to checkout...');
-                setTimeout(() => tg.close(), 500);
-            } else {
-                alert('Checkout Data:\n' + JSON.stringify(checkoutData, null, 2));
-            }
+            // Close web app after 2 seconds
+            setTimeout(() => {
+                if (tg) tg.close();
+            }, 2000);
+        } else {
+            showToast('Error: ' + data.message);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error sending cart. Please try again.');
+    });
+}
         
         // Book Functions
         function showBookDetail(bookId) {
