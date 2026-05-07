@@ -1016,7 +1016,8 @@
         // Cart
         let cart = [];
         let navigationStack = ['home'];
-        
+
+        let currentUserId = null;
         // Initialize
         function init() {
             applyTelegramTheme();
@@ -1145,9 +1146,16 @@
         }
         
 // Flask server URL - Replace with your actual server URL
-const FLASK_SERVER = "https://e8f4-156-211-99-14.ngrok-free.app/webapp-data";
+const FLASK_SERVER = "https://18b2-156-211-114-91.ngrok-free.app/webapp-data";
 
 function checkoutFromWebApp() {
+    // Check if we have user ID
+    if (!currentUserId) {
+        showToast('Please reopen the store and try again.');
+        console.error("Missing user ID - reopen store from bot");
+        return;
+    }
+
     if (cart.length === 0) {
         showToast('Your cart is empty!');
         return;
@@ -1167,7 +1175,7 @@ function checkoutFromWebApp() {
     }
     
     const checkoutData = {
-        user_id: userId,
+        user_id: currentUserId,
         action: 'checkout',
         items: cart.map(item => ({
             id: item.id,
