@@ -1146,49 +1146,31 @@
         }
         
 // Flask server URL - Replace with your actual server URL
-const FLASK_SERVER = "https://18b2-156-211-114-91.ngrok-free.app/webapp-data";
+const FLASK_SERVER = "https://261c-156-211-93-31.ngrok-free.app/webapp-data";
 
 function checkoutFromWebApp() {
-    // Check if we have user ID
-    if (!currentUserId) {
-        showToast('Please reopen the store and try again.');
-        console.error("Missing user ID - reopen store from bot");
-        return;
-    }
-
     if (cart.length === 0) {
         showToast('Your cart is empty!');
         return;
     }
     
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    
-    // Get user ID from Telegram
-    let userId = null;
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        userId = tg.initDataUnsafe.user.id;
-    }
-    
-    if (!userId) {
-        showToast('Unable to get user information. Please open from Telegram.');
+    if (!currentUserId) {
+        showToast('Please reopen the store from Telegram');
         return;
     }
+    
+    // 🔥 Send ONLY book IDs
+    const bookIds = cart.map(item => item.id);
     
     const checkoutData = {
         user_id: currentUserId,
         action: 'checkout',
-        items: cart.map(item => ({
-            id: item.id,
-            name: item.title,
-            price: item.price
-        })),
-        total: total,
+        items: bookIds,  // Just the IDs array
         timestamp: Date.now()
     };
     
-    showToast('Sending cart to bot...');
+    console.log("Sending book IDs:", bookIds);
     
-    // Send to Flask server
     fetch(FLASK_SERVER, {
         method: 'POST',
         headers: {
@@ -1199,16 +1181,11 @@ function checkoutFromWebApp() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'ok') {
-            showToast('✓ Cart sent! Check your Telegram bot.');
-            // Clear local cart after successful send
+            showToast('✓ Cart sent to bot!');
             cart = [];
             saveCartToStorage();
             updateCartUI();
-            
-            // Close web app after 2 seconds
-            setTimeout(() => {
-                if (tg) tg.close();
-            }, 2000);
+            setTimeout(() => tg?.close(), 1500);
         } else {
             showToast('Error: ' + data.message);
         }
@@ -1217,8 +1194,7 @@ function checkoutFromWebApp() {
         console.error('Error:', error);
         showToast('Error sending cart. Please try again.');
     });
-}
-        
+}        
         // Book Functions
         function showBookDetail(bookId) {
             const book = books.find(b => b.id === bookId);
