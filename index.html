@@ -1,2104 +1,1505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ENJOYMED Book Store</title>
-    <link rel="icon" type="image/png" href="logo.png">
-    
-    <!-- Telegram WebApp Script -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>MedBook Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  /* ── CSS Variables pulled from Telegram theme ── */
+  :root {
+    --bg:          var(--tg-theme-bg-color,           #ffffff);
+    --bg2:         var(--tg-theme-secondary-bg-color, #f4f4f5);
+    --text:        var(--tg-theme-text-color,         #1a1a2e);
+    --hint:        var(--tg-theme-hint-color,         #8a8a9a);
+    --link:        var(--tg-theme-link-color,         #2563eb);
+    --btn:         var(--tg-theme-button-color,       #2563eb);
+    --btn-text:    var(--tg-theme-button-text-color,  #ffffff);
+    --accent:      #e63946;
+    --gold:        #f4a522;
+    --radius:      14px;
+    --card-shadow: 0 2px 16px rgba(0,0,0,.08);
+    --font-display:"DM Serif Display", Georgia, serif;
+    --font-body:   "DM Sans", system-ui, sans-serif;
+    --nav-h:       68px;
+    --header-h:    56px;
+  }
 
-        /* Telegram Theme Variables - Applied by JS */
-        :root {
-            --tg-bg-color: #ffffff;
-            --tg-text-color: #000000;
-            --tg-hint-color: #999999;
-            --tg-link-color: #2481cc;
-            --tg-button-color: #2481cc;
-            --tg-button-text-color: #ffffff;
-            --tg-secondary-bg-color: #f0f0f0;
-            --tg-section-bg: #ffffff;
-            --tg-border-color: #e0e0e0;
-        }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        .app-container {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            background: var(--tg-bg-color);
-        }
-        
-        /* Complete Protection */
-        body, .app-container, .view, .content, h1, h2, h3, p, span, div, 
-        .book-title, .book-desc, .book-price, .section-title, .stat-label,
-        .hero p, .contact-info p, .home-book-title, .home-book-desc, 
-        .cart-item-title, .summary-row, .feature-list li, .about-section p {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-touch-callout: none;
-        }
-
-        input, textarea, .search-bar input {
-            user-select: text;
-            -webkit-user-select: text;
-        }
-
-        * {
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--tg-bg-color);
-            border-bottom: 1px solid var(--tg-border-color);
-            z-index: 100;
-        }
-
-        .back-btn, .cart-icon-btn {
-            background: var(--tg-secondary-bg-color);
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--tg-text-color);
-            font-size: 18px;
-            transition: all 0.2s ease;
-        }
-
-        .cart-icon-btn {
-            position: relative;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--tg-text-color);
-        }
-
-        .header-title i {
-            color: var(--tg-link-color);
-        }
-
-        .spacer {
-            width: 36px;
-        }
-
-        /* Content */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 16px;
-            -webkit-overflow-scrolling: touch;
-            background: var(--tg-bg-color);
-        }
-
-        /* Views */
-        .view {
-            display: none;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        .view.active {
-            display: block;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Hero */
-        .hero {
-            text-align: center;
-            padding: 32px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 28px;
-            margin-bottom: 20px;
-        }
-
-        .hero-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .hero h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .hero p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-/* ============================================
-   CAROUSEL STYLES
-   ============================================ */
-
-.carousel-section {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.carousel-container {
-    position: relative;
-    width: 100%;
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
     overflow: hidden;
-    border-radius: 20px;
-    background: var(--tg-secondary-bg-color);
-}
+  }
 
-.carousel-track {
+  /* ════════════ LAYOUT ════════════ */
+  #app {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    flex-direction: column;
+    height: 100%;
+  }
+
+/* ════════════ PREMIUM GLASS HEADER ════════════ */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  height: var(--header-h);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding:
+    calc(env(safe-area-inset-top, 0) + 6px)
+    18px
+    10px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.72),
+      rgba(255,255,255,.42)
+    );
+
+  backdrop-filter:
+    blur(22px)
+    saturate(180%);
+
+  -webkit-backdrop-filter:
+    blur(22px)
+    saturate(180%);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.10);
+
+  box-shadow:
+    0 4px 24px rgba(0,0,0,.05),
+    inset 0 -1px 0 rgba(255,255,255,.06);
+
+  flex-shrink: 0;
+
+  overflow: hidden;
 }
 
-.carousel-slide {
-    flex: 0 0 100%;
+header::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--btn) 18%, transparent),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, #7c3aed 14%, transparent),
+      transparent 40%
+    );
+
+  opacity: .9;
+
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  header {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(15,15,20,.78),
+        rgba(15,15,20,.45)
+      );
+
+    border-bottom:
+      1px solid rgba(255,255,255,.04);
+
+    box-shadow:
+      0 4px 24px rgba(0,0,0,.28),
+      inset 0 -1px 0 rgba(255,255,255,.03);
+  }
+}
+
+.logo-mark {
+  position: relative;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 14px;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--btn) 92%, white),
+      color-mix(in srgb, #7c3aed 45%, var(--btn))
+    );
+
+  color: white;
+
+  box-shadow:
+    0 6px 18px color-mix(in srgb, var(--btn) 30%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+}
+
+.logo-mark::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255,255,255,.22) 50%,
+      transparent 80%
+    );
+
+  transform: translateX(-120%);
+  animation: logoShine 5s infinite linear;
+}
+
+@keyframes logoShine {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 19px;
+    letter-spacing: -.3px;
+    line-height: 1;
+    flex: 1;
+  }
+
+#cart-badge-header {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  transition:
+    transform .18s ease,
+    background .25s ease;
+}
+
+#cart-badge-header:active {
+  transform: scale(.92);
+}
+
+#cart-badge-header svg {
+  width: 20px;
+  height: 20px;
+}
+
+  /* scrollable content area */
+  #content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: calc(var(--nav-h) + 8px);
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+/* ════════════ GLASS BOTTOM NAV ════════════ */
+nav {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+
+  height: calc(var(--nav-h) - 8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  padding: 8px;
+
+  border-radius: 24px;
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.08);
+
+  z-index: 200;
+
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 8px);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  nav {
+    background: rgba(20,20,25,0.55);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+}
+
+.nav-tab {
+  flex: 1;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--hint);
+
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+
+  border-radius: 18px;
+
+  position: relative;
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    color .2s ease,
+    background .25s ease;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-tab svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+  transition: transform .2s ease;
+}
+
+/* Hover / Press */
+.nav-tab:active {
+  transform: scale(.94);
+}
+
+/* Active tab */
+.nav-tab.active {
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--btn) 88%, white),
+      color-mix(in srgb, var(--btn) 65%, #7c3aed)
+    );
+
+  box-shadow:
+    0 4px 18px color-mix(in srgb, var(--btn) 40%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.nav-tab.active svg {
+  transform: translateY(-1px) scale(1.05);
+}
+
+.nav-tab .nav-badge {
+  position: absolute;
+
+  top: 6px;
+  right: 22%;
+
+  min-width: 16px;
+  height: 16px;
+
+  padding: 0 4px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #ff4d6d, #ff1744);
+
+  color: white;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 10px rgba(255, 23, 68, .35);
+
+  border: 2px solid rgba(255,255,255,.12);
+
+  backdrop-filter: blur(10px);
+
+  display: none;
+}
+  /* ════════════ PAGES ════════════ */
+/* ════════════ SMOOTH PAGE TRANSITIONS ════════════ */
+.page,
+.nav-tab,
+.book-card,
+.support-card {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+
+#content {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* pages */
+.page {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  min-height: 100%;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform:
+    translateX(24px)
+    scale(.985);
+
+  transition:
+    opacity .34s cubic-bezier(.22,1,.36,1),
+    transform .34s cubic-bezier(.22,1,.36,1),
+    visibility .34s;
+
+  will-change: transform, opacity;
+
+  pointer-events: none;
+}
+
+/* active page */
+.page.active {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translateX(0)
+    scale(1);
+
+  pointer-events: auto;
+
+  z-index: 2;
+}
+
+/* outgoing animation */
+.page.leaving {
+  opacity: 0;
+
+  transform:
+    translateX(-18px)
+    scale(.98);
+
+  z-index: 1;
+}
+
+  /* ════════════ HOME PAGE ════════════ */
+  .section-label {
+    padding: 20px 16px 10px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: -.4px;
+  }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 12px 12px;
+  }
+
+  .book-card {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+
+  .book-card:active { transform: scale(.97); }
+
+  .book-cover {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    background: color-mix(in srgb, var(--btn) 12%, var(--bg2));
+  }
+
+  .book-cover-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--btn) 15%, var(--bg2)),
+      color-mix(in srgb, var(--btn) 5%,  var(--bg2)));
+    font-size: 36px;
+    gap: 6px;
+  }
+
+  .book-cover-placeholder span {
+    font-size: 10px;
+    color: var(--hint);
+    font-weight: 500;
     text-align: center;
-    padding: 20px;
-    cursor: pointer;
-}
+    padding: 0 8px;
+    line-height: 1.3;
+  }
 
-.carousel-slide img {
-    width: 180px;
-    height: 240px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    margin-bottom: 16px;
-}
+  .book-info {
+    padding: 10px 10px 12px;
+  }
 
-.carousel-slide h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: var(--tg-text-color);
-}
-
-.carousel-slide p {
+  .book-title {
+    font-weight: 600;
     font-size: 13px;
-    color: var(--tg-hint-color);
-    margin-bottom: 12px;
-    max-width: 80%;
+    line-height: 1.3;
+    margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
+  }
 
-.carousel-slide .price {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--tg-link-color);
-    margin-bottom: 15px;
-}
-
-.carousel-slide .carousel-actions {
+  .book-prices {
     display: flex;
-    gap: 12px;
-    justify-content: center;
-}
+    flex-direction: column;
+    gap: 2px;
+  }
 
-.carousel-slide .carousel-btn-sample,
-.carousel-slide .carousel-btn-add {
-    padding: 8px 16px;
+  .price-stars {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .price-egp {
+    font-size: 12px;
+    color: var(--hint);
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 0;
+    background: var(--btn);
+    color: var(--btn-text);
     border: none;
-    border-radius: 25px;
-    font-size: 13px;
-    font-weight: 500;
+    border-radius: 9px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.carousel-slide .carousel-btn-sample {
-    background: var(--tg-secondary-bg-color);
-    color: var(--tg-text-color);
-    border: 1px solid var(--tg-border-color);
-}
-
-.carousel-slide .carousel-btn-add {
-    background: var(--tg-link-color);
-    color: white;
-}
-
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    z-index: 10;
-    transition: all 0.2s ease;
-}
-
-.carousel-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: translateY(-50%) scale(1.05);
-}
-
-.prev-btn {
-    left: 10px;
-}
-
-.next-btn {
-    right: 10px;
-}
-
-.carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--tg-hint-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.dot.active {
-    width: 24px;
-    border-radius: 4px;
-    background: var(--tg-link-color);
-}
-
-@media (max-width: 480px) {
-    .carousel-slide img {
-        width: 140px;
-        height: 190px;
-    }
-    .carousel-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
-    }
-}
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 28px;
-        }
-
-        .stat-card {
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            padding: 16px 12px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 6px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--tg-hint-color);
-        }
-
-        /* Section Title */
-        .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--tg-text-color);
-        }
-
-        .section-title i {
-            font-size: 22px;
-            color: var(--tg-link-color);
-        }
-
-/* Home page book cover */
-.home-book-cover {
-    width: 80px;
-    height: 100px;
-    border-radius: 12px;
-    flex-shrink: 0;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.home-book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.home-book-cover:hover img {
-    transform: scale(1.05);
-}
-
-/* Book card cover */
-.book-cover {
-    height: 180px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.book-card:hover .book-cover img {
-    transform: scale(1.05);
-}
-
-/* Detail cover */
-.detail-cover {
-    padding: 20px;
-    text-align: center;
-    background: var(--tg-secondary-bg-color);
-    border-radius: 20px;
-    margin-bottom: 24px;
-}
-
-/* Cart item cover */
-.cart-item-cover {
-    width: 50px;
-    height: 65px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.cart-item-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Book list cover */
-.book-list-cover {
-    width: 70px;
-    height: 90px;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.book-list-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-        /* Home Books List - Each book in its own row */
-        .home-books-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .home-book-item {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .home-book-item:active {
-            transform: scale(0.98);
-        }
-
-        .home-book-cover {
-            width: 80px;
-            height: 100px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .home-book-cover i {
-            font-size: 40px;
-            color: white;
-        }
-
-        .home-book-info {
-            flex: 1;
-        }
-
-        .home-book-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 6px;
-            color: var(--tg-text-color);
-        }
-
-        .home-book-desc {
-            font-size: 12px;
-            color: var(--tg-hint-color);
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .home-book-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--tg-link-color);
-            margin-bottom: 10px;
-        }
-
-        .home-book-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Buttons */
-        .action-btn {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-        }
-
-        .action-btn.primary-btn {
-            background: var(--tg-button-color);
-            color: var(--tg-button-text-color);
-        }
-
-        .action-btn.secondary-btn {
-            background: var(--tg-secondary-bg-color);
-            color: var(--tg-text-color);
-        }
-
-        .sample-link {
-            font-size: 12px;
-            color: var(--tg-link-color);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            cursor: pointer;
-            border: none;
-        }
-
-        /* Cart Items */
-        .cart-items {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 14px;
-            padding: 14px;
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            align-items: center;
-        }
-
-        .cart-item-cover {
-            width: 50px;
-            height: 65px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cart-item-cover i {
-            font-size: 24px;
-            color: white;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 4px;
-            color: var(--tg-text-color);
-        }
-
-        .cart-item-price {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--tg-link-color);
-        }
-
-        .cart-item-remove {
-            background: rgba(231, 76, 60, 0.15);
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #e74c3c;
-        }
-
-        .cart-summary-card {
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            font-size: 14px;
-            color: var(--tg-hint-color);
-        }
-
-        .summary-row.total {
-            border-top: 1px solid var(--tg-border-color);
-            margin-top: 8px;
-            padding-top: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--tg-link-color);
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .empty-cart p {
-            color: var(--tg-text-color);
-            margin-bottom: 20px;
-        }
-
-        /* Checkout Button inside Cart View */
-        .cart-checkout {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* Sample Viewer */
-        .sample-header {
-            text-align: center;
-            padding: 20px;
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
-        .sample-header h3 {
-            margin: 10px 0 5px;
-            font-size: 18px;
-            color: var(--tg-text-color);
-        }
-
-        .pdf-viewer {
-            height: 60vh;
-            margin: 16px 0;
-            border-radius: 20px;
-            overflow: hidden;
-            background: var(--tg-secondary-bg-color);
-        }
-
-        .pdf-viewer iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Support Section */
-        .support-section {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .contact-card {
-            display: flex;
-            gap: 16px;
-            padding: 18px;
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            align-items: center;
-        }
-
-        .contact-icon {
-            font-size: 36px;
-            width: 55px;
-            text-align: center;
-            color: var(--tg-link-color);
-        }
-
-        .contact-info h3 {
-            color: var(--tg-text-color);
-            margin-bottom: 4px;
-        }
-
-        .contact-info p {
-            color: var(--tg-hint-color);
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .small-btn {
-            padding: 6px 12px;
-            background: var(--tg-link-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .response-time {
-            text-align: center;
-            padding: 14px;
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            margin-top: 16px;
-            font-size: 12px;
-            color: var(--tg-hint-color);
-        }
-
-        /* About Section */
-        .about-section {
-            background: var(--tg-secondary-bg-color);
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .about-section h3 {
-            color: var(--tg-text-color);
-            margin-bottom: 10px;
-        }
-
-        .about-section p {
-            color: var(--tg-hint-color);
-        }
-
-        .feature-list {
-            list-style: none;
-        }
-
-        .feature-list li {
-            padding: 6px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--tg-hint-color);
-        }
-
-        .payment-icons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .payment-icons span {
-            padding: 8px 16px;
-            background: var(--tg-bg-color);
-            border-radius: 20px;
-            color: var(--tg-text-color);
-        }
-
-/* ============================================
-   BOTTOM SHEET BOOK DETAIL - SIMPLE & CLEAN
-   ============================================ */
-/* ============================================
-   BOTTOM SHEET MODAL
-   ============================================ */
-
-.bottom-sheet {
+    transition: opacity .15s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .add-to-cart-btn:active { transform: scale(.96); opacity: .85; }
+  .add-to-cart-btn.added {
+    background: color-mix(in srgb, var(--btn) 20%, var(--bg2));
+    color: var(--btn);
+  }
+
+  /* book detail sheet */
+  .sheet-overlay {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--tg-bg-color);
-    border-radius: 28px 28px 0 0;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-out;
-    z-index: 1000;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    max-height: 85vh;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 300;
+    display: none;
+    align-items: flex-end;
+  }
+  .sheet-overlay.open { display: flex; }
+
+  .sheet {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-height: 88vh;
     overflow-y: auto;
-}
+    padding: 16px 16px 32px;
+    animation: slideUp .25s ease;
+  }
 
-.bottom-sheet.open {
-    transform: translateY(0);
-}
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
 
-.bottom-sheet-content {
-    padding: 16px 20px 30px;
-}
-
-/* Drag handle */
-.bottom-sheet-handle {
-    width: 40px;
-    height: 4px;
-    background: var(--tg-hint-color);
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: var(--hint);
     border-radius: 2px;
-    margin: 0 auto 20px;
-    opacity: 0.5;
-}
+    margin: 0 auto 16px;
+    opacity: .4;
+  }
 
-/* Overlay background */
-.sheet-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.sheet-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Bottom sheet book styles */
-.sheet-book-cover {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
-.sheet-book-cover img {
-    width: 120px;
-    height: 160px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    object-fit: cover;
-}
-
-.sheet-book-title {
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--tg-text-color);
-    margin-bottom: 6px;
-}
-
-.sheet-book-price {
-    font-size: 22px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--tg-link-color);
-    margin-bottom: 12px;
-}
-
-.sheet-book-description {
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--tg-hint-color);
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.sheet-actions {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.sheet-btn-cart {
-    flex: 2;
-    background: var(--tg-link-color);
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-.sheet-btn-sample {
-    flex: 1;
-    background: var(--tg-secondary-bg-color);
-    color: var(--tg-text-color);
-    border: 1px solid var(--tg-border-color);
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-.sheet-btn-back {
-    background: transparent;
-    color: var(--tg-hint-color);
-    border: none;
-    padding: 10px;
+  .sheet-cover {
     width: 100%;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    cursor: pointer;
-}
-
-.sheet-divider {
-    height: 1px;
-    background: var(--tg-border-color);
-    margin: 12px 0;
-}
-.book-detail-sheet {
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Book cover image */
-.book-sheet-cover {
-    display: flex;
-    justify-content: center;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: 12px;
     margin-bottom: 16px;
-}
+    display: block;
+  }
 
-.book-sheet-cover img {
-    width: 140px;
-    height: 190px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    object-fit: cover;
-}
-
-/* Book title */
-.book-sheet-title {
+  .sheet-title {
+    font-family: var(--font-display);
     font-size: 22px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--tg-text-color);
     margin-bottom: 8px;
-}
+    letter-spacing: -.3px;
+  }
 
-/* Book price */
-.book-sheet-price {
-    font-size: 24px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--tg-link-color);
-    margin-bottom: 16px;
-}
-
-/* Book description */
-.book-sheet-description {
+  .sheet-desc {
+    color: var(--hint);
     font-size: 14px;
-    line-height: 1.5;
-    color: var(--tg-hint-color);
-    text-align: center;
-    margin-bottom: 24px;
-    padding: 0 8px;
-}
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
 
-/* Action buttons */
-.book-sheet-actions {
+  .sheet-prices {
     display: flex;
     gap: 12px;
-    margin-bottom: 16px;
-}
+    margin-bottom: 20px;
+  }
 
-.btn-add-cart {
-    flex: 2;
-    background: var(--tg-link-color);
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 14px;
-    font-size: 16px;
+  .sheet-price-pill {
+    padding: 7px 14px;
+    border-radius: 20px;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-add-cart:active {
-    transform: scale(0.97);
-}
-
-.btn-sample-sheet {
-    flex: 1;
-    background: var(--tg-secondary-bg-color);
-    color: var(--tg-text-color);
-    border: 1px solid var(--tg-border-color);
-    padding: 14px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-sample-sheet:active {
-    transform: scale(0.97);
-}
-
-.btn-back-sheet {
-    background: transparent;
-    color: var(--tg-hint-color);
-    border: none;
-    padding: 12px;
-    width: 100%;
     font-size: 14px;
+  }
+
+  .pill-stars { background: color-mix(in srgb, var(--gold) 15%, var(--bg2)); color: var(--gold); }
+  .pill-egp   { background: var(--bg2); color: var(--text); }
+
+  .sheet-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-primary, .btn-secondary {
+    flex: 1;
+    padding: 14px 0;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary  { background: var(--btn); color: var(--btn-text); }
+  .btn-secondary {
+    background: var(--bg2);
+    color: var(--text);
+    border: 1.5px solid color-mix(in srgb, var(--hint) 30%, transparent);
+  }
+  .btn-primary:active, .btn-secondary:active { transform: scale(.97); opacity: .85; }
+
+  /* ════════════ CART PAGE ════════════ */
+  .cart-empty {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--hint);
+  }
+  .cart-empty .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+  .cart-empty p { font-size: 15px; }
+
+  .cart-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cart-item {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cart-item-cover {
+    width: 52px; height: 68px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--btn) 10%, var(--bg2));
+  }
+
+  .cart-item-info { flex: 1; min-width: 0; }
+
+  .cart-item-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cart-item-price {
+    font-size: 12px;
+    color: var(--hint);
+  }
+
+  .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .qty-btn {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    border: none;
+    background: color-mix(in srgb, var(--btn) 15%, var(--bg2));
+    color: var(--btn);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .qty-value {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .cart-remove-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg2));
+    color: var(--accent);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cart-summary {
+    margin: 8px 12px;
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 4px 0;
+  }
+
+  .cart-summary-row.total {
+    font-weight: 700;
+    font-size: 16px;
+    border-top: 1px solid color-mix(in srgb, var(--hint) 25%, transparent);
+    margin-top: 8px;
+    padding-top: 10px;
+  }
+
+  .checkout-methods {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 10px;
+    transition: transform .1s, opacity .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .checkout-btn:active { transform: scale(.98); opacity: .85; }
+
+  .checkout-stars {
+    background: linear-gradient(135deg, #f4a522, #e8890c);
+    color: #fff;
+  }
+
+  .checkout-vodafone {
+    background: linear-gradient(135deg, #e63946, #c1121f);
+    color: #fff;
+  }
+
+  /* ════════════ SUPPORT PAGE ════════════ */
+  .support-wrap {
+    padding: 24px 16px;
+  }
+
+  .support-hero {
+    text-align: center;
+    padding: 24px 0 32px;
+  }
+
+  .support-hero .hero-icon {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .support-hero h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .support-hero p {
+    color: var(--hint);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .support-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .support-card {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
     cursor: pointer;
+    transition: opacity .15s;
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+  .support-card:active { opacity: .75; }
+
+  .support-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+.support-card-icon {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 4px 14px rgba(0,0,0,.08);
 }
 
-/* Divider */
-.book-sheet-divider {
-    height: 1px;
-    background: var(--tg-border-color);
-    margin: 16px 0;
+.support-card-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-    .book-sheet-cover img {
-        width: 120px;
-        height: 160px;
-    }
-    
-    .book-sheet-title {
-        font-size: 20px;
-    }
-    
-    .book-sheet-price {
-        font-size: 22px;
-    }
+/* Individual colors */
+.support-chat-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(37,99,235,.18),
+    rgba(59,130,246,.08)
+  );
+  color: #3b82f6;
 }
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 9999px;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-            color: white;
-            font-size: 14px;
-        }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
+.support-orders-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(245,158,11,.18),
+    rgba(251,191,36,.08)
+  );
+  color: #f59e0b;
+}
 
-        /* Complete image protection */
-        img {
-            pointer-events: none;           /* Prevents clicking */
-            user-select: none;              /* Prevents selection */
-            -webkit-user-drag: none;        /* Prevents dragging */
-            user-drag: none;                /* Prevents dragging */
-            -webkit-tap-highlight-color: transparent;  /* Removes tap highlight */
-            -webkit-touch-callout: none;    /* Prevents long-press menu on iOS */
-            draggable: false;               /* HTML attribute alternative */
-        }
+.support-payment-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(239,68,68,.18),
+    rgba(248,113,113,.08)
+  );
+  color: #ef4444;
+}
 
-        /* Bottom Navigation */
-        /* ============================================
-   FLOATING BOTTOM NAVIGATION - IPHONE STYLE
-   ============================================ */
+.support-refund-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(34,197,94,.18),
+    rgba(74,222,128,.08)
+  );
+  color: #22c55e;
+}
 
-        .bottom-nav {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            background: var(--tg-secondary-bg-color);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            margin: 10px 16px 12px 16px;
-            padding: 6px 8px;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-        }
+  .support-card-text h3 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+  .support-card-text p  { font-size: 13px; color: var(--hint); }
 
-        /* Floating animation on open */
-        .bottom-nav {
-            animation: floatUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
+  .support-card .arrow {
+    margin-left: auto;
+    color: var(--hint);
+    font-size: 18px;
+  }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+  /* ════════════ TOAST ════════════ */
+  #toast {
+    position: fixed;
+    bottom: calc(var(--nav-h) + 14px);
+    left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text);
+    color: var(--bg);
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 999;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
-        /* Individual nav items */
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px 0;
-            border-radius: 25px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            position: relative;
-            overflow: hidden;
-            color: var(--tg-hint-color);
-        }
+  /* ════════════ LOADING ════════════ */
+  .skeleton {
+    background: linear-gradient(90deg,
+      var(--bg2) 25%,
+      color-mix(in srgb, var(--hint) 15%, var(--bg2)) 50%,
+      var(--bg2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
 
-        /* Hover effect (desktop) */
-        .nav-item:hover {
-            background: rgba(128, 128, 128, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Active/Selected state */
-        .nav-item.active {
-            color: var(--tg-link-color);
-            background: rgba(128, 128, 128, 0.08);
-            transform: translateY(-2px);
-        }
-
-        /* Ripple effect on click */
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(128, 128, 128, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s, height 0.4s;
-        }
-
-        .nav-item:active::after {
-            width: 100px;
-            height: 100px;
-        }
-
-        /* Icon styling */
-        .nav-icon {
-            font-size: 22px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        /* Icon bounce when active */
-        .nav-item.active .nav-icon {
-            transform: scale(1.1);
-            animation: iconBounce 0.4s ease;
-        }
-
-        @keyframes iconBounce {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1.1);
-            }
-        }
-        
-        /* Label styling */
-        .nav-label {
-            font-size: 10px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            opacity: 0.9;
-        }
-        
-        /* Active label becomes slightly bolder */
-        .nav-item.active .nav-label {
-            font-weight: 600;
-            opacity: 1;
-        }
-
-        /* Sliding indicator (optional - underline effect) */
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background: var(--tg-link-color);
-            border-radius: 3px;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            0% {
-                width: 0;
-                opacity: 0;
-            }
-            100% {
-                width: 20px;
-                opacity: 1;
-            }
-        }
-        
-        /* Dark mode adjustments */
-        @media (prefers-color-scheme: dark) {
-            .bottom-nav {
-                background: rgba(30, 30, 40, 0.95);
-                backdrop-filter: blur(20px);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            }
-        }
-        
-        /* Mobile optimization */
-        @media (max-width: 480px) {
-            .bottom-nav {
-                margin: 8px 12px 10px 12px;
-                padding: 4px 6px;
-            }
-            
-            .nav-icon {
-                font-size: 20px;
-            }
-            
-            .nav-label {
-                font-size: 9px;
-            }
-            
-            .nav-item.active::before {
-                width: 16px;
-                bottom: 3px;
-            }
-        }
-        </style>
+  .skeleton-card {
+    background: var(--bg2);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .skeleton-cover { width: 100%; aspect-ratio: 3/4; }
+  .skeleton-line { height: 12px; margin: 10px 10px 6px; }
+  .skeleton-line.short { width: 60%; height: 10px; margin-bottom: 12px; }
+</style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <div class="header">
-            <button class="back-btn" id="backBtn">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="header-title">
-                <img src="logo.svg" alt="Logo" style="width: 28px; height: 28px; border-radius: 8px; object-fit: cover;">
-                <span>ENJOYMED Book Store</span>
-            </div>
-            <button class="cart-icon-btn" id="cartIconBtn">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cartBadge" class="cart-badge hidden">0</span>
-            </button>
-        </div>
+<div id="app">
 
-        <!-- Content -->
-        <div class="content" id="content">
-            <!-- Home View -->
-            <div id="homeView" class="view active">
-                <!-- Book Carousel Section -->
-<div class="carousel-section" style="margin-bottom: 24px;">
-    <div class="carousel-container">
-        <button class="carousel-btn prev-btn" onclick="prevSlide()">❮</button>
-        <div class="carousel-track" id="carouselTrack"></div>
-        <button class="carousel-btn next-btn" onclick="nextSlide()">❯</button>
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo-mark">📖</div>
+    <span class="logo-text">MedBook Store</span>
+    <div id="cart-badge-header" onclick="switchTab('cart')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="badge" id="header-cart-count">0</span>
     </div>
-    <div class="carousel-dots" id="carouselDots"></div>
+  </header>
+
+  <!-- ── Content ── -->
+  <div id="content">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="section-label">Medical Books</div>
+      <div class="books-grid" id="books-grid">
+        <!-- skeleton -->
+        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
+        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
+      </div>
+    </div>
+
+    <!-- CART -->
+    <div class="page" id="page-cart">
+      <div class="section-label">Your Cart</div>
+      <div id="cart-content"></div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="page" id="page-support">
+      <div class="support-wrap">
+        <div class="support-hero">
+          <span class="hero-icon">🏥</span>
+          <h2>How can we help?</h2>
+          <p>Reach out and we'll get back to you as soon as possible.</p>
+        </div>
+        <div class="support-cards">
+
+          <!-- Live Chat -->
+          <button class="support-card" onclick="openSupport('chat')">
+            <div class="support-card-icon support-chat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+
+            <div class="support-card-text">
+              <h3>Live Chat</h3>
+              <p>Chat with our support team</p>
+            </div>
+
+            <span class="arrow">›</span>
+          </button>
+
+          <!-- Orders -->
+          <button class="support-card" onclick="openSupport('orders')">
+            <div class="support-card-icon support-orders-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 7l9-4 9 4-9 4-9-4z"/>
+                <path d="M3 7v10l9 4 9-4V7"/>
+                <path d="M12 11v10"/>
+              </svg>
+            </div>
+
+            <div class="support-card-text">
+              <h3>My Orders</h3>
+              <p>Track or query your orders</p>
+            </div>
+
+            <span class="arrow">›</span>
+          </button>
+
+          <!-- Payment -->
+          <button class="support-card" onclick="openSupport('payment')">
+            <div class="support-card-icon support-payment-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                <path d="M2 10h20"/>
+              </svg>
+            </div>
+
+            <div class="support-card-text">
+              <h3>Payment Issue</h3>
+              <p>Problem with a payment?</p>
+            </div>
+
+            <span class="arrow">›</span>
+          </button>
+
+          <!-- Refund -->
+          <button class="support-card" onclick="openSupport('refund')">
+            <div class="support-card-icon support-refund-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 10h11a4 4 0 1 1 0 8h-1"/>
+                <path d="M7 14l-4-4 4-4"/>
+              </svg>
+            </div>
+
+            <div class="support-card-text">
+              <h3>Refund Request</h3>
+              <p>Request a refund for your order</p>
+            </div>
+
+            <span class="arrow">›</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- ── Bottom Nav ── -->
+  <nav>
+    <button class="nav-tab active" id="tab-home" onclick="switchTab('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+        <path d="M9 21V12h6v9"/>
+      </svg>
+      Home
+    </button>
+    <button class="nav-tab" id="tab-cart" onclick="switchTab('cart')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57L23 6H6"/>
+      </svg>
+      Cart
+      <span class="nav-badge" id="cart-count">0</span>
+    </button>
+    <button class="nav-tab" id="tab-support" onclick="switchTab('support')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </svg>
+      Support
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- ── Book Detail Sheet ── -->
+<div class="sheet-overlay" id="sheet" onclick="closeSheet(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheet-content"></div>
+  </div>
 </div>
 
-                <h2 class="section-title"><i class="fas fa-fire"></i> Featured Books</h2>
-                <div class="home-books-list" id="featuredBooksList"></div>
-            </div>
+<!-- ── Toast ── -->
+<div id="toast"></div>
 
-            <!-- Cart View (Checkout button is INSIDE here) -->
-            <div id="cartView" class="view">
-                <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Your Cart</h2>
-                <div id="cartItems" class="cart-items"></div>
-                <div id="cartSummary"></div>
-                <div class="cart-checkout" id="cartCheckout" style="display: none;">
-                    <button class="action-btn primary-btn" id="checkoutBtn">
-                        <i class="fas fa-credit-card"></i> Proceed to Checkout
-                    </button>
-                </div>
-            </div>
+<script>
+/* ════════════════════════════════════════════
+   Telegram WebApp Init
+════════════════════════════════════════════ */
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
-            <!-- Book Detail View -->
-            <div id="detailView" class="view">
-                <div id="bookDetail"></div>
-            </div>
+// ── Main Button helper ──────────────────────
+const MB = tg.MainButton;
 
-            <!-- Sample Viewer View -->
-            <div id="sampleView" class="view">
-                <div class="sample-header">
-                    <i class="fas fa-file-pdf" style="font-size: 32px; color: #e74c3c;"></i>
-                    <h3 id="sampleTitle">Book Sample</h3>
-                    <p><i class="fas fa-eye"></i> Preview</p>
-                </div>
-                <div class="pdf-viewer" id="pdfViewer">
-                    <iframe id="pdfFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
-                </div>
-                <div class="sample-actions">
-                    <button class="action-btn primary-btn" id="purchaseFromSampleBtn">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </div>
-            </div>
+function showMainBtn(text, fn) {
+  MB.setText(text);
+  MB.onClick(fn);
+  MB.show();
+}
+function hideMainBtn() {
+  MB.offClick();
+  MB.hide();
+}
 
-            <!-- Support View -->
-            <div id="supportView" class="view">
-                <div class="support-section">
-                    <div class="contact-card">
-                        <div class="contact-icon"><i class="fab fa-telegram-plane"></i></div>
-                        <div class="contact-info">
-                            <h3>Telegram Support</h3>
-                            <p>@MedicalBooksSupport</p>
-                            <button class="small-btn" onclick="window.openTelegramChat()"><i class="fab fa-telegram"></i> Chat Now</button>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <div class="contact-info">
-                            <h3>Email Us</h3>
-                            <p>support@medicalbooks.com</p>
-                            <button class="small-btn" onclick="window.sendEmail()"><i class="fas fa-paper-plane"></i> Send Email</button>
-                        </div>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="contact-info">
-                            <h3>Vodafone Cash</h3>
-                            <p>0100 123 4567</p>
-                            <button class="small-btn" onclick="window.copyNumber()"><i class="fas fa-copy"></i> Copy Number</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="response-time"><i class="fas fa-clock"></i> Response time: 24-48 hours</div>
-            </div>
+/* ════════════════════════════════════════════
+   State
+════════════════════════════════════════════ */
+let books = [];
+let cart  = {};   // { book_id: quantity }
 
-            <!-- About View -->
-            <div id="aboutView" class="view">
-                <div style="text-align:center">
-                    <div style="margin-bottom: 16px">
-                      <img src="logo.svg" alt="Medical Book Store Logo" 
-             style="width: 100px; height: 100px; border-radius: 20px; object-fit: contain;">
-                    </div>
-                    <h2 style="color:var(--tg-text-color)">ENJOYMED Book Store</h2>
-                    <p style="color:var(--tg-hint-color);margin-bottom:28px">Version 2.0.0</p>
-                    
-                    <div class="about-section">
-                        <h3><i class="fas fa-info-circle"></i> About Us</h3>
-                        <p>We provide high-quality medical ebooks for students, residents, and practicing physicians.</p>
-                    </div>
-                    
-                    <div class="about-section">
-                        <h3><i class="fas fa-star"></i> Features</h3>
-                        <ul class="feature-list">
-                            <li><i class="fas fa-bolt"></i> Instant delivery after purchase</li>
-                            <li><i class="fas fa-infinity"></i> Lifetime access</li>
-                            <li><i class="fas fa-file-pdf"></i> PDF format - works on all devices</li>
-                            <li><i class="fas fa-lock"></i> Secure payment via Vodafone Cash</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="about-section">
-                        <h3><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                        <div class="payment-icons">
-                            <span><i class="fas fa-mobile-alt"></i> Vodafone Cash</span>
-                        </div>
-                    </div>
-                    
-                    <button class="action-btn primary-btn" onclick="window.openBot()"><i class="fas fa-robot"></i> Open Bot to Purchase</button>
-                </div>
-            </div>
+/* ════════════════════════════════════════════
+   Tab switching
+════════════════════════════════════════════ */
+let currentTab = 'home';
+
+function switchTab(tab) {
+  if (tab === currentTab) return;
+
+  const currentPage = document.getElementById(`page-${currentTab}`);
+  const nextPage = document.getElementById(`page-${tab}`);
+
+  /* nav active */
+  document.querySelectorAll('.nav-tab')
+    .forEach(t => t.classList.remove('active'));
+
+  document.getElementById(`tab-${tab}`)
+    .classList.add('active');
+
+  /* animate current page out */
+  currentPage.classList.add('leaving');
+  currentPage.classList.remove('active');
+
+  /* animate new page in */
+  nextPage.classList.add('active');
+
+  /* cleanup */
+  setTimeout(() => {
+    currentPage.classList.remove('leaving');
+  }, 350);
+
+  currentTab = tab;
+
+  /* cart logic */
+  if (tab === 'cart') {
+    renderCart();
+    updateMainBtn();
+  } else {
+    hideMainBtn();
+  }
+
+  haptic('selection');
+}
+
+/* ════════════════════════════════════════════
+   Load Books from Bot API
+════════════════════════════════════════════ */
+async function loadBooks() {
+  try {
+    const res  = await fetch('/api/books');
+    const data = await res.json();
+    books = data.books || [];
+    renderBooks();
+  } catch (e) {
+    document.getElementById('books-grid').innerHTML =
+      '<p style="padding:24px;color:var(--hint);grid-column:1/-1;">Failed to load books. Please try again.</p>';
+  }
+}
+
+/* ════════════════════════════════════════════
+   Render Books Grid
+════════════════════════════════════════════ */
+function renderBooks() {
+  const grid = document.getElementById('books-grid');
+  if (!books.length) {
+    grid.innerHTML = '<p style="padding:24px;color:var(--hint);grid-column:1/-1;text-align:center;">No books available yet.</p>';
+    return;
+  }
+  grid.innerHTML = books.map(b => {
+    const inCart = cart[b.id] > 0;
+    const coverHtml = b.cover_url
+      ? `<img class="book-cover" src="${b.cover_url}" alt="${escHtml(b.title)}" loading="lazy"/>`
+      : `<div class="book-cover-placeholder">📖<span>${escHtml(b.title)}</span></div>`;
+    return `
+    <div class="book-card" onclick="openSheet(${b.id})">
+      ${coverHtml}
+      <div class="book-info">
+        <div class="book-title">${escHtml(b.title)}</div>
+        <div class="book-prices">
+          <span class="price-stars">⭐ ${b.price_stars} Stars</span>
+          <span class="price-egp">💵 ${b.price_egp.toFixed(2)} EGP</span>
         </div>
-        
-        <!-- Bottom Sheet Modal -->
-<div id="bottomSheet" class="bottom-sheet">
-    <div class="bottom-sheet-content">
-        <div class="bottom-sheet-handle"></div>
-        <div id="bottomSheetBody"></div>
-    </div>
-</div>
-
-        <!-- Bottom Navigation - Floating Style -->
-        <div class="bottom-nav">
-            <button class="nav-item" onclick="window.switchToView('home')" data-view="home">
-                <i class="fas fa-home nav-icon"></i>
-                <span class="nav-label">Home</span>
-            </button>
-            <button class="nav-item" onclick="window.viewCart()" data-view="cart">
-                <i class="fas fa-shopping-cart nav-icon"></i>
-                <span class="nav-label">Cart</span>
-            </button>
-            <button class="nav-item" onclick="window.switchToView('support')" data-view="support">
-                <i class="fas fa-headset nav-icon"></i>
-                <span class="nav-label">Support</span>
-            </button>
-            <button class="nav-item" onclick="window.switchToView('about')" data-view="about">
-                <i class="fas fa-info-circle nav-icon"></i>
-                <span class="nav-label">About</span>
-            </button>
-        </div>
-    </div>
-
-    <div id="toast" class="toast hidden"><i class="fas fa-check-circle"></i><span id="toastMessage"></span></div>
-
-    <script>
-        
-        const tg = window.Telegram?.WebApp;
-        
-        // Apply Telegram theme
-        function applyTelegramTheme() {
-            if (tg && tg.themeParams) {
-                const theme = tg.themeParams;
-                document.documentElement.style.setProperty('--tg-bg-color', theme.bg_color || '#ffffff');
-                document.documentElement.style.setProperty('--tg-text-color', theme.text_color || '#000000');
-                document.documentElement.style.setProperty('--tg-hint-color', theme.hint_color || '#999999');
-                document.documentElement.style.setProperty('--tg-link-color', theme.link_color || '#2481cc');
-                document.documentElement.style.setProperty('--tg-button-color', theme.button_color || '#2481cc');
-                document.documentElement.style.setProperty('--tg-button-text-color', theme.button_text_color || '#ffffff');
-                document.documentElement.style.setProperty('--tg-secondary-bg-color', theme.secondary_bg_color || '#f0f0f0');
-                document.documentElement.style.setProperty('--tg-border-color', theme.secondary_bg_color || '#e0e0e0');
-            }
-        }
-        
-        // Book Database (IDs match bot database)
-        const books = [
-            { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", image: "images/one.jpg", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "https://drive.google.com/file/d/1JEERhagCXuJweyyRwCQfdg3ZU31jrk-8/preview" },
-            { id: "forensic", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", image: "images/two.jpg", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
-            { id: "musculoskeletal", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", image: "images/three.jpg", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
-            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", image: "images/four.jpg", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" }
-        ];
-        
-// ============================================
-// CAROUSEL FUNCTIONS
-// ============================================
-
-let currentSlide = 0;
-let carouselBooks = [];
-let carouselInterval;
-
-function initCarousel() {
-    // Get featured books for carousel
-    carouselBooks = books.filter(b => b.featured).slice(0, 5);
-    renderCarousel();
-    startCarouselAuto();
-}
-
-function renderCarousel() {
-    const track = document.getElementById('carouselTrack');
-    const dotsContainer = document.getElementById('carouselDots');
-    
-    if (!track) return;
-    
-    track.innerHTML = carouselBooks.map(book => `
-        <div class="carousel-slide" onclick="showBookDetail('${book.id}')">
-            <img src="${book.image}" alt="${book.title}" onerror="this.src='https://placehold.co/300x400/2c7da0/white?text=${encodeURIComponent(book.title)}'">
-            <h3>${book.title}</h3>
-            <p>${book.description.substring(0, 80)}...</p>
-            <div class="price">${book.price} EGP</div>
-            <div class="carousel-actions">
-                <button class="carousel-btn-sample" onclick="event.stopPropagation(); viewSample('${book.id}')">
-                    <i class="fas fa-file-pdf"></i> Sample
-                </button>
-                <button class="carousel-btn-add" onclick="event.stopPropagation(); addToCart('${book.id}')">
-                    <i class="fas fa-cart-plus"></i> Add
-                </button>
-            </div>
-        </div>
-    `).join('');
-    
-    dotsContainer.innerHTML = carouselBooks.map((_, index) => `
-        <div class="dot ${index === currentSlide ? 'active' : ''}" onclick="goToSlide(${index})"></div>
-    `).join('');
-    
-    updateCarouselPosition();
-}
-
-function updateCarouselPosition() {
-    const track = document.getElementById('carouselTrack');
-    if (track) {
-        track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    }
-}
-
-function nextSlide() {
-    if (currentSlide < carouselBooks.length - 1) {
-        currentSlide++;
-    } else {
-        currentSlide = 0;
-    }
-    updateCarouselPosition();
-    updateDots();
-}
-
-function prevSlide() {
-    if (currentSlide > 0) {
-        currentSlide--;
-    } else {
-        currentSlide = carouselBooks.length - 1;
-    }
-    updateCarouselPosition();
-    updateDots();
-}
-
-function goToSlide(index) {
-    currentSlide = index;
-    updateCarouselPosition();
-    updateDots();
-    stopCarouselAuto();
-    startCarouselAuto();
-}
-
-function updateDots() {
-    document.querySelectorAll('.dot').forEach((dot, index) => {
-        if (index === currentSlide) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
-    });
-}
-
-function startCarouselAuto() {
-    carouselInterval = setInterval(() => {
-        nextSlide();
-    }, 5000);
-}
-
-function stopCarouselAuto() {
-    if (carouselInterval) {
-        clearInterval(carouselInterval);
-    }
-}
-        
-        // Cart
-        let cart = [];
-        let navigationStack = ['home'];
-        
-        // Initialize
-        function init() {
-            applyTelegramTheme();
-            
-            if (tg) {
-                tg.expand();
-                tg.enableClosingConfirmation();
-                tg.ready();
-            }
-            
-            loadCartFromStorage();
-            loadFeaturedBooks();
-            updateCartUI();
-            initCarousel();
-            
-            document.querySelector('.nav-item[data-view="home"]').classList.add('active');
-        }
-        
-        // Load Featured Books - Each in its own row (4 books)
-function loadFeaturedBooks() {
-    const container = document.getElementById('featuredBooksList');
-    const featured = books.filter(b => b.featured).slice(0, 4);
-    
-    container.innerHTML = featured.map(book => `
-        <div class="home-book-item">
-            <div class="home-book-cover" onclick="openBottomSheet('${book.id}')">
-                <img src="${book.image}" alt="${book.title}">
-            </div>
-            <div class="home-book-info">
-                <div class="home-book-title" onclick="openBottomSheet('${book.id}')">${book.title}</div>
-                <div class="home-book-desc" onclick="openBottomSheet('${book.id}')">${book.description.substring(0, 80)}...</div>
-                <div class="home-book-price">${book.price} EGP</div>
-                <div class="home-book-actions">
-                    <button class="sample-link" onclick="event.stopPropagation(); viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button>
-                    <button class="sample-link" onclick="event.stopPropagation(); addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-        
-        // Cart Functions
-        function loadCartFromStorage() {
-            const saved = localStorage.getItem('medical_cart');
-            if (saved) cart = JSON.parse(saved);
-        }
-        
-        function saveCartToStorage() {
-            localStorage.setItem('medical_cart', JSON.stringify(cart));
-            updateCartUI();
-            updateCheckoutButton();
-        }
-        
-        function updateCartUI() {
-            const badge = document.getElementById('cartBadge');
-            if (cart.length > 0) {
-                badge.textContent = cart.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-            
-            if (document.getElementById('cartView').classList.contains('active')) {
-                displayCartItems();
-            }
-        }
-        
-        function updateCheckoutButton() {
-            const checkoutContainer = document.getElementById('cartCheckout');
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            
-            if (cart.length > 0) {
-                const total = cart.reduce((sum, item) => sum + item.price, 0);
-                checkoutBtn.innerHTML = `<i class="fas fa-credit-card"></i> Checkout • ${total} EGP`;
-                checkoutContainer.style.display = 'block';
-            } else {
-                checkoutContainer.style.display = 'none';
-            }
-        }
-        
-        function addToCart(bookId) {
-            const book = books.find(b => b.id === bookId);
-            if (!book) return;
-            
-            if (cart.find(item => item.id === bookId)) {
-                showToast(`${book.title} is already in cart!`);
-                return;
-            }
-            
-            cart.push({ id: book.id, title: book.title, price: book.price, icon: book.icon, color: book.color });
-            saveCartToStorage();
-            showToast(`✅ ${book.title} added to cart!`);
-        }
-        
-        function removeFromCart(bookId) {
-            const book = books.find(b => b.id === bookId);
-            cart = cart.filter(item => item.id !== bookId);
-            saveCartToStorage();
-            showToast(`❌ ${book?.title || 'Book'} removed`);
-            if (document.getElementById('cartView').classList.contains('active')) displayCartItems();
-        }
-        
-        function viewCart() {
-            displayCartItems();
-            switchToView('cart');
-        }
-        
-function displayCartItems() {
-    const container = document.getElementById('cartItems');
-    const summaryContainer = document.getElementById('cartSummary');
-    
-    if (cart.length === 0) {
-        container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:var(--tg-hint-color)"></i><p style="color:var(--tg-text-color)">Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
-        summaryContainer.innerHTML = '';
-        return;
-    }
-    
-    let total = 0;
-    container.innerHTML = cart.map(item => {
-        total += item.price;
-        const book = books.find(b => b.id === item.id);
-        return `<div class="cart-item">
-                    <div class="cart-item-cover">
-                        <img src="${book.image}" alt="${item.title}">
-                    </div>
-                    <div class="cart-item-info">
-                        <div class="cart-item-title" style="color:var(--tg-text-color)">${item.title}</div>
-                        <div class="cart-item-price">${item.price} EGP</div>
-                    </div>
-                    <button class="cart-item-remove" onclick="window.removeFromCart('${item.id}')"><i class="fas fa-trash-alt"></i></button>
-                </div>`;
-    }).join('');
-    
-    summaryContainer.innerHTML = `<div class="cart-summary-card"><div class="summary-row"><span>Subtotal:</span><span>${total} EGP</span></div><div class="summary-row"><span>Delivery:</span><span>Free</span></div><div class="summary-row total"><span>Total:</span><span>${total} EGP</span></div></div>`;
-}
-        
-        function checkoutFromWebApp() {
-            if (cart.length === 0) {
-                showToast('Your cart is empty!');
-                return;
-            }
-            
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const checkoutData = { 
-                action: 'checkout', 
-                items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), 
-                total: total, 
-                timestamp: Date.now() 
-            };
-            
-            if (tg) {
-                tg.sendData(JSON.stringify(checkoutData));
-                showToast('Redirecting to checkout...');
-                setTimeout(() => tg.close(), 500);
-            } else {
-                alert('Checkout Data:\n' + JSON.stringify(checkoutData, null, 2));
-            }
-        }
-        
-function showBookDetail(bookId) {
-    const book = books.find(b => b.id === bookId);
-    if (!book) return;
-    
-    const detailHtml = `
-        <div class="book-detail-sheet">
-            <!-- Book Cover -->
-            <div class="book-sheet-cover">
-                <img src="${book.image}" alt="${book.title}" onerror="this.src='https://placehold.co/300x400/2c7da0/white?text=${encodeURIComponent(book.title)}'">
-            </div>
-            
-            <!-- Book Info -->
-            <div class="book-sheet-title">${book.title}</div>
-            <div class="book-sheet-price">${book.price} EGP</div>
-            <div class="book-sheet-description">${book.description}</div>
-            
-            <div class="book-sheet-divider"></div>
-            
-            <!-- Action Buttons -->
-            <div class="book-sheet-actions">
-                <button class="btn-add-cart" onclick="window.addToCart('${book.id}'); window.switchToView('cart')">
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
-                <button class="btn-sample-sheet" onclick="window.viewSample('${book.id}')">
-                    <i class="fas fa-file-pdf"></i> Sample
-                </button>
-            </div>
-            
-            <!-- Back Button -->
-            <button class="btn-back-sheet" onclick="window.switchToView('home')">
-                <i class="fas fa-arrow-left"></i> Back to Books
-            </button>
-        </div>
-    `;
-    
-    document.getElementById('bookDetail').innerHTML = detailHtml;
-    switchToView('detail');
-}
-        
-        function viewSample(bookId) {
-            const book = books.find(b => b.id === bookId);
-            if (!book) return;
-    
-            document.getElementById('sampleTitle').textContent = book.title;
-            const pdfFrame = document.getElementById('pdfFrame');
-            let sampleUrl = book.sample;
-    
-            // Check if it's a Google Drive link
-            if (sampleUrl.includes('drive.google.com')) {
-                // Extract file ID and use Google's embedded viewer
-                const fileIdMatch = sampleUrl.match(/\/d\/(.+?)\//);
-                if (fileIdMatch) {
-                    const fileId = fileIdMatch[1];
-                    sampleUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-                }
-            }
-    
-            pdfFrame.src = sampleUrl;
-    
-            // Add loading indicator
-            pdfFrame.onload = () => {
-                console.log('Sample loaded successfully');
-            };
-    
-            pdfFrame.onerror = () => {
-                pdfFrame.srcdoc = `
-                    <html>
-                    <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;color:#666;">
-                        <div style="text-align:center">
-                            <i class="fas fa-exclamation-triangle" style="font-size:48px;color:#e74c3c"></i>
-                            <h3>Sample Not Available</h3>
-                            <p>Please check your connection or contact support.</p>
-                        </div>
-                    </body>
-                    </html>
-                `;
-            };
-    
-            document.getElementById('purchaseFromSampleBtn').onclick = () => {
-                addToCart(book.id);
-                switchToView('cart');
-            };
-    
-            switchToView('sample');
-        }        
-        // Navigation
-// Smooth navigation transition
-function switchToView(viewName) {
-    // Add leaving animation to current view
-    const currentView = document.querySelector('.view.active');
-    if (currentView) {
-        currentView.style.animation = 'fadeOut 0.2s ease forwards';
-    }
-    
-    // Small delay to let fadeOut complete
-    setTimeout(() => {
-        // Hide all views
-        document.querySelectorAll('.view').forEach(view => {
-            view.classList.remove('active');
-            view.style.animation = '';
-        });
-        
-        // Show selected view
-        const target = document.getElementById(`${viewName}View`);
-        if (target) {
-            target.classList.add('active');
-            target.style.animation = 'fadeInUp 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
-        }
-        
-        // Update active nav item
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-            if (item.getAttribute('data-view') === viewName) {
-                item.classList.add('active');
-                // Add haptic feedback on mobile (optional)
-                if (tg && tg.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred('light');
-                }
-            }
-        });
-        
-        // Update navigation stack
-        if (viewName !== navigationStack[navigationStack.length - 1]) {
-            navigationStack.push(viewName);
-        }
-        
-        if (viewName === 'cart') displayCartItems();
-        
-        // Update header title
-        const titles = { 
-            home: 'Medical Book Store', 
-            cart: 'Your Cart', 
-            support: 'Support & Contact', 
-            about: 'About Us', 
-            detail: 'Book Details', 
-            sample: 'Sample Preview' 
-        };
-        const titleSpan = document.querySelector('.header-title span');
-        if (titleSpan) titleSpan.textContent = titles[viewName] || 'Medical Book Store';
-        
-        // Scroll to top when switching views
-        document.querySelector('.content').scrollTop = 0;
-    }, 150);
-}
-
-// Add fadeOut animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-    }
-`;
-document.head.appendChild(style);
-        
-        function goBack() {
-            if (navigationStack.length > 1) {
-                navigationStack.pop();
-                switchToView(navigationStack[navigationStack.length - 1]);
-            }
-        }
-        
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-        
-        // Support Functions
-        function openTelegramChat() { 
-            if (tg) tg.openTelegramLink('https://t.me/MedicalBooksSupport');
-            else window.open('https://t.me/MedicalBooksSupport', '_blank');
-        }
-        
-        function sendEmail() { window.location.href = 'mailto:support@medicalbooks.com'; }
-        
-        function copyNumber() {
-            const number = '01001234567';
-            navigator.clipboard.writeText(number);
-            showToast('Phone number copied!');
-        }
-        
-// ============================================
-// BOTTOM SHEET FUNCTIONS
-// ============================================
-
-function openBottomSheet(bookId) {
-    const book = books.find(b => b.id === bookId);
-    if (!book) return;
-    
-    // Create overlay if not exists
-    let overlay = document.querySelector('.sheet-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'sheet-overlay';
-        document.body.appendChild(overlay);
-        
-        overlay.addEventListener('click', closeBottomSheet);
-    }
-    
-    // Fill bottom sheet content
-    const bottomSheetBody = document.getElementById('bottomSheetBody');
-    bottomSheetBody.innerHTML = `
-        <div class="sheet-book-cover">
-            <img src="${book.image}" alt="${book.title}" onerror="this.src='https://placehold.co/300x400/2c7da0/white?text=${encodeURIComponent(book.title)}'">
-        </div>
-        <div class="sheet-book-title">${book.title}</div>
-        <div class="sheet-book-price">${book.price} EGP</div>
-        <div class="sheet-book-description">${book.description}</div>
-        
-        <div class="sheet-divider"></div>
-        
-        <div class="sheet-actions">
-            <button class="sheet-btn-cart" onclick="window.addToCartAndClose('${book.id}')">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
-            </button>
-            <button class="sheet-btn-sample" onclick="window.viewSampleFromSheet('${book.id}')">
-                <i class="fas fa-file-pdf"></i> Sample
-            </button>
-        </div>
-        
-        <button class="sheet-btn-back" onclick="window.closeBottomSheet()">
-            <i class="fas fa-times"></i> Close
+        <button class="add-to-cart-btn ${inCart?'added':''}"
+          id="atc-${b.id}"
+          onclick="event.stopPropagation();addToCart(${b.id})">
+          ${inCart ? '✓ In Cart' : '+ Add to Cart'}
         </button>
-    `;
-    
-    // Show overlay and bottom sheet
-    overlay.classList.add('active');
-    const sheet = document.getElementById('bottomSheet');
-    sheet.classList.add('open');
-    
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function closeBottomSheet() {
-    const overlay = document.querySelector('.sheet-overlay');
-    const sheet = document.getElementById('bottomSheet');
-    
-    if (overlay) overlay.classList.remove('active');
-    if (sheet) sheet.classList.remove('open');
-    
-    // Restore body scroll
-    document.body.style.overflow = '';
+/* ════════════════════════════════════════════
+   Book Detail Sheet
+════════════════════════════════════════════ */
+function openSheet(bookId) {
+  const b = books.find(x => x.id === bookId);
+  if (!b) return;
+  haptic('light');
+
+  const coverHtml = b.cover_url
+    ? `<img class="sheet-cover" src="${b.cover_url}" alt="${escHtml(b.title)}"/>`
+    : `<div style="font-size:64px;text-align:center;padding:24px 0">📖</div>`;
+
+  document.getElementById('sheet-content').innerHTML = `
+    ${coverHtml}
+    <div class="sheet-title">${escHtml(b.title)}</div>
+    <p class="sheet-desc">${escHtml(b.description || 'No description available.')}</p>
+    <div class="sheet-prices">
+      <span class="sheet-price-pill pill-stars">⭐ ${b.price_stars} Stars</span>
+      <span class="sheet-price-pill pill-egp">💵 ${b.price_egp.toFixed(2)} EGP</span>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-secondary" onclick="closeSheet()">Close</button>
+      <button class="btn-primary" onclick="addToCartFromSheet(${b.id})">
+        ${cart[b.id] ? '✓ In Cart' : '+ Add to Cart'}
+      </button>
+    </div>
+  `;
+  document.getElementById('sheet').classList.add('open');
+
+  tg.BackButton.show();
+  tg.BackButton.onClick(closeSheet);
 }
 
-function addToCartAndClose(bookId) {
-    addToCart(bookId);
-    closeBottomSheet();
+function closeSheet(e) {
+  if (e && e.target !== document.getElementById('sheet')) return;
+  document.getElementById('sheet').classList.remove('open');
+  tg.BackButton.hide();
+  tg.BackButton.offClick(closeSheet);
 }
 
-function viewSampleFromSheet(bookId) {
-    closeBottomSheet();
-    setTimeout(() => {
-        viewSample(bookId);
-    }, 300);
+function addToCartFromSheet(bookId) {
+  addToCart(bookId);
+  closeSheet();
+  switchTab('cart');
 }
 
-// Update home book click to open bottom sheet
-// Change your home book onclick from showBookDetail to openBottomSheet
-        
-        function openBot() { 
-            const botUsername = 'enjoymedbot';
-            if (tg) tg.openTelegramLink(`https://t.me/${botUsername}`);
-            else window.open(`https://t.me/${botUsername}`, '_blank');
-        }
-        
-        // Expose functions globally
-        window.switchToView = switchToView;
-        window.viewCart = viewCart;
-        window.addToCart = addToCart;
-        window.removeFromCart = removeFromCart;
-        window.checkoutFromWebApp = checkoutFromWebApp;
-        window.showBookDetail = showBookDetail;
-        window.viewSample = viewSample;
-        window.openTelegramChat = openTelegramChat;
-        window.sendEmail = sendEmail;
-        window.copyNumber = copyNumber;
-        window.openBot = openBot;
-        window.goBack = goBack;
-        
-        // Event listeners
-        const backBtn = document.getElementById('backBtn');
-        if (backBtn) backBtn.addEventListener('click', goBack);
-        
-        const cartIconBtn = document.getElementById('cartIconBtn');
-        if (cartIconBtn) cartIconBtn.addEventListener('click', viewCart);
-        
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        if (checkoutBtn) checkoutBtn.addEventListener('click', checkoutFromWebApp);
-        
-        // Start
-        init();
-    </script>
+/* ════════════════════════════════════════════
+   Cart
+════════════════════════════════════════════ */
+function addToCart(bookId) {
+  cart[bookId] = (cart[bookId] || 0) + 1;
+  updateCartBadge();
+  updateBookCardBtn(bookId);
+  showToast('Added to cart 🛒');
+  haptic('medium');
+}
+
+function removeFromCart(bookId) {
+  delete cart[bookId];
+  updateCartBadge();
+  updateBookCardBtn(bookId);
+  renderCart();
+  updateMainBtn();
+  haptic('light');
+}
+
+function changeQty(bookId, delta) {
+  cart[bookId] = (cart[bookId] || 0) + delta;
+  if (cart[bookId] <= 0) return removeFromCart(bookId);
+  renderCart();
+  updateMainBtn();
+  haptic('selection');
+}
+
+function cartItems() {
+  return Object.entries(cart)
+    .filter(([,q]) => q > 0)
+    .map(([id, qty]) => ({
+      book: books.find(b => b.id == id),
+      qty: parseInt(qty)
+    }))
+    .filter(x => x.book);
+}
+
+function cartTotals() {
+  return cartItems().reduce((acc, {book, qty}) => {
+    acc.stars += book.price_stars * qty;
+    acc.egp   += book.price_egp   * qty;
+    return acc;
+  }, { stars: 0, egp: 0 });
+}
+
+function updateCartBadge() {
+  const count = Object.values(cart).reduce((a,b) => a + b, 0);
+  const badge     = document.getElementById('cart-count');
+  const hdrBadge  = document.getElementById('header-cart-count');
+  const navBadge  = badge;
+
+  if (count > 0) {
+    badge.textContent = count;
+    badge.style.display = 'flex';
+    hdrBadge.textContent = count;
+    hdrBadge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+    hdrBadge.style.display = 'none';
+  }
+}
+
+function updateBookCardBtn(bookId) {
+  const btn = document.getElementById(`atc-${bookId}`);
+  if (!btn) return;
+  const inCart = cart[bookId] > 0;
+  btn.textContent = inCart ? '✓ In Cart' : '+ Add to Cart';
+  btn.className = 'add-to-cart-btn' + (inCart ? ' added' : '');
+}
+
+function renderCart() {
+  const items = cartItems();
+  const wrap  = document.getElementById('cart-content');
+
+  if (!items.length) {
+    wrap.innerHTML = `
+      <div class="cart-empty">
+        <span class="emoji">🛒</span>
+        <p>Your cart is empty.<br>Browse books on the Home tab!</p>
+      </div>`;
+    return;
+  }
+
+  const totals = cartTotals();
+
+  const itemsHtml = items.map(({book, qty}) => {
+    const cover = book.cover_url
+      ? `<img class="cart-item-cover" src="${book.cover_url}" alt="${escHtml(book.title)}"/>`
+      : `<div class="cart-item-cover" style="display:flex;align-items:center;justify-content:center;font-size:24px">📖</div>`;
+    return `
+    <div class="cart-item">
+      ${cover}
+      <div class="cart-item-info">
+        <div class="cart-item-title">${escHtml(book.title)}</div>
+        <div class="cart-item-price">⭐ ${book.price_stars} · 💵 ${book.price_egp.toFixed(2)} EGP</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${book.id},-1)">−</button>
+          <span class="qty-value">${qty}</span>
+          <button class="qty-btn" onclick="changeQty(${book.id},+1)">+</button>
+        </div>
+      </div>
+      <button class="cart-remove-btn" onclick="removeFromCart(${book.id})">🗑</button>
+    </div>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="cart-list">${itemsHtml}</div>
+    <div class="cart-summary">
+      <div class="cart-summary-row"><span>Items</span><span>${items.reduce((a,x)=>a+x.qty,0)}</span></div>
+      <div class="cart-summary-row total">
+        <span>Total</span>
+        <span>⭐ ${totals.stars} · ${totals.egp.toFixed(2)} EGP</span>
+      </div>
+    </div>
+    <div class="checkout-methods">
+      <p style="font-size:13px;color:var(--hint);margin-bottom:4px;">Choose payment method:</p>
+      <button class="checkout-btn checkout-stars" onclick="checkout('stars')">
+        ⭐ Pay with Telegram Stars
+      </button>
+      <button class="checkout-btn checkout-vodafone" onclick="checkout('vodafone')">
+        📱 Pay via Vodafone Cash
+      </button>
+    </div>
+  `;
+}
+
+function updateMainBtn() {
+  const items = cartItems();
+  if (items.length && document.getElementById('tab-cart').classList.contains('active')) {
+    const totals = cartTotals();
+    showMainBtn(`Checkout — ⭐${totals.stars}`, () => checkout('stars'));
+  } else {
+    hideMainBtn();
+  }
+}
+
+/* ════════════════════════════════════════════
+   Checkout
+════════════════════════════════════════════ */
+function checkout(method) {
+  const items = cartItems();
+  if (!items.length) return showToast('Cart is empty');
+  haptic('medium');
+
+  const payload = {
+    action: method === 'stars' ? 'checkout_stars' : 'checkout_vodafone',
+    cart: items.map(({book, qty}) => ({ book_id: book.id, quantity: qty }))
+  };
+
+  tg.sendData(JSON.stringify(payload));
+}
+
+/* ════════════════════════════════════════════
+   Support
+════════════════════════════════════════════ */
+function openSupport(type) {
+  haptic('light');
+  const messages = {
+    chat:    'Hello! I need some help.',
+    orders:  'Hello! I have a question about my order.',
+    payment: 'Hello! I have a payment issue.',
+    refund:  'Hello! I would like to request a refund.',
+  };
+  tg.sendData(JSON.stringify({ action: 'support', type, message: messages[type] }));
+}
+
+/* ════════════════════════════════════════════
+   Utilities
+════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function haptic(style) {
+  try { tg.HapticFeedback.impactOccurred(style); } catch(e) {}
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ════════════════════════════════════════════
+   Boot
+════════════════════════════════════════════ */
+loadBooks();
+</script>
 </body>
 </html>
