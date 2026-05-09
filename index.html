@@ -202,6 +202,163 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
+/* ============================================
+   CAROUSEL STYLES
+   ============================================ */
+
+.carousel-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--tg-secondary-bg-color);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.carousel-slide img {
+    width: 180px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 16px;
+}
+
+.carousel-slide h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--tg-text-color);
+}
+
+.carousel-slide p {
+    font-size: 13px;
+    color: var(--tg-hint-color);
+    margin-bottom: 12px;
+    max-width: 80%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.carousel-slide .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--tg-link-color);
+    margin-bottom: 15px;
+}
+
+.carousel-slide .carousel-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.carousel-slide .carousel-btn-sample,
+.carousel-slide .carousel-btn-add {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.carousel-slide .carousel-btn-sample {
+    background: var(--tg-secondary-bg-color);
+    color: var(--tg-text-color);
+    border: 1px solid var(--tg-border-color);
+}
+
+.carousel-slide .carousel-btn-add {
+    background: var(--tg-link-color);
+    color: white;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--tg-hint-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--tg-link-color);
+}
+
+@media (max-width: 480px) {
+    .carousel-slide img {
+        width: 140px;
+        height: 190px;
+    }
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+}
+
         /* Stats */
         .stats-grid {
             display: grid;
@@ -247,6 +404,83 @@
             font-size: 22px;
             color: var(--tg-link-color);
         }
+
+/* Home page book cover */
+.home-book-cover {
+    width: 80px;
+    height: 100px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.home-book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.home-book-cover:hover img {
+    transform: scale(1.05);
+}
+
+/* Book card cover */
+.book-cover {
+    height: 180px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-cover img {
+    transform: scale(1.05);
+}
+
+/* Detail cover */
+.detail-cover {
+    padding: 20px;
+    text-align: center;
+    background: var(--tg-secondary-bg-color);
+    border-radius: 20px;
+    margin-bottom: 24px;
+}
+
+/* Cart item cover */
+.cart-item-cover {
+    width: 50px;
+    height: 65px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cart-item-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Book list cover */
+.book-list-cover {
+    width: 70px;
+    height: 90px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.book-list-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
         /* Home Books List - Each book in its own row */
         .home-books-list {
@@ -845,17 +1079,15 @@
         <div class="content" id="content">
             <!-- Home View -->
             <div id="homeView" class="view active">
-                <div class="hero">
-                    <div class="hero-icon"><i class="fas fa-stethoscope"></i></div>
-                    <h1>Medical Knowledge<br>At Your Fingertips</h1>
-                    <p>Trusted by 500+ medical professionals worldwide</p>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-number">50+</div><div class="stat-label"><i class="fas fa-book"></i> Medical Books</div></div>
-                    <div class="stat-card"><div class="stat-number">24/7</div><div class="stat-label"><i class="fas fa-clock"></i> Instant Access</div></div>
-                    <div class="stat-card"><div class="stat-number">⭐ 4.9</div><div class="stat-label"><i class="fas fa-star"></i> User Rating</div></div>
-                </div>
+                <!-- Book Carousel Section -->
+<div class="carousel-section" style="margin-bottom: 24px;">
+    <div class="carousel-container">
+        <button class="carousel-btn prev-btn" onclick="prevSlide()">❮</button>
+        <div class="carousel-track" id="carouselTrack"></div>
+        <button class="carousel-btn next-btn" onclick="nextSlide()">❯</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+</div>
 
                 <h2 class="section-title"><i class="fas fa-fire"></i> Featured Books</h2>
                 <div class="home-books-list" id="featuredBooksList"></div>
@@ -883,7 +1115,7 @@
                 <div class="sample-header">
                     <i class="fas fa-file-pdf" style="font-size: 32px; color: #e74c3c;"></i>
                     <h3 id="sampleTitle">Book Sample</h3>
-                    <p><i class="fas fa-eye"></i> Preview - First 3 pages</p>
+                    <p><i class="fas fa-eye"></i> Preview</p>
                 </div>
                 <div class="pdf-viewer" id="pdfViewer">
                     <iframe id="pdfFrame" src="" width="100%" height="100%" frameborder="0"></iframe>
@@ -1007,17 +1239,118 @@
         
         // Book Database (IDs match bot database)
         const books = [
-            { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", icon: "fas fa-heartbeat", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "https://drive.google.com/file/d/1JEERhagCXuJweyyRwCQfdg3ZU31jrk-8/preview" },
-            { id: "forensic", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", icon: "fas fa-capsules", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
-            { id: "musculoskeletal", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", icon: "fas fa-heart", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
-            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", icon: "fas fa-brain", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" }
+            { id: "community", title: "Clinical Anatomy 2024", description: "Complete guide to human anatomy with clinical correlations. Over 500 illustrations and clinical cases.", price: 299, category: "anatomy", image: "images/one.jpg", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "https://drive.google.com/file/d/1JEERhagCXuJweyyRwCQfdg3ZU31jrk-8/preview" },
+            { id: "forensic", title: "Pharmacology Handbook", description: "Essential drug information, mechanisms, side effects, and clinical applications. Updated for 2024.", price: 249, category: "pharmacology", image: "images/two.jpg", color: "linear-gradient(135deg, #3498db, #2980b9)", featured: true, sample: "samples/pharmacology-sample.pdf" },
+            { id: "musculoskeletal", title: "Cardiology Made Easy", description: "ECG interpretation, heart diseases, and management strategies for clinicians.", price: 289, category: "cardiology", image: "images/three.jpg", color: "linear-gradient(135deg, #e74c3c, #c0392b)", featured: true, sample: "samples/cardiology-sample.pdf" },
+            { id: "neurology", title: "Neurology Essentials", description: "Comprehensive guide to neurological disorders, examination techniques, and treatment.", price: 269, category: "neurology", image: "images/four.jpg", color: "linear-gradient(135deg, #1abc9c, #16a085)", featured: true, sample: "samples/neurology-sample.pdf" }
         ];
+        
+// ============================================
+// CAROUSEL FUNCTIONS
+// ============================================
+
+let currentSlide = 0;
+let carouselBooks = [];
+let carouselInterval;
+
+function initCarousel() {
+    // Get featured books for carousel
+    carouselBooks = books.filter(b => b.featured).slice(0, 5);
+    renderCarousel();
+    startCarouselAuto();
+}
+
+function renderCarousel() {
+    const track = document.getElementById('carouselTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    
+    if (!track) return;
+    
+    track.innerHTML = carouselBooks.map(book => `
+        <div class="carousel-slide" onclick="showBookDetail('${book.id}')">
+            <img src="${book.image}" alt="${book.title}" onerror="this.src='https://placehold.co/300x400/2c7da0/white?text=${encodeURIComponent(book.title)}'">
+            <h3>${book.title}</h3>
+            <p>${book.description.substring(0, 80)}...</p>
+            <div class="price">${book.price} EGP</div>
+            <div class="carousel-actions">
+                <button class="carousel-btn-sample" onclick="event.stopPropagation(); viewSample('${book.id}')">
+                    <i class="fas fa-file-pdf"></i> Sample
+                </button>
+                <button class="carousel-btn-add" onclick="event.stopPropagation(); addToCart('${book.id}')">
+                    <i class="fas fa-cart-plus"></i> Add
+                </button>
+            </div>
+        </div>
+    `).join('');
+    
+    dotsContainer.innerHTML = carouselBooks.map((_, index) => `
+        <div class="dot ${index === currentSlide ? 'active' : ''}" onclick="goToSlide(${index})"></div>
+    `).join('');
+    
+    updateCarouselPosition();
+}
+
+function updateCarouselPosition() {
+    const track = document.getElementById('carouselTrack');
+    if (track) {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+}
+
+function nextSlide() {
+    if (currentSlide < carouselBooks.length - 1) {
+        currentSlide++;
+    } else {
+        currentSlide = 0;
+    }
+    updateCarouselPosition();
+    updateDots();
+}
+
+function prevSlide() {
+    if (currentSlide > 0) {
+        currentSlide--;
+    } else {
+        currentSlide = carouselBooks.length - 1;
+    }
+    updateCarouselPosition();
+    updateDots();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateCarouselPosition();
+    updateDots();
+    stopCarouselAuto();
+    startCarouselAuto();
+}
+
+function updateDots() {
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        if (index === currentSlide) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+function startCarouselAuto() {
+    carouselInterval = setInterval(() => {
+        nextSlide();
+    }, 5000);
+}
+
+function stopCarouselAuto() {
+    if (carouselInterval) {
+        clearInterval(carouselInterval);
+    }
+}
         
         // Cart
         let cart = [];
         let navigationStack = ['home'];
-
-        let currentUserId = null;
+        
         // Initialize
         function init() {
             applyTelegramTheme();
@@ -1031,32 +1364,33 @@
             loadCartFromStorage();
             loadFeaturedBooks();
             updateCartUI();
+            initCarousel();
             
             document.querySelector('.nav-item[data-view="home"]').classList.add('active');
         }
         
         // Load Featured Books - Each in its own row (4 books)
-        function loadFeaturedBooks() {
-            const container = document.getElementById('featuredBooksList');
-            const featured = books.filter(b => b.featured).slice(0, 4);
-            
-            container.innerHTML = featured.map(book => `
-                <div class="home-book-item">
-                    <div class="home-book-cover" style="background: ${book.color}" onclick="window.showBookDetail('${book.id}')">
-                        <i class="${book.icon}"></i>
-                    </div>
-                    <div class="home-book-info">
-                        <div class="home-book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div>
-                        <div class="home-book-desc" onclick="window.showBookDetail('${book.id}')">${book.description.substring(0, 80)}...</div>
-                        <div class="home-book-price">${book.price} EGP</div>
-                        <div class="home-book-actions">
-                            <button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button>
-                            <button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-                        </div>
-                    </div>
+function loadFeaturedBooks() {
+    const container = document.getElementById('featuredBooksList');
+    const featured = books.filter(b => b.featured).slice(0, 4);
+    
+    container.innerHTML = featured.map(book => `
+        <div class="home-book-item">
+            <div class="home-book-cover" onclick="window.showBookDetail('${book.id}')">
+                <img src="${book.image}" alt="${book.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+            </div>
+            <div class="home-book-info">
+                <div class="home-book-title" onclick="window.showBookDetail('${book.id}')">${book.title}</div>
+                <div class="home-book-desc" onclick="window.showBookDetail('${book.id}')">${book.description.substring(0, 80)}...</div>
+                <div class="home-book-price">${book.price} EGP</div>
+                <div class="home-book-actions">
+                    <button class="sample-link" onclick="event.stopPropagation(); window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> Sample</button>
+                    <button class="sample-link" onclick="event.stopPropagation(); window.addToCart('${book.id}')"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                 </div>
-            `).join('');
-        }
+            </div>
+        </div>
+    `).join('');
+}
         
         // Cart Functions
         function loadCartFromStorage() {
@@ -1124,100 +1458,81 @@
             switchToView('cart');
         }
         
-        function displayCartItems() {
-            const container = document.getElementById('cartItems');
-            const summaryContainer = document.getElementById('cartSummary');
-            
+function displayCartItems() {
+    const container = document.getElementById('cartItems');
+    const summaryContainer = document.getElementById('cartSummary');
+    
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:var(--tg-hint-color)"></i><p style="color:var(--tg-text-color)">Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
+        summaryContainer.innerHTML = '';
+        return;
+    }
+    
+    let total = 0;
+    container.innerHTML = cart.map(item => {
+        total += item.price;
+        const book = books.find(b => b.id === item.id);
+        return `<div class="cart-item">
+                    <div class="cart-item-cover">
+                        <img src="${book.image}" alt="${item.title}">
+                    </div>
+                    <div class="cart-item-info">
+                        <div class="cart-item-title" style="color:var(--tg-text-color)">${item.title}</div>
+                        <div class="cart-item-price">${item.price} EGP</div>
+                    </div>
+                    <button class="cart-item-remove" onclick="window.removeFromCart('${item.id}')"><i class="fas fa-trash-alt"></i></button>
+                </div>`;
+    }).join('');
+    
+    summaryContainer.innerHTML = `<div class="cart-summary-card"><div class="summary-row"><span>Subtotal:</span><span>${total} EGP</span></div><div class="summary-row"><span>Delivery:</span><span>Free</span></div><div class="summary-row total"><span>Total:</span><span>${total} EGP</span></div></div>`;
+}
+        
+        function checkoutFromWebApp() {
             if (cart.length === 0) {
-                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart" style="font-size:64px;color:var(--tg-hint-color)"></i><p>Your cart is empty</p><button class="action-btn secondary-btn" onclick="window.switchToView('home')">Browse Books →</button></div>`;
-                summaryContainer.innerHTML = '';
-                updateCheckoutButton();
+                showToast('Your cart is empty!');
                 return;
             }
             
-            let total = 0;
-            container.innerHTML = cart.map(item => {
-                total += item.price;
-                return `<div class="cart-item"><div class="cart-item-cover" style="background:${item.color}"><i class="${item.icon}"></i></div><div class="cart-item-info"><div class="cart-item-title" style="color:var(--tg-text-color)">${item.title}</div><div class="cart-item-price">${item.price} EGP</div></div><button class="cart-item-remove" onclick="window.removeFromCart('${item.id}')"><i class="fas fa-trash-alt"></i></button></div>`;
-            }).join('');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const checkoutData = { 
+                action: 'checkout', 
+                items: cart.map(item => ({ id: item.id, name: item.title, price: item.price })), 
+                total: total, 
+                timestamp: Date.now() 
+            };
             
-            summaryContainer.innerHTML = `<div class="cart-summary-card"><div class="summary-row"><span>Subtotal:</span><span>${total} EGP</span></div><div class="summary-row"><span>Delivery:</span><span>Free</span></div><div class="summary-row total"><span>Total:</span><span>${total} EGP</span></div></div>`;
-            updateCheckoutButton();
+            if (tg) {
+                tg.sendData(JSON.stringify(checkoutData));
+                showToast('Redirecting to checkout...');
+                setTimeout(() => tg.close(), 500);
+            } else {
+                alert('Checkout Data:\n' + JSON.stringify(checkoutData, null, 2));
+            }
         }
         
-// Flask server URL - Replace with your actual server URL
-const FLASK_SERVER = "https://261c-156-211-93-31.ngrok-free.app/webapp-data";
-
-function checkoutFromWebApp() {
-    if (cart.length === 0) {
-        showToast('Your cart is empty!');
-        return;
-    }
-    
-    if (!currentUserId) {
-        showToast('Please reopen the store from Telegram');
-        return;
-    }
-    
-    // 🔥 Send ONLY book IDs
-    const bookIds = cart.map(item => item.id);
-    
-    const checkoutData = {
-        user_id: currentUserId,
-        action: 'checkout',
-        items: bookIds,  // Just the IDs array
-        timestamp: Date.now()
-    };
-    
-    console.log("Sending book IDs:", bookIds);
-    
-    fetch(FLASK_SERVER, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(checkoutData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'ok') {
-            showToast('✓ Cart sent to bot!');
-            cart = [];
-            saveCartToStorage();
-            updateCartUI();
-            setTimeout(() => tg?.close(), 1500);
-        } else {
-            showToast('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Error sending cart. Please try again.');
-    });
-}        
         // Book Functions
-        function showBookDetail(bookId) {
-            const book = books.find(b => b.id === bookId);
-            if (!book) return;
-            
-            const detailHtml = `
-                <div class="book-detail-card">
-                    <div class="detail-cover" style="background:${book.color}">
-                        <i class="${book.icon}"></i>
-                    </div>
-                    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:var(--tg-text-color)">${book.title}</h2>
-                    <p style="font-size:28px;font-weight:700;color:var(--tg-link-color);text-align:center;margin-bottom:20px">${book.price} EGP</p>
-                    <p style="font-size:15px;line-height:1.6;color:var(--tg-hint-color);margin-bottom:28px;padding:0 8px">${book.description}</p>
-                    <div style="display:flex;flex-direction:column;gap:12px">
-                        <button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button>
-                        <button class="action-btn secondary-btn" onclick="window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> View Sample Pages</button>
-                        <button class="action-btn secondary-btn" onclick="window.switchToView('home')"><i class="fas fa-arrow-left"></i> Back to Books</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('bookDetail').innerHTML = detailHtml;
-            switchToView('detail');
-        }
+function showBookDetail(bookId) {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return;
+    
+    const detailHtml = `
+        <div class="book-detail-card">
+            <div class="detail-cover">
+                <img src="${book.image}" alt="${book.title}" style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 20px;">
+            </div>
+            <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:var(--tg-text-color)">${book.title}</h2>
+            <p style="font-size:28px;font-weight:700;color:var(--tg-link-color);text-align:center;margin-bottom:20px">${book.price} EGP</p>
+            <p style="font-size:15px;line-height:1.6;color:var(--tg-hint-color);margin-bottom:28px;padding:0 8px">${book.description}</p>
+            <div style="display:flex;flex-direction:column;gap:12px">
+                <button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button>
+                <button class="action-btn secondary-btn" onclick="window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> View Sample Pages</button>
+                <button class="action-btn secondary-btn" onclick="window.switchToView('home')"><i class="fas fa-arrow-left"></i> Back to Books</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('bookDetail').innerHTML = detailHtml;
+    switchToView('detail');
+}
         
         function viewSample(bookId) {
             const book = books.find(b => b.id === bookId);
