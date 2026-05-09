@@ -827,23 +827,153 @@
             color: var(--tg-text-color);
         }
 
-        /* Book Detail */
-        .book-detail-card {
-            background: var(--tg-bg-color);
-        }
+/* ============================================
+   BOTTOM SHEET BOOK DETAIL - SIMPLE & CLEAN
+   ============================================ */
 
-        .detail-cover {
-            padding: 48px;
-            text-align: center;
-            border-radius: 28px;
-            margin-bottom: 24px;
-        }
+.book-detail-sheet {
+    animation: slideUp 0.3s ease;
+}
 
-        .detail-cover i {
-            font-size: 80px;
-            color: white;
-        }
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
+/* Book cover image */
+.book-sheet-cover {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.book-sheet-cover img {
+    width: 140px;
+    height: 190px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+}
+
+/* Book title */
+.book-sheet-title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--tg-text-color);
+    margin-bottom: 8px;
+}
+
+/* Book price */
+.book-sheet-price {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--tg-link-color);
+    margin-bottom: 16px;
+}
+
+/* Book description */
+.book-sheet-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--tg-hint-color);
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 0 8px;
+}
+
+/* Action buttons */
+.book-sheet-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.btn-add-cart {
+    flex: 2;
+    background: var(--tg-link-color);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-add-cart:active {
+    transform: scale(0.97);
+}
+
+.btn-sample-sheet {
+    flex: 1;
+    background: var(--tg-secondary-bg-color);
+    color: var(--tg-text-color);
+    border: 1px solid var(--tg-border-color);
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-sample-sheet:active {
+    transform: scale(0.97);
+}
+
+.btn-back-sheet {
+    background: transparent;
+    color: var(--tg-hint-color);
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+/* Divider */
+.book-sheet-divider {
+    height: 1px;
+    background: var(--tg-border-color);
+    margin: 16px 0;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .book-sheet-cover img {
+        width: 120px;
+        height: 160px;
+    }
+    
+    .book-sheet-title {
+        font-size: 20px;
+    }
+    
+    .book-sheet-price {
+        font-size: 22px;
+    }
+}
         /* Toast */
         .toast {
             position: fixed;
@@ -1510,26 +1640,41 @@ function displayCartItems() {
             }
         }
         
-        // Book Functions
 function showBookDetail(bookId) {
     const book = books.find(b => b.id === bookId);
     if (!book) return;
     
     const detailHtml = `
-        <div class="book-detail-card">
-            <div class="detail-cover">
-                <img src="${book.image}" alt="${book.title}" style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 20px;">
+        <div class="book-detail-sheet">
+            <!-- Book Cover -->
+            <div class="book-sheet-cover">
+                <img src="${book.image}" alt="${book.title}" onerror="this.src='https://placehold.co/300x400/2c7da0/white?text=${encodeURIComponent(book.title)}'">
             </div>
-            <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;text-align:center;color:var(--tg-text-color)">${book.title}</h2>
-            <p style="font-size:28px;font-weight:700;color:var(--tg-link-color);text-align:center;margin-bottom:20px">${book.price} EGP</p>
-            <p style="font-size:15px;line-height:1.6;color:var(--tg-hint-color);margin-bottom:28px;padding:0 8px">${book.description}</p>
-            <div style="display:flex;flex-direction:column;gap:12px">
-                <button class="action-btn primary-btn" onclick="window.addToCart('${book.id}');window.switchToView('cart')"><i class="fas fa-cart-plus"></i> Add to Cart & Checkout</button>
-                <button class="action-btn secondary-btn" onclick="window.viewSample('${book.id}')"><i class="fas fa-file-pdf"></i> View Sample Pages</button>
-                <button class="action-btn secondary-btn" onclick="window.switchToView('home')"><i class="fas fa-arrow-left"></i> Back to Books</button>
+            
+            <!-- Book Info -->
+            <div class="book-sheet-title">${book.title}</div>
+            <div class="book-sheet-price">${book.price} EGP</div>
+            <div class="book-sheet-description">${book.description}</div>
+            
+            <div class="book-sheet-divider"></div>
+            
+            <!-- Action Buttons -->
+            <div class="book-sheet-actions">
+                <button class="btn-add-cart" onclick="window.addToCart('${book.id}'); window.switchToView('cart')">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="btn-sample-sheet" onclick="window.viewSample('${book.id}')">
+                    <i class="fas fa-file-pdf"></i> Sample
+                </button>
             </div>
+            
+            <!-- Back Button -->
+            <button class="btn-back-sheet" onclick="window.switchToView('home')">
+                <i class="fas fa-arrow-left"></i> Back to Books
+            </button>
         </div>
     `;
+    
     document.getElementById('bookDetail').innerHTML = detailHtml;
     switchToView('detail');
 }
