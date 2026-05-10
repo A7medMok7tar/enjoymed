@@ -6,1259 +6,1461 @@
 <title>MedBook Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  /* ── CSS Variables pulled from Telegram theme ── */
+/* ══════════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════════ */
+:root {
+  /* Telegram theme passthrough */
+  --tg-bg:      var(--tg-theme-bg-color,           #0e1117);
+  --tg-bg2:     var(--tg-theme-secondary-bg-color, #161b26);
+  --tg-text:    var(--tg-theme-text-color,         #e8e6df);
+  --tg-hint:    var(--tg-theme-hint-color,         #6b7280);
+  --tg-btn:     var(--tg-theme-button-color,       #1a56db);
+  --tg-btn-txt: var(--tg-theme-button-text-color,  #ffffff);
+
+  /* Brand identity — deep navy + warm gold */
+  --navy:   #0d1b2a;
+  --navy2:  #162032;
+  --navy3:  #1e2d42;
+  --gold:   #c9a84c;
+  --gold2:  #e2c06b;
+  --gold3:  #f0d896;
+  --cream:  #f5f0e8;
+  --rust:   #c0392b;
+
+  /* Semantic aliases (light/dark aware) */
+  --bg:         var(--tg-bg);
+  --bg2:        var(--tg-bg2);
+  --surface:    color-mix(in srgb, var(--tg-text) 6%, var(--tg-bg));
+  --border:     color-mix(in srgb, var(--tg-hint) 20%, transparent);
+  --text:       var(--tg-text);
+  --muted:      var(--tg-hint);
+  --accent:     var(--gold);
+  --accent2:    var(--gold2);
+
+  /* Layout */
+  --nav-h:    64px;
+  --hdr-h:    58px;
+  --r:        16px;
+  --r-sm:     10px;
+
+  /* Typography */
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --sans:     'Figtree', system-ui, sans-serif;
+}
+
+/* Force dark brand palette when Telegram gives us a dark theme,
+   light palette when light */
+@media (prefers-color-scheme: light) {
   :root {
-    --bg:          var(--tg-theme-bg-color,           #ffffff);
-    --bg2:         var(--tg-theme-secondary-bg-color, #f4f4f5);
-    --text:        var(--tg-theme-text-color,         #1a1a2e);
-    --hint:        var(--tg-theme-hint-color,         #8a8a9a);
-    --link:        var(--tg-theme-link-color,         #2563eb);
-    --btn:         var(--tg-theme-button-color,       #2563eb);
-    --btn-text:    var(--tg-theme-button-text-color,  #ffffff);
-    --accent:      #e63946;
-    --gold:        #f4a522;
-    --radius:      14px;
-    --card-shadow: 0 2px 16px rgba(0,0,0,.08);
-    --font-display:"DM Serif Display", Georgia, serif;
-    --font-body:   "DM Sans", system-ui, sans-serif;
-    --nav-h:       68px;
-    --header-h:    56px;
+    --navy:  #f5f0e8;
+    --navy2: #ede8df;
+    --navy3: #e0d9cc;
+    --gold:  #8a6620;
+    --gold2: #a07828;
+    --gold3: #6b4f18;
+    --cream: #1a1208;
   }
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
 
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 15px;
-    -webkit-font-smoothing: antialiased;
-    overflow: hidden;
-  }
+/* ══════════════════════════════════════════════
+   LAYOUT SHELL
+══════════════════════════════════════════════ */
+#app { display: flex; flex-direction: column; height: 100%; }
 
-  /* ════════════ LAYOUT ════════════ */
-  #app {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
+#content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--nav-h) + 12px);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
 
-/* ════════════ PREMIUM GLASS HEADER ════════════ */
-
+/* ══════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════ */
 header {
+  height: var(--hdr-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 12px;
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-shrink: 0;
+}
 
-  height: var(--header-h);
-
+.hdr-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-
-  padding:
-    calc(env(safe-area-inset-top, 0) + 6px)
-    18px
-    10px;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,.72),
-      rgba(255,255,255,.42)
-    );
-
-  backdrop-filter:
-    blur(22px)
-    saturate(180%);
-
-  -webkit-backdrop-filter:
-    blur(22px)
-    saturate(180%);
-
-  border-bottom:
-    1px solid rgba(255,255,255,.10);
-
-  box-shadow:
-    0 4px 24px rgba(0,0,0,.05),
-    inset 0 -1px 0 rgba(255,255,255,.06);
-
-  flex-shrink: 0;
-
-  overflow: hidden;
+  gap: 10px;
+  flex: 1;
 }
 
-header::before {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    radial-gradient(
-      circle at top left,
-      color-mix(in srgb, var(--btn) 18%, transparent),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, #7c3aed 14%, transparent),
-      transparent 40%
-    );
-
-  opacity: .9;
-
-  pointer-events: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  header {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(15,15,20,.78),
-        rgba(15,15,20,.45)
-      );
-
-    border-bottom:
-      1px solid rgba(255,255,255,.04);
-
-    box-shadow:
-      0 4px 24px rgba(0,0,0,.28),
-      inset 0 -1px 0 rgba(255,255,255,.03);
-  }
-}
-
-.logo-mark {
-  position: relative;
-
-  width: 38px;
-  height: 38px;
-
-  border-radius: 14px;
-
+.hdr-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 10px;
   display: grid;
   place-items: center;
-
-  font-size: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--btn) 92%, white),
-      color-mix(in srgb, #7c3aed 45%, var(--btn))
-    );
-
-  color: white;
-
-  box-shadow:
-    0 6px 18px color-mix(in srgb, var(--btn) 30%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.18);
-
+  font-size: 16px;
   flex-shrink: 0;
-
-  overflow: hidden;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--gold) 35%, transparent);
 }
 
-.logo-mark::before {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent 20%,
-      rgba(255,255,255,.22) 50%,
-      transparent 80%
-    );
-
-  transform: translateX(-120%);
-  animation: logoShine 5s infinite linear;
+.hdr-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  line-height: 1;
 }
 
-@keyframes logoShine {
-  to {
-    transform: translateX(120%);
-  }
+.hdr-title span {
+  color: var(--accent);
+  font-style: italic;
 }
 
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: 19px;
-    letter-spacing: -.3px;
-    line-height: 1;
-    flex: 1;
-  }
-
-#cart-badge-header {
+.hdr-cart-btn {
   position: relative;
+  width: 38px; height: 38px;
+  border: none;
+  background: var(--surface);
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s;
+}
+.hdr-cart-btn:active { background: var(--border); }
+.hdr-cart-btn svg { width: 20px; height: 20px; stroke-width: 1.7; }
 
-  width: 40px;
-  height: 40px;
-
-  display: flex;
+.hdr-badge {
+  position: absolute;
+  top: -3px; right: -3px;
+  background: var(--rust);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 16px; height: 16px;
+  border-radius: 8px;
+  display: none;
   align-items: center;
   justify-content: center;
-
-  border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.08);
-
-  backdrop-filter: blur(12px);
-
-  border: 1px solid rgba(255,255,255,.08);
-
-  transition:
-    transform .18s ease,
-    background .25s ease;
+  padding: 0 4px;
+  border: 2px solid var(--bg);
 }
+.hdr-badge.visible { display: flex; }
 
-#cart-badge-header:active {
-  transform: scale(.92);
-}
-
-#cart-badge-header svg {
-  width: 20px;
-  height: 20px;
-}
-
-  /* scrollable content area */
-  #content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: calc(var(--nav-h) + 8px);
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-/* ════════════ GLASS BOTTOM NAV ════════════ */
+/* ══════════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════════ */
 nav {
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-
-  height: calc(var(--nav-h) - 8px);
-
+  height: var(--nav-h);
+  background: var(--bg);
+  border-top: 1px solid var(--border);
   display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  padding: 8px;
-
-  border-radius: 24px;
-
-  background: rgba(255,255,255,0.08);
-
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-
-  border: 1px solid rgba(255,255,255,0.12);
-
-  box-shadow:
-    0 8px 32px rgba(0,0,0,.18),
-    inset 0 1px 0 rgba(255,255,255,.08);
-
+  align-items: stretch;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
   z-index: 200;
-
-  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 8px);
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  nav {
-    background: rgba(20,20,25,0.55);
-    border: 1px solid rgba(255,255,255,0.06);
-  }
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .nav-tab {
   flex: 1;
-
-  height: 100%;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   gap: 4px;
-
+  cursor: pointer;
   border: none;
   background: transparent;
-
-  color: var(--hint);
-
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 600;
-
-  border-radius: 18px;
-
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  transition: color .2s;
   position: relative;
-  overflow: hidden;
-
-  cursor: pointer;
-
-  transition:
-    transform .18s ease,
-    color .2s ease,
-    background .25s ease;
-
   -webkit-tap-highlight-color: transparent;
 }
 
-.nav-tab svg {
-  width: 22px;
-  height: 22px;
-  stroke-width: 2;
-  transition: transform .2s ease;
-}
+.nav-tab.active { color: var(--accent); }
 
-/* Hover / Press */
-.nav-tab:active {
-  transform: scale(.94);
-}
-
-/* Active tab */
-.nav-tab.active {
-  color: #fff;
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--btn) 88%, white),
-      color-mix(in srgb, var(--btn) 65%, #7c3aed)
-    );
-
-  box-shadow:
-    0 4px 18px color-mix(in srgb, var(--btn) 40%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.18);
-}
-
-.nav-tab.active svg {
-  transform: translateY(-1px) scale(1.05);
-}
-
-.nav-tab .nav-badge {
-  position: absolute;
-
-  top: 6px;
-  right: 22%;
-
-  min-width: 16px;
-  height: 16px;
-
-  padding: 0 4px;
-
-  border-radius: 999px;
-
-  background: linear-gradient(135deg, #ff4d6d, #ff1744);
-
-  color: white;
-
-  font-size: 9px;
-  font-weight: 700;
-
+.nav-tab-icon {
+  width: 28px; height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 9px;
+  transition: background .2s, transform .15s;
+}
 
-  box-shadow: 0 4px 10px rgba(255, 23, 68, .35);
+.nav-tab.active .nav-tab-icon {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  transform: translateY(-1px);
+}
 
-  border: 2px solid rgba(255,255,255,.12);
+.nav-tab svg { width: 20px; height: 20px; stroke-width: 1.7; }
 
-  backdrop-filter: blur(10px);
-
+.nav-dot {
+  position: absolute;
+  top: 8px;
+  left: calc(50% + 7px);
+  width: 7px; height: 7px;
+  background: var(--rust);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
   display: none;
 }
-  /* ════════════ PAGES ════════════ */
-/* ════════════ SMOOTH PAGE TRANSITIONS ════════════ */
-.page,
-.nav-tab,
-.book-card,
-.support-card {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+.nav-dot.visible { display: block; }
 
-
-#content {
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* pages */
-.page {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  min-height: 100%;
-
-  opacity: 0;
-  visibility: hidden;
-
-  transform:
-    translateX(24px)
-    scale(.985);
-
-  transition:
-    opacity .34s cubic-bezier(.22,1,.36,1),
-    transform .34s cubic-bezier(.22,1,.36,1),
-    visibility .34s;
-
-  will-change: transform, opacity;
-
-  pointer-events: none;
-}
-
-/* active page */
+/* ══════════════════════════════════════════════
+   PAGES
+══════════════════════════════════════════════ */
+.page { display: none; }
 .page.active {
-  opacity: 1;
-  visibility: visible;
-
-  transform:
-    translateX(0)
-    scale(1);
-
-  pointer-events: auto;
-
-  z-index: 2;
+  display: block;
+  animation: pageIn .2s ease;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* outgoing animation */
-.page.leaving {
-  opacity: 0;
+/* ══════════════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════════════ */
 
-  transform:
-    translateX(-18px)
-    scale(.98);
-
-  z-index: 1;
+/* ─ Hero (featured book) ─ */
+.hero-wrap {
+  padding: 16px 16px 0;
 }
 
-  /* ════════════ HOME PAGE ════════════ */
-  .section-label {
-    padding: 20px 16px 10px;
-    font-family: var(--font-display);
-    font-size: 22px;
-    letter-spacing: -.4px;
-  }
+.hero-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--navy2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s;
+}
+.hero-card:active { transform: scale(.985); }
 
-  .books-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 0 12px 12px;
-  }
+.hero-cover {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
 
-  .book-card {
-    background: var(--bg2);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-    cursor: pointer;
-    transition: transform .15s, box-shadow .15s;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-  }
-
-  .book-card:active { transform: scale(.97); }
-
-  .book-cover {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    display: block;
-    background: color-mix(in srgb, var(--btn) 12%, var(--bg2));
-  }
-
-  .book-cover-placeholder {
-    width: 100%;
-    aspect-ratio: 3/4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg,
-      color-mix(in srgb, var(--btn) 15%, var(--bg2)),
-      color-mix(in srgb, var(--btn) 5%,  var(--bg2)));
-    font-size: 36px;
-    gap: 6px;
-  }
-
-  .book-cover-placeholder span {
-    font-size: 10px;
-    color: var(--hint);
-    font-weight: 500;
-    text-align: center;
-    padding: 0 8px;
-    line-height: 1.3;
-  }
-
-  .book-info {
-    padding: 10px 10px 12px;
-  }
-
-  .book-title {
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 1.3;
-    margin-bottom: 6px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .book-prices {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .price-stars {
-    font-size: 12px;
-    color: var(--gold);
-    font-weight: 600;
-  }
-
-  .price-egp {
-    font-size: 12px;
-    color: var(--hint);
-  }
-
-  .add-to-cart-btn {
-    width: 100%;
-    margin-top: 8px;
-    padding: 8px 0;
-    background: var(--btn);
-    color: var(--btn-text);
-    border: none;
-    border-radius: 9px;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .15s, transform .1s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .add-to-cart-btn:active { transform: scale(.96); opacity: .85; }
-  .add-to-cart-btn.added {
-    background: color-mix(in srgb, var(--btn) 20%, var(--bg2));
-    color: var(--btn);
-  }
-
-  /* book detail sheet */
-  .sheet-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    z-index: 300;
-    display: none;
-    align-items: flex-end;
-  }
-  .sheet-overlay.open { display: flex; }
-
-  .sheet {
-    background: var(--bg);
-    border-radius: 20px 20px 0 0;
-    width: 100%;
-    max-height: 88vh;
-    overflow-y: auto;
-    padding: 16px 16px 32px;
-    animation: slideUp .25s ease;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
-  }
-
-  .sheet-handle {
-    width: 36px; height: 4px;
-    background: var(--hint);
-    border-radius: 2px;
-    margin: 0 auto 16px;
-    opacity: .4;
-  }
-
-  .sheet-cover {
-    width: 100%;
-    max-height: 260px;
-    object-fit: contain;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .sheet-title {
-    font-family: var(--font-display);
-    font-size: 22px;
-    margin-bottom: 8px;
-    letter-spacing: -.3px;
-  }
-
-  .sheet-desc {
-    color: var(--hint);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-
-  .sheet-prices {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .sheet-price-pill {
-    padding: 7px 14px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .pill-stars { background: color-mix(in srgb, var(--gold) 15%, var(--bg2)); color: var(--gold); }
-  .pill-egp   { background: var(--bg2); color: var(--text); }
-
-  .sheet-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .btn-primary, .btn-secondary {
-    flex: 1;
-    padding: 14px 0;
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity .15s, transform .1s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-primary  { background: var(--btn); color: var(--btn-text); }
-  .btn-secondary {
-    background: var(--bg2);
-    color: var(--text);
-    border: 1.5px solid color-mix(in srgb, var(--hint) 30%, transparent);
-  }
-  .btn-primary:active, .btn-secondary:active { transform: scale(.97); opacity: .85; }
-
-  /* ════════════ CART PAGE ════════════ */
-  .cart-empty {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--hint);
-  }
-  .cart-empty .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
-  .cart-empty p { font-size: 15px; }
-
-  .cart-list {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .cart-item {
-    background: var(--bg2);
-    border-radius: var(--radius);
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .cart-item-cover {
-    width: 52px; height: 68px;
-    object-fit: cover;
-    border-radius: 8px;
-    flex-shrink: 0;
-    background: color-mix(in srgb, var(--btn) 10%, var(--bg2));
-  }
-
-  .cart-item-info { flex: 1; min-width: 0; }
-
-  .cart-item-title {
-    font-weight: 600;
-    font-size: 13px;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .cart-item-price {
-    font-size: 12px;
-    color: var(--hint);
-  }
-
-  .qty-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-  }
-
-  .qty-btn {
-    width: 26px; height: 26px;
-    border-radius: 7px;
-    border: none;
-    background: color-mix(in srgb, var(--btn) 15%, var(--bg2));
-    color: var(--btn);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .qty-value {
-    font-size: 14px;
-    font-weight: 600;
-    min-width: 18px;
-    text-align: center;
-  }
-
-  .cart-remove-btn {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: color-mix(in srgb, var(--accent) 12%, var(--bg2));
-    color: var(--accent);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .cart-summary {
-    margin: 8px 12px;
-    background: var(--bg2);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-  }
-
-  .cart-summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    padding: 4px 0;
-  }
-
-  .cart-summary-row.total {
-    font-weight: 700;
-    font-size: 16px;
-    border-top: 1px solid color-mix(in srgb, var(--hint) 25%, transparent);
-    margin-top: 8px;
-    padding-top: 10px;
-  }
-
-  .checkout-methods {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .checkout-btn {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: transform .1s, opacity .15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .checkout-btn:active { transform: scale(.98); opacity: .85; }
-
-  .checkout-stars {
-    background: linear-gradient(135deg, #f4a522, #e8890c);
-    color: #fff;
-  }
-
-  .checkout-vodafone {
-    background: linear-gradient(135deg, #e63946, #c1121f);
-    color: #fff;
-  }
-
-  /* ════════════ SUPPORT PAGE ════════════ */
-  .support-wrap {
-    padding: 24px 16px;
-  }
-
-  .support-hero {
-    text-align: center;
-    padding: 24px 0 32px;
-  }
-
-  .support-hero .hero-icon {
-    font-size: 56px;
-    display: block;
-    margin-bottom: 14px;
-  }
-
-  .support-hero h2 {
-    font-family: var(--font-display);
-    font-size: 24px;
-    margin-bottom: 8px;
-  }
-
-  .support-hero p {
-    color: var(--hint);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .support-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .support-card {
-    background: var(--bg2);
-    border-radius: var(--radius);
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    transition: opacity .15s;
-    -webkit-tap-highlight-color: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
-    color: var(--text);
-    font-family: var(--font-body);
-  }
-  .support-card:active { opacity: .75; }
-
-  .support-card-icon {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
-
-.support-card-icon {
-  width: 50px;
-  height: 50px;
-
-  border-radius: 16px;
-
+.hero-cover-ph {
+  width: 100%;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 64px;
+  background: linear-gradient(145deg,
+    color-mix(in srgb, var(--accent) 12%, var(--bg2)),
+    color-mix(in srgb, var(--accent) 4%, var(--bg2)));
+}
 
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.2) 55%, transparent 100%);
+}
+
+.hero-tag {
+  position: absolute;
+  top: 14px; left: 14px;
+  background: var(--accent);
+  color: #0d1108;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.hero-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 18px;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: .2px;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-prices {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.price-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+
+.price-tag.stars {
+  background: color-mix(in srgb, var(--gold) 25%, transparent);
+  color: var(--gold3);
+  border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+}
+
+.price-tag.egp {
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.hero-add-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #0d1108;
+  font-size: 20px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .1s;
   flex-shrink: 0;
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,.08);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 4px 14px rgba(0,0,0,.08);
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-add-btn:active { transform: scale(.9); }
+.hero-add-btn.added {
+  background: #22c55e;
+  color: #fff;
+  font-size: 15px;
 }
 
-.support-card-icon svg {
-  width: 24px;
-  height: 24px;
-  stroke-width: 2;
+/* ─ Section header ─ */
+.section-hdr {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 22px 16px 12px;
 }
 
-/* Individual colors */
-.support-chat-icon {
-  background: linear-gradient(
-    135deg,
-    rgba(37,99,235,.18),
-    rgba(59,130,246,.08)
-  );
-  color: #3b82f6;
+.section-hdr h2 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  line-height: 1;
 }
 
-.support-orders-icon {
-  background: linear-gradient(
-    135deg,
-    rgba(245,158,11,.18),
-    rgba(251,191,36,.08)
-  );
-  color: #f59e0b;
+.section-hdr h2 em {
+  font-style: italic;
+  color: var(--accent);
 }
 
-.support-payment-icon {
-  background: linear-gradient(
-    135deg,
-    rgba(239,68,68,.18),
-    rgba(248,113,113,.08)
-  );
-  color: #ef4444;
+.section-count {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
 }
 
-.support-refund-icon {
-  background: linear-gradient(
-    135deg,
-    rgba(34,197,94,.18),
-    rgba(74,222,128,.08)
-  );
-  color: #22c55e;
+/* ─ Book list ─ */
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px 8px;
 }
 
-  .support-card-text h3 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
-  .support-card-text p  { font-size: 13px; color: var(--hint); }
+.book-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .2s, transform .1s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
 
-  .support-card .arrow {
-    margin-left: auto;
-    color: var(--hint);
-    font-size: 18px;
-  }
+.book-row:active {
+  transform: scale(.985);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 10%, transparent);
+}
 
-  /* ════════════ TOAST ════════════ */
-  #toast {
-    position: fixed;
-    bottom: calc(var(--nav-h) + 14px);
-    left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--text);
-    color: var(--bg);
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity .2s, transform .2s;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 999;
-  }
-  #toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+.book-row-cover {
+  width: 58px;
+  height: 76px;
+  border-radius: 9px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg2);
+}
 
-  /* ════════════ LOADING ════════════ */
-  .skeleton {
-    background: linear-gradient(90deg,
-      var(--bg2) 25%,
-      color-mix(in srgb, var(--hint) 15%, var(--bg2)) 50%,
-      var(--bg2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 8px;
-  }
-  @keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
+.book-row-cover-ph {
+  width: 58px;
+  height: 76px;
+  border-radius: 9px;
+  background: linear-gradient(145deg,
+    color-mix(in srgb, var(--accent) 10%, var(--bg2)),
+    var(--bg2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
 
-  .skeleton-card {
-    background: var(--bg2);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .skeleton-cover { width: 100%; aspect-ratio: 3/4; }
-  .skeleton-line { height: 12px; margin: 10px 10px 6px; }
-  .skeleton-line.short { width: 60%; height: 10px; margin-bottom: 12px; }
+.book-row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-row-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  letter-spacing: .1px;
+}
+
+.book-row-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-row-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.book-row-price {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.book-row-price.stars {
+  background: color-mix(in srgb, var(--gold) 15%, var(--bg2));
+  color: var(--gold2);
+}
+
+.book-row-price.egp {
+  background: var(--bg2);
+  color: var(--muted);
+}
+
+.book-row-add {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 19px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, border-color .2s, transform .1s;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.book-row-add:active { transform: scale(.88); }
+.book-row-add.added {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* ─ Skeleton ─ */
+.skel-hero {
+  height: 220px;
+  border-radius: 20px;
+  margin: 16px 16px 0;
+}
+.skel-row {
+  display: flex;
+  gap: 14px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.skel-cover { width: 58px; height: 76px; border-radius: 9px; flex-shrink: 0; }
+.skel-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.skel-line { height: 13px; border-radius: 6px; }
+.skel-line.w80 { width: 80%; }
+.skel-line.w50 { width: 50%; }
+.skel-line.w65 { width: 65%; }
+
+.shimmer {
+  background: linear-gradient(90deg,
+    var(--surface) 0%,
+    color-mix(in srgb, var(--muted) 12%, var(--surface)) 50%,
+    var(--surface) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ══════════════════════════════════════════════
+   BOOK DETAIL SHEET
+══════════════════════════════════════════════ */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 400;
+  display: none;
+  align-items: flex-end;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.sheet-overlay.open { display: flex; }
+
+.sheet {
+  background: var(--bg);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: sheetUp .3s cubic-bezier(.32,.72,0,1);
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.sheet-cover-wrap {
+  position: relative;
+  margin: 16px 16px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.sheet-cover {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+}
+
+.sheet-cover-ph {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+}
+
+.sheet-body {
+  padding: 20px 16px 40px;
+}
+
+.sheet-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.sheet-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: .2px;
+}
+
+.sheet-title em { font-style: italic; }
+
+.sheet-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.sheet-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 20px;
+}
+
+.sheet-price-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sheet-price-pill {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sheet-price-pill .pill-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  opacity: .65;
+}
+
+.sheet-price-pill .pill-value {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.pill-gold {
+  background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  color: var(--gold2);
+}
+
+.pill-neutral {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.sheet-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 15px 0;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(.97); opacity: .85; }
+
+.btn-outline {
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  flex: 0 0 auto;
+  padding: 15px 18px;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #0d1108;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════════════
+   CART PAGE
+══════════════════════════════════════════════ */
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+
+.cart-empty-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  margin-bottom: 4px;
+}
+
+.cart-empty h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.cart-empty p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.cart-empty-btn {
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Cart items */
+.cart-items-wrap {
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px;
+  animation: pageIn .2s ease;
+}
+
+.cart-item-cover {
+  width: 54px; height: 70px;
+  border-radius: 9px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg2);
+}
+
+.cart-item-cover-ph {
+  width: 54px; height: 70px;
+  border-radius: 9px;
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.cart-item-info { flex: 1; min-width: 0; }
+
+.cart-item-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item-price {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .15s, background .15s;
+}
+.qty-btn:active { background: var(--border); }
+
+.qty-val {
+  font-size: 15px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-remove {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  border: none;
+  background: color-mix(in srgb, var(--rust) 12%, var(--surface));
+  color: var(--rust);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Order slip */
+.order-slip {
+  margin: 16px 16px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.slip-header {
+  padding: 14px 16px;
+  border-bottom: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slip-header-icon {
+  font-size: 16px;
+}
+
+.slip-header-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+.slip-rows {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.slip-row .label { color: var(--muted); }
+.slip-row .value { font-weight: 600; }
+
+.slip-total {
+  padding: 14px 16px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slip-total .label {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.slip-total .values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.slip-total .v-stars {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold2);
+}
+
+.slip-total .v-egp {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Checkout buttons */
+.checkout-section {
+  padding: 14px 16px 0;
+}
+
+.checkout-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.checkout-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: var(--r);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .1s, opacity .15s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
+.checkout-btn:active { transform: scale(.98); opacity: .9; }
+
+.checkout-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.1);
+  opacity: 0;
+  transition: opacity .15s;
+}
+.checkout-btn:active::before { opacity: 1; }
+
+.btn-stars {
+  background: linear-gradient(135deg, #d4a017, #f0c040, #c8920e);
+  color: #1a0f00;
+  box-shadow: 0 4px 16px color-mix(in srgb, #d4a017 35%, transparent);
+}
+
+.btn-vodafone {
+  background: linear-gradient(135deg, #c0392b, #e74c3c, #a93226);
+  color: #fff;
+  box-shadow: 0 4px 16px color-mix(in srgb, #c0392b 30%, transparent);
+}
+
+.btn-icon { font-size: 19px; }
+
+/* ══════════════════════════════════════════════
+   SUPPORT PAGE
+══════════════════════════════════════════════ */
+.support-wrap { padding: 0 16px 16px; }
+
+.support-hero {
+  padding: 28px 0 24px;
+  text-align: center;
+}
+
+.support-hero-icon {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--gold) 20%, var(--bg2)),
+    color-mix(in srgb, var(--gold) 8%, var(--bg2)));
+  border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--gold) 15%, transparent);
+}
+
+.support-hero h2 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: .2px;
+}
+
+.support-hero p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* FAQ */
+.faq-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: border-color .2s;
+}
+
+.faq-item.open {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 12px;
+}
+
+.faq-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--accent); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+}
+
+.faq-a-inner {
+  padding: 0 16px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.faq-item.open .faq-a { max-height: 300px; }
+
+/* Contact button */
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+  text-align: left;
+  font-family: var(--sans);
+  color: var(--text);
+}
+.contact-card:active {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.contact-icon {
+  width: 46px; height: 46px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.contact-text { flex: 1; }
+.contact-text h3 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+.contact-text p  { font-size: 13px; color: var(--muted); }
+
+.contact-arrow {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+#toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 999;
+  transition: opacity .2s, transform .2s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ── Header ── -->
+  <!-- ══ HEADER ══ -->
   <header>
-    <div class="logo-mark">📖</div>
-    <span class="logo-text">MedBook Store</span>
-    <div id="cart-badge-header" onclick="switchTab('cart')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 01-8 0"/>
-      </svg>
-      <span class="badge" id="header-cart-count">0</span>
+    <div class="hdr-brand">
+      <div class="hdr-icon">📖</div>
+      <div class="hdr-title">Med<span>Book</span></div>
     </div>
+    <button class="hdr-cart-btn" onclick="switchTab('cart')" aria-label="Cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57L23 6H6"/>
+      </svg>
+      <span class="hdr-badge" id="hdr-badge">0</span>
+    </button>
   </header>
 
-  <!-- ── Content ── -->
+  <!-- ══ CONTENT ══ -->
   <div id="content">
 
-    <!-- HOME -->
+    <!-- ─── HOME ─── -->
     <div class="page active" id="page-home">
-      <div class="section-label">Medical Books</div>
-      <div class="books-grid" id="books-grid">
+      <div id="home-inner">
         <!-- skeleton -->
-        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
-        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
-        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
-        <div class="skeleton-card"><div class="skeleton skeleton-cover"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div></div>
+        <div class="skel-hero shimmer"></div>
+        <div class="section-hdr">
+          <h2>All <em>Books</em></h2>
+        </div>
+        <div class="books-list" style="padding:0 16px 8px">
+          <div class="skel-row"><div class="skel-cover shimmer"></div><div class="skel-lines"><div class="skel-line w80 shimmer"></div><div class="skel-line w65 shimmer"></div><div class="skel-line w50 shimmer"></div></div></div>
+          <div class="skel-row"><div class="skel-cover shimmer"></div><div class="skel-lines"><div class="skel-line w80 shimmer"></div><div class="skel-line w65 shimmer"></div><div class="skel-line w50 shimmer"></div></div></div>
+          <div class="skel-row"><div class="skel-cover shimmer"></div><div class="skel-lines"><div class="skel-line w80 shimmer"></div><div class="skel-line w65 shimmer"></div><div class="skel-line w50 shimmer"></div></div></div>
+        </div>
       </div>
     </div>
 
-    <!-- CART -->
+    <!-- ─── CART ─── -->
     <div class="page" id="page-cart">
-      <div class="section-label">Your Cart</div>
-      <div id="cart-content"></div>
+      <div id="cart-inner"></div>
     </div>
 
-    <!-- SUPPORT -->
+    <!-- ─── SUPPORT ─── -->
     <div class="page" id="page-support">
       <div class="support-wrap">
         <div class="support-hero">
-          <span class="hero-icon">🏥</span>
+          <div class="support-hero-icon">🏥</div>
           <h2>How can we help?</h2>
-          <p>Reach out and we'll get back to you as soon as possible.</p>
+          <p>Find answers below or reach out<br>and we'll respond promptly.</p>
         </div>
-        <div class="support-cards">
 
-          <!-- Live Chat -->
-          <button class="support-card" onclick="openSupport('chat')">
-            <div class="support-card-icon support-chat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-            </div>
+        <div class="faq-wrap" id="faq-list"></div>
 
-            <div class="support-card-text">
-              <h3>Live Chat</h3>
-              <p>Chat with our support team</p>
-            </div>
-
-            <span class="arrow">›</span>
-          </button>
-
-          <!-- Orders -->
-          <button class="support-card" onclick="openSupport('orders')">
-            <div class="support-card-icon support-orders-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M3 7l9-4 9 4-9 4-9-4z"/>
-                <path d="M3 7v10l9 4 9-4V7"/>
-                <path d="M12 11v10"/>
-              </svg>
-            </div>
-
-            <div class="support-card-text">
-              <h3>My Orders</h3>
-              <p>Track or query your orders</p>
-            </div>
-
-            <span class="arrow">›</span>
-          </button>
-
-          <!-- Payment -->
-          <button class="support-card" onclick="openSupport('payment')">
-            <div class="support-card-icon support-payment-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="2" y="5" width="20" height="14" rx="2"/>
-                <path d="M2 10h20"/>
-              </svg>
-            </div>
-
-            <div class="support-card-text">
-              <h3>Payment Issue</h3>
-              <p>Problem with a payment?</p>
-            </div>
-
-            <span class="arrow">›</span>
-          </button>
-
-          <!-- Refund -->
-          <button class="support-card" onclick="openSupport('refund')">
-            <div class="support-card-icon support-refund-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M3 10h11a4 4 0 1 1 0 8h-1"/>
-                <path d="M7 14l-4-4 4-4"/>
-              </svg>
-            </div>
-
-            <div class="support-card-text">
-              <h3>Refund Request</h3>
-              <p>Request a refund for your order</p>
-            </div>
-
-            <span class="arrow">›</span>
-          </button>
-
-        </div>
+        <button class="contact-card" onclick="openChat()">
+          <div class="contact-icon">💬</div>
+          <div class="contact-text">
+            <h3>Chat with Support</h3>
+            <p>We typically reply within minutes</p>
+          </div>
+          <span class="contact-arrow">›</span>
+        </button>
       </div>
     </div>
 
   </div><!-- /content -->
 
-  <!-- ── Bottom Nav ── -->
+  <!-- ══ BOTTOM NAV ══ -->
   <nav>
     <button class="nav-tab active" id="tab-home" onclick="switchTab('home')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-        <path d="M9 21V12h6v9"/>
-      </svg>
+      <div class="nav-tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+          <path d="M9 21V12h6v9"/>
+        </svg>
+      </div>
       Home
     </button>
     <button class="nav-tab" id="tab-cart" onclick="switchTab('cart')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57L23 6H6"/>
-      </svg>
+      <div class="nav-tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.57L23 6H6"/>
+        </svg>
+      </div>
       Cart
-      <span class="nav-badge" id="cart-count">0</span>
+      <span class="nav-dot" id="nav-dot"></span>
     </button>
     <button class="nav-tab" id="tab-support" onclick="switchTab('support')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-      </svg>
+      <div class="nav-tab-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+      </div>
       Support
     </button>
   </nav>
+</div>
 
-</div><!-- /app -->
-
-<!-- ── Book Detail Sheet ── -->
-<div class="sheet-overlay" id="sheet" onclick="closeSheet(event)">
+<!-- ══ DETAIL SHEET ══ -->
+<div class="sheet-overlay" id="sheet" onclick="onSheetOverlayClick(event)">
   <div class="sheet">
     <div class="sheet-handle"></div>
-    <div id="sheet-content"></div>
+    <div id="sheet-body"></div>
   </div>
 </div>
 
-<!-- ── Toast ── -->
+<!-- ══ TOAST ══ -->
 <div id="toast"></div>
 
 <script>
 /* ════════════════════════════════════════════
-   Telegram WebApp Init
+   Telegram WebApp
 ════════════════════════════════════════════ */
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
-
-// ── Main Button helper ──────────────────────
 const MB = tg.MainButton;
-
-function showMainBtn(text, fn) {
-  MB.setText(text);
-  MB.onClick(fn);
-  MB.show();
-}
-function hideMainBtn() {
-  MB.offClick();
-  MB.hide();
-}
 
 /* ════════════════════════════════════════════
    State
 ════════════════════════════════════════════ */
 let books = [];
-let cart  = {};   // { book_id: quantity }
+let cart  = {};   // { bookId: qty }
 
 /* ════════════════════════════════════════════
-   Tab switching
+   FAQ Data
 ════════════════════════════════════════════ */
-let currentTab = 'home';
-
-function switchTab(tab) {
-  if (tab === currentTab) return;
-
-  const currentPage = document.getElementById(`page-${currentTab}`);
-  const nextPage = document.getElementById(`page-${tab}`);
-
-  /* nav active */
-  document.querySelectorAll('.nav-tab')
-    .forEach(t => t.classList.remove('active'));
-
-  document.getElementById(`tab-${tab}`)
-    .classList.add('active');
-
-  /* animate current page out */
-  currentPage.classList.add('leaving');
-  currentPage.classList.remove('active');
-
-  /* animate new page in */
-  nextPage.classList.add('active');
-
-  /* cleanup */
-  setTimeout(() => {
-    currentPage.classList.remove('leaving');
-  }, 350);
-
-  currentTab = tab;
-
-  /* cart logic */
-  if (tab === 'cart') {
-    renderCart();
-    updateMainBtn();
-  } else {
-    hideMainBtn();
+const FAQ = [
+  {
+    q: "How are books delivered?",
+    a: "After your payment is confirmed, the PDF is sent directly to this Telegram chat. No download links — the file lands right here."
+  },
+  {
+    q: "How does Vodafone Cash payment work?",
+    a: "You send the amount to our Vodafone Cash number, then send us your phone number and a screenshot of the transfer. Our admin verifies it and delivers your book — usually within minutes."
+  },
+  {
+    q: "What are Telegram Stars?",
+    a: "Stars are Telegram's built-in digital currency. You can buy them inside Telegram's settings. Paying with Stars is instant and automatic — your book arrives immediately after payment."
+  },
+  {
+    q: "Can I buy multiple books at once?",
+    a: "Yes! Add any books to your cart and check out together. All books will be delivered in one go once payment is confirmed."
+  },
+  {
+    q: "What if my payment was refused?",
+    a: "If your Vodafone Cash screenshot couldn't be verified, you'll be notified. Please ensure the screenshot clearly shows the transferred amount and recipient number. Contact support if you need help."
   }
+];
 
+/* ════════════════════════════════════════════
+   Tab Switching
+════════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`page-${tab}`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab === 'cart') renderCart();
   haptic('selection');
 }
 
 /* ════════════════════════════════════════════
-   Load Books from Bot API
+   Load Books
 ════════════════════════════════════════════ */
 async function loadBooks() {
   try {
-    const res  = await fetch('/api/books');
-    const data = await res.json();
-    books = data.books || [];
-    renderBooks();
-  } catch (e) {
-    document.getElementById('books-grid').innerHTML =
-      '<p style="padding:24px;color:var(--hint);grid-column:1/-1;">Failed to load books. Please try again.</p>';
+    const r = await fetch('/api/books');
+    const d = await r.json();
+    books = d.books || [];
+  } catch(e) {
+    books = [];
   }
+  renderHome();
 }
 
 /* ════════════════════════════════════════════
-   Render Books Grid
+   Render Home
 ════════════════════════════════════════════ */
-function renderBooks() {
-  const grid = document.getElementById('books-grid');
+function renderHome() {
+  const wrap = document.getElementById('home-inner');
   if (!books.length) {
-    grid.innerHTML = '<p style="padding:24px;color:var(--hint);grid-column:1/-1;text-align:center;">No books available yet.</p>';
+    wrap.innerHTML = `
+      <div style="text-align:center;padding:60px 24px;color:var(--muted)">
+        <div style="font-size:48px;margin-bottom:16px">📭</div>
+        <p style="font-family:var(--serif);font-size:20px;color:var(--text);margin-bottom:8px">No books yet</p>
+        <p style="font-size:14px;line-height:1.6">Check back soon — new titles are added regularly.</p>
+      </div>`;
     return;
   }
-  grid.innerHTML = books.map(b => {
-    const inCart = cart[b.id] > 0;
-    const coverHtml = b.cover_url
-      ? `<img class="book-cover" src="${b.cover_url}" alt="${escHtml(b.title)}" loading="lazy"/>`
-      : `<div class="book-cover-placeholder">📖<span>${escHtml(b.title)}</span></div>`;
-    return `
-    <div class="book-card" onclick="openSheet(${b.id})">
-      ${coverHtml}
-      <div class="book-info">
-        <div class="book-title">${escHtml(b.title)}</div>
-        <div class="book-prices">
-          <span class="price-stars">⭐ ${b.price_stars} Stars</span>
-          <span class="price-egp">💵 ${b.price_egp.toFixed(2)} EGP</span>
+
+  const [featured, ...rest] = books;
+  let html = '';
+
+  // Hero — first book
+  html += `
+    <div class="hero-wrap">
+      <div class="hero-card" onclick="openSheet(${featured.id})">
+        ${featured.cover_url
+          ? `<img class="hero-cover" src="${featured.cover_url}" alt="${esc(featured.title)}"/>`
+          : `<div class="hero-cover-ph">📖</div>`}
+        <div class="hero-gradient"></div>
+        <div class="hero-tag">Featured</div>
+        <div class="hero-body">
+          <div class="hero-title">${esc(featured.title)}</div>
+          <div class="hero-meta">
+            <div class="hero-prices">
+              <span class="price-tag stars">⭐ ${featured.price_stars}</span>
+              <span class="price-tag egp">💵 ${featured.price_egp.toFixed(2)}</span>
+            </div>
+            <button class="hero-add-btn ${cart[featured.id]?'added':''}"
+              id="hadd-${featured.id}"
+              onclick="event.stopPropagation();quickAdd(${featured.id})">
+              ${cart[featured.id] ? '✓' : '+'}
+            </button>
+          </div>
         </div>
-        <button class="add-to-cart-btn ${inCart?'added':''}"
-          id="atc-${b.id}"
-          onclick="event.stopPropagation();addToCart(${b.id})">
-          ${inCart ? '✓ In Cart' : '+ Add to Cart'}
-        </button>
       </div>
     </div>`;
-  }).join('');
+
+  // Rest list
+  if (rest.length) {
+    html += `
+      <div class="section-hdr">
+        <h2>All <em>Books</em></h2>
+        <span class="section-count">${books.length} titles</span>
+      </div>
+      <div class="books-list">
+        ${rest.map(b => bookRowHtml(b)).join('')}
+      </div>`;
+  }
+
+  wrap.innerHTML = html;
+}
+
+function bookRowHtml(b) {
+  const added = !!cart[b.id];
+  return `
+    <div class="book-row" onclick="openSheet(${b.id})">
+      ${b.cover_url
+        ? `<img class="book-row-cover" src="${b.cover_url}" alt="${esc(b.title)}"/>`
+        : `<div class="book-row-cover-ph">📖</div>`}
+      <div class="book-row-info">
+        <div class="book-row-title">${esc(b.title)}</div>
+        <div class="book-row-desc">${esc(b.description || 'Medical reference book')}</div>
+        <div class="book-row-footer">
+          <span class="book-row-price stars">⭐ ${b.price_stars}</span>
+          <span class="book-row-price egp">💵 ${b.price_egp.toFixed(2)} EGP</span>
+        </div>
+      </div>
+      <button class="book-row-add ${added?'added':''}"
+        id="radd-${b.id}"
+        onclick="event.stopPropagation();quickAdd(${b.id})">
+        ${added ? '✓' : '+'}
+      </button>
+    </div>`;
 }
 
 /* ════════════════════════════════════════════
@@ -1269,213 +1471,245 @@ function openSheet(bookId) {
   if (!b) return;
   haptic('light');
 
-  const coverHtml = b.cover_url
-    ? `<img class="sheet-cover" src="${b.cover_url}" alt="${escHtml(b.title)}"/>`
-    : `<div style="font-size:64px;text-align:center;padding:24px 0">📖</div>`;
+  const added = !!cart[b.id];
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="sheet-cover-wrap">
+      ${b.cover_url
+        ? `<img class="sheet-cover" src="${b.cover_url}" alt="${esc(b.title)}"/>`
+        : `<div class="sheet-cover-ph">📖</div>`}
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-label">Medical Reference</div>
+      <div class="sheet-title">${esc(b.title)}</div>
+      <p class="sheet-desc">${esc(b.description || 'A comprehensive medical reference book.')}</p>
+      <div class="sheet-divider"></div>
+      <div class="sheet-price-row">
+        <div class="sheet-price-pill pill-gold">
+          <span class="pill-label">Telegram Stars</span>
+          <span class="pill-value">⭐ ${b.price_stars}</span>
+        </div>
+        <div class="sheet-price-pill pill-neutral">
+          <span class="pill-label">Vodafone Cash</span>
+          <span class="pill-value">${b.price_egp.toFixed(2)} EGP</span>
+        </div>
+      </div>
+      <div class="sheet-btns">
+        <button class="btn btn-outline" onclick="closeSheet()">Close</button>
+        <button class="btn btn-gold" id="sheet-add-btn" onclick="addFromSheet(${b.id})">
+          ${added ? '✓ In Cart' : '+ Add to Cart'}
+        </button>
+      </div>
+    </div>`;
 
-  document.getElementById('sheet-content').innerHTML = `
-    ${coverHtml}
-    <div class="sheet-title">${escHtml(b.title)}</div>
-    <p class="sheet-desc">${escHtml(b.description || 'No description available.')}</p>
-    <div class="sheet-prices">
-      <span class="sheet-price-pill pill-stars">⭐ ${b.price_stars} Stars</span>
-      <span class="sheet-price-pill pill-egp">💵 ${b.price_egp.toFixed(2)} EGP</span>
-    </div>
-    <div class="sheet-actions">
-      <button class="btn-secondary" onclick="closeSheet()">Close</button>
-      <button class="btn-primary" onclick="addToCartFromSheet(${b.id})">
-        ${cart[b.id] ? '✓ In Cart' : '+ Add to Cart'}
-      </button>
-    </div>
-  `;
   document.getElementById('sheet').classList.add('open');
-
   tg.BackButton.show();
   tg.BackButton.onClick(closeSheet);
 }
 
-function closeSheet(e) {
-  if (e && e.target !== document.getElementById('sheet')) return;
+function closeSheet() {
   document.getElementById('sheet').classList.remove('open');
   tg.BackButton.hide();
   tg.BackButton.offClick(closeSheet);
 }
 
-function addToCartFromSheet(bookId) {
+function onSheetOverlayClick(e) {
+  if (e.target === document.getElementById('sheet')) closeSheet();
+}
+
+function addFromSheet(bookId) {
   addToCart(bookId);
   closeSheet();
   switchTab('cart');
 }
 
 /* ════════════════════════════════════════════
-   Cart
+   Cart Logic
 ════════════════════════════════════════════ */
+function quickAdd(bookId) {
+  addToCart(bookId);
+}
+
 function addToCart(bookId) {
   cart[bookId] = (cart[bookId] || 0) + 1;
-  updateCartBadge();
-  updateBookCardBtn(bookId);
-  showToast('Added to cart 🛒');
+  updateBadges();
+  refreshAddBtns(bookId);
+  showToast('📚 Added to cart');
   haptic('medium');
 }
 
 function removeFromCart(bookId) {
   delete cart[bookId];
-  updateCartBadge();
-  updateBookCardBtn(bookId);
+  updateBadges();
+  refreshAddBtns(bookId);
   renderCart();
-  updateMainBtn();
   haptic('light');
 }
 
 function changeQty(bookId, delta) {
-  cart[bookId] = (cart[bookId] || 0) + delta;
-  if (cart[bookId] <= 0) return removeFromCart(bookId);
+  const newQty = (cart[bookId] || 0) + delta;
+  if (newQty <= 0) return removeFromCart(bookId);
+  cart[bookId] = newQty;
   renderCart();
-  updateMainBtn();
   haptic('selection');
 }
 
-function cartItems() {
+function cartList() {
   return Object.entries(cart)
     .filter(([,q]) => q > 0)
-    .map(([id, qty]) => ({
-      book: books.find(b => b.id == id),
-      qty: parseInt(qty)
-    }))
+    .map(([id, qty]) => ({ book: books.find(b => b.id == id), qty }))
     .filter(x => x.book);
 }
 
 function cartTotals() {
-  return cartItems().reduce((acc, {book, qty}) => {
-    acc.stars += book.price_stars * qty;
-    acc.egp   += book.price_egp   * qty;
-    return acc;
-  }, { stars: 0, egp: 0 });
+  return cartList().reduce((acc, {book, qty}) => ({
+    stars: acc.stars + book.price_stars * qty,
+    egp:   acc.egp   + book.price_egp   * qty,
+    count: acc.count + qty
+  }), { stars: 0, egp: 0, count: 0 });
 }
 
-function updateCartBadge() {
-  const count = Object.values(cart).reduce((a,b) => a + b, 0);
-  const badge     = document.getElementById('cart-count');
-  const hdrBadge  = document.getElementById('header-cart-count');
-  const navBadge  = badge;
-
-  if (count > 0) {
-    badge.textContent = count;
-    badge.style.display = 'flex';
-    hdrBadge.textContent = count;
-    hdrBadge.style.display = 'flex';
-  } else {
-    badge.style.display = 'none';
-    hdrBadge.style.display = 'none';
-  }
+function updateBadges() {
+  const count = Object.values(cart).reduce((a,b) => a+b, 0);
+  const show = count > 0;
+  const hdrB = document.getElementById('hdr-badge');
+  const navD = document.getElementById('nav-dot');
+  hdrB.textContent = count;
+  hdrB.classList.toggle('visible', show);
+  navD.classList.toggle('visible', show);
 }
 
-function updateBookCardBtn(bookId) {
-  const btn = document.getElementById(`atc-${bookId}`);
-  if (!btn) return;
-  const inCart = cart[bookId] > 0;
-  btn.textContent = inCart ? '✓ In Cart' : '+ Add to Cart';
-  btn.className = 'add-to-cart-btn' + (inCart ? ' added' : '');
+function refreshAddBtns(bookId) {
+  const added = !!cart[bookId];
+  [`hadd-${bookId}`, `radd-${bookId}`].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = el.className.replace(' added','') + (added ? ' added' : '');
+    el.textContent = added ? '✓' : '+';
+  });
 }
 
+/* ════════════════════════════════════════════
+   Render Cart
+════════════════════════════════════════════ */
 function renderCart() {
-  const items = cartItems();
-  const wrap  = document.getElementById('cart-content');
+  const items  = cartList();
+  const totals = cartTotals();
+  const wrap   = document.getElementById('cart-inner');
 
   if (!items.length) {
     wrap.innerHTML = `
       <div class="cart-empty">
-        <span class="emoji">🛒</span>
-        <p>Your cart is empty.<br>Browse books on the Home tab!</p>
+        <div class="cart-empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Browse medical books on the<br>Home tab and add what you need.</p>
+        <button class="cart-empty-btn" onclick="switchTab('home')">Browse Books</button>
       </div>`;
     return;
   }
 
-  const totals = cartTotals();
-
-  const itemsHtml = items.map(({book, qty}) => {
-    const cover = book.cover_url
-      ? `<img class="cart-item-cover" src="${book.cover_url}" alt="${escHtml(book.title)}"/>`
-      : `<div class="cart-item-cover" style="display:flex;align-items:center;justify-content:center;font-size:24px">📖</div>`;
-    return `
+  const itemsHtml = items.map(({book, qty}) => `
     <div class="cart-item">
-      ${cover}
+      ${book.cover_url
+        ? `<img class="cart-item-cover" src="${book.cover_url}" alt="${esc(book.title)}"/>`
+        : `<div class="cart-item-cover-ph">📖</div>`}
       <div class="cart-item-info">
-        <div class="cart-item-title">${escHtml(book.title)}</div>
-        <div class="cart-item-price">⭐ ${book.price_stars} · 💵 ${book.price_egp.toFixed(2)} EGP</div>
-        <div class="qty-control">
+        <div class="cart-item-title">${esc(book.title)}</div>
+        <div class="cart-item-price">⭐ ${book.price_stars} Stars &nbsp;·&nbsp; ${book.price_egp.toFixed(2)} EGP</div>
+        <div class="qty-row">
           <button class="qty-btn" onclick="changeQty(${book.id},-1)">−</button>
-          <span class="qty-value">${qty}</span>
+          <span class="qty-val">${qty}</span>
           <button class="qty-btn" onclick="changeQty(${book.id},+1)">+</button>
         </div>
       </div>
-      <button class="cart-remove-btn" onclick="removeFromCart(${book.id})">🗑</button>
-    </div>`;
-  }).join('');
+      <button class="cart-remove" onclick="removeFromCart(${book.id})" aria-label="Remove">
+        🗑
+      </button>
+    </div>`).join('');
+
+  const slipRows = items.map(({book, qty}) => `
+    <div class="slip-row">
+      <span class="label">${esc(book.title)} × ${qty}</span>
+      <span class="value">${(book.price_egp * qty).toFixed(2)} EGP</span>
+    </div>`).join('');
 
   wrap.innerHTML = `
-    <div class="cart-list">${itemsHtml}</div>
-    <div class="cart-summary">
-      <div class="cart-summary-row"><span>Items</span><span>${items.reduce((a,x)=>a+x.qty,0)}</span></div>
-      <div class="cart-summary-row total">
-        <span>Total</span>
-        <span>⭐ ${totals.stars} · ${totals.egp.toFixed(2)} EGP</span>
+    <div class="cart-items-wrap">${itemsHtml}</div>
+
+    <div class="order-slip">
+      <div class="slip-header">
+        <span class="slip-header-icon">🧾</span>
+        <span class="slip-header-title">Order Summary</span>
+      </div>
+      <div class="slip-rows">${slipRows}</div>
+      <div class="slip-total">
+        <span class="label">Total</span>
+        <div class="values">
+          <span class="v-stars">⭐ ${totals.stars} Stars</span>
+          <span class="v-egp">${totals.egp.toFixed(2)} EGP</span>
+        </div>
       </div>
     </div>
-    <div class="checkout-methods">
-      <p style="font-size:13px;color:var(--hint);margin-bottom:4px;">Choose payment method:</p>
-      <button class="checkout-btn checkout-stars" onclick="checkout('stars')">
-        ⭐ Pay with Telegram Stars
-      </button>
-      <button class="checkout-btn checkout-vodafone" onclick="checkout('vodafone')">
-        📱 Pay via Vodafone Cash
-      </button>
-    </div>
-  `;
-}
 
-function updateMainBtn() {
-  const items = cartItems();
-  if (items.length && document.getElementById('tab-cart').classList.contains('active')) {
-    const totals = cartTotals();
-    showMainBtn(`Checkout — ⭐${totals.stars}`, () => checkout('stars'));
-  } else {
-    hideMainBtn();
-  }
+    <div class="checkout-section">
+      <div class="checkout-label">Choose payment method</div>
+      <div class="checkout-btns">
+        <button class="checkout-btn btn-stars" onclick="checkout('stars')">
+          <span class="btn-icon">⭐</span>
+          Pay with Telegram Stars
+        </button>
+        <button class="checkout-btn btn-vodafone" onclick="checkout('vodafone')">
+          <span class="btn-icon">📱</span>
+          Pay via Vodafone Cash
+        </button>
+      </div>
+    </div>`;
 }
 
 /* ════════════════════════════════════════════
    Checkout
 ════════════════════════════════════════════ */
 function checkout(method) {
-  const items = cartItems();
-  if (!items.length) return showToast('Cart is empty');
+  const items = cartList();
+  if (!items.length) return;
   haptic('medium');
-
-  const payload = {
+  tg.sendData(JSON.stringify({
     action: method === 'stars' ? 'checkout_stars' : 'checkout_vodafone',
     cart: items.map(({book, qty}) => ({ book_id: book.id, quantity: qty }))
-  };
-
-  tg.sendData(JSON.stringify(payload));
+  }));
 }
 
 /* ════════════════════════════════════════════
-   Support
+   FAQ
 ════════════════════════════════════════════ */
-function openSupport(type) {
+function renderFaq() {
+  const wrap = document.getElementById('faq-list');
+  wrap.innerHTML = FAQ.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <span>${f.q}</span>
+        <span class="faq-arrow">⌄</span>
+      </div>
+      <div class="faq-a">
+        <div class="faq-a-inner">${f.a}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleFaq(i) {
+  const el = document.getElementById(`faq-${i}`);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(x => x.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+  haptic('selection');
+}
+
+function openChat() {
   haptic('light');
-  const messages = {
-    chat:    'Hello! I need some help.',
-    orders:  'Hello! I have a question about my order.',
-    payment: 'Hello! I have a payment issue.',
-    refund:  'Hello! I would like to request a refund.',
-  };
-  tg.sendData(JSON.stringify({ action: 'support', type, message: messages[type] }));
+  tg.sendData(JSON.stringify({ action: 'support', type: 'chat' }));
 }
 
 /* ════════════════════════════════════════════
-   Utilities
+   Utils
 ════════════════════════════════════════════ */
 let toastTimer;
 function showToast(msg) {
@@ -1483,15 +1717,15 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
 
 function haptic(style) {
   try { tg.HapticFeedback.impactOccurred(style); } catch(e) {}
 }
 
-function escHtml(s) {
-  return String(s)
+function esc(s) {
+  return String(s||'')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -1499,6 +1733,7 @@ function escHtml(s) {
 /* ════════════════════════════════════════════
    Boot
 ════════════════════════════════════════════ */
+renderFaq();
 loadBooks();
 </script>
 </body>
